@@ -1,0 +1,174 @@
+frame,timestamp_ms,track_id,label,detector_label,role,center_x,center_y,velocity_x,velocity_y,speed,motion_state,detected
+0,0,obj_001,chair,chair,environment,0.3382,0.7305,0.0,0.0,0.0,stationary,True
+1,83,obj_001,chair,chair,environment,0.3403,0.7305,0.025,0.0,0.025,stationary,True
+2,167,obj_001,chair,chair,environment,0.3382,0.7309,-0.025,0.0047,0.0254,stationary,True
+3,250,obj_001,chair,chair,environment,0.3382,0.7305,0.0,-0.0047,0.0047,stationary,True
+4,333,obj_001,chair,chair,environment,0.3382,0.7309,0.0,0.0047,0.0047,stationary,True
+5,417,obj_001,chair,chair,environment,0.3396,0.7305,0.0167,-0.0047,0.0173,stationary,True
+6,500,obj_001,chair,chair,environment,0.3389,0.7309,-0.0083,0.0047,0.0096,stationary,True
+7,583,obj_001,chair,chair,environment,0.3382,0.7309,-0.0083,0.0,0.0083,stationary,True
+8,667,obj_001,chair,chair,environment,0.3403,0.7324,0.025,0.0188,0.0313,stationary,True
+9,750,obj_001,chair,chair,environment,0.3396,0.7332,-0.0083,0.0094,0.0125,stationary,True
+10,833,obj_001,chair,chair,environment,0.3465,0.7328,0.0833,-0.0047,0.0835,moving,True
+11,917,obj_001,chair,chair,environment,0.3479,0.7324,0.0167,-0.0047,0.0173,stationary,True
+12,1000,obj_001,chair,chair,environment,0.3458,0.7309,-0.025,-0.0187,0.0312,stationary,True
+13,1083,obj_001,chair,chair,environment,0.3535,0.7246,0.0917,-0.075,0.1184,moving,True
+14,1167,obj_001,chair,chair,environment,0.3535,0.727,0.0,0.0281,0.0281,stationary,True
+15,1250,obj_001,chair,chair,environment,0.3521,0.7285,-0.0167,0.0187,0.0251,stationary,True
+16,1333,obj_001,chair,chair,environment,0.3528,0.7289,0.0083,0.0047,0.0096,stationary,True
+17,1417,obj_001,chair,chair,environment,0.391,0.7301,0.4583,0.0141,0.4585,moving,True
+18,1500,obj_001,chair,chair,environment,0.3625,0.7273,-0.3417,-0.0328,0.3432,moving,True
+19,1583,obj_001,chair,chair,environment,0.3778,0.7293,0.1833,0.0234,0.1848,moving,True
+20,1667,obj_001,chair,chair,environment,0.3771,0.7293,-0.0083,0.0,0.0083,stationary,True
+21,1750,obj_001,chair,chair,environment,0.3729,0.7289,-0.05,-0.0047,0.0502,stationary,True
+22,1833,obj_001,chair,chair,environment,0.3604,0.7262,-0.15,-0.0328,0.1535,moving,True
+23,1917,obj_001,chair,chair,environment,0.3625,0.7258,0.025,-0.0047,0.0254,stationary,True
+24,2000,obj_001,chair,chair,environment,0.3604,0.7258,-0.025,0.0,0.025,stationary,True
+25,2083,obj_001,chair,chair,environment,0.3618,0.725,0.0167,-0.0094,0.0191,stationary,True
+26,2167,obj_001,chair,chair,environment,0.3611,0.7254,-0.0083,0.0047,0.0096,stationary,True
+27,2250,obj_001,chair,chair,environment,0.366,0.7277,0.0583,0.0281,0.0648,moving,True
+28,2333,obj_001,chair,chair,environment,0.3674,0.7273,0.0167,-0.0047,0.0173,stationary,True
+29,2417,obj_001,chair,chair,environment,0.3618,0.7246,-0.0667,-0.0328,0.0743,moving,True
+30,2500,obj_001,chair,chair,environment,0.3757,0.7289,0.1667,0.0516,0.1745,moving,True
+31,2583,obj_001,chair,chair,environment,0.3757,0.7297,0.0,0.0094,0.0094,stationary,True
+32,2667,obj_001,chair,chair,environment,0.3875,0.7301,0.1417,0.0047,0.1417,moving,True
+33,2750,obj_001,chair,chair,environment,0.4049,0.7316,0.2083,0.0188,0.2092,moving,True
+34,2833,obj_001,chair,chair,environment,0.3938,0.7305,-0.1333,-0.0141,0.1341,moving,True
+35,2917,obj_001,chair,chair,environment,0.3618,0.7281,-0.3833,-0.0281,0.3844,moving,True
+36,3000,obj_001,chair,chair,environment,0.3965,0.7285,0.4167,0.0047,0.4167,moving,True
+37,3083,obj_001,chair,chair,environment,0.3611,0.725,-0.425,-0.0422,0.4271,moving,True
+38,3167,obj_001,chair,chair,environment,0.3583,0.725,-0.0333,-0.0,0.0333,stationary,True
+39,3250,obj_001,chair,chair,environment,0.3569,0.7223,-0.0167,-0.0328,0.0368,stationary,True
+40,3333,obj_001,chair,chair,environment,0.3583,0.7211,0.0167,-0.0141,0.0218,stationary,True
+41,3417,obj_001,chair,chair,environment,0.3826,0.7211,0.2917,0.0,0.2917,moving,True
+42,3500,obj_001,chair,chair,environment,0.3528,0.7191,-0.3583,-0.0234,0.3591,moving,True
+43,3583,obj_001,chair,chair,environment,0.3472,0.7184,-0.0667,-0.0094,0.0673,moving,True
+44,3667,obj_001,chair,chair,environment,0.3424,0.723,-0.0583,0.0562,0.081,moving,True
+45,3750,obj_001,chair,chair,environment,0.3396,0.7223,-0.0333,-0.0094,0.0346,stationary,True
+46,3833,obj_001,chair,chair,environment,0.3403,0.7227,0.0083,0.0047,0.0096,stationary,True
+47,3917,obj_001,chair,chair,environment,0.3403,0.7227,0.0,0.0,0.0,stationary,True
+48,4000,obj_001,chair,chair,environment,0.3438,0.7176,0.0417,-0.0609,0.0738,moving,True
+49,4083,obj_001,chair,chair,environment,0.3444,0.7172,0.0083,-0.0047,0.0096,stationary,True
+50,4167,obj_001,chair,chair,environment,0.3424,0.7168,-0.025,-0.0047,0.0254,stationary,True
+51,4250,obj_001,chair,chair,environment,0.3431,0.7164,0.0083,-0.0047,0.0096,stationary,True
+52,4333,obj_001,chair,chair,environment,0.341,0.7164,-0.025,0.0,0.025,stationary,True
+53,4417,obj_001,chair,chair,environment,0.3417,0.7176,0.0083,0.0141,0.0163,stationary,True
+54,4500,obj_001,chair,chair,environment,0.3403,0.7172,-0.0167,-0.0047,0.0173,stationary,True
+55,4583,obj_001,chair,chair,environment,0.3389,0.7172,-0.0167,0.0,0.0167,stationary,True
+56,4667,obj_001,chair,chair,environment,0.3361,0.7164,-0.0333,-0.0094,0.0346,stationary,True
+57,4750,obj_001,chair,chair,environment,0.3361,0.7168,0.0,0.0047,0.0047,stationary,True
+58,4833,obj_001,chair,chair,environment,0.3382,0.7164,0.025,-0.0047,0.0254,stationary,True
+59,4917,obj_001,chair,chair,environment,0.3396,0.7172,0.0167,0.0094,0.0191,stationary,True
+60,5000,obj_001,chair,chair,environment,0.3403,0.7164,0.0083,-0.0094,0.0125,stationary,True
+61,5083,obj_001,chair,chair,environment,0.3403,0.7168,0.0,0.0047,0.0047,stationary,True
+62,5167,obj_001,chair,chair,environment,0.3389,0.7168,-0.0167,0.0,0.0167,stationary,True
+63,5250,obj_001,chair,chair,environment,0.3396,0.7211,0.0083,0.0516,0.0522,stationary,True
+64,5333,obj_001,chair,chair,environment,0.3396,0.7219,0.0,0.0094,0.0094,stationary,True
+65,5417,obj_001,chair,chair,environment,0.3424,0.7195,0.0333,-0.0281,0.0436,stationary,True
+66,5500,obj_001,chair,chair,environment,0.3486,0.7188,0.075,-0.0094,0.0756,moving,True
+67,5583,obj_001,chair,chair,environment,0.3535,0.7211,0.0583,0.0281,0.0648,moving,True
+68,5667,obj_001,chair,chair,environment,0.3569,0.7238,0.0417,0.0328,0.053,stationary,True
+69,5750,obj_001,chair,chair,environment,0.3597,0.7238,0.0333,-0.0,0.0333,stationary,True
+70,5833,obj_001,chair,chair,environment,0.3583,0.7254,-0.0167,0.0188,0.0251,stationary,True
+71,5917,obj_001,chair,chair,environment,0.3569,0.7277,-0.0167,0.0281,0.0327,stationary,True
+72,6000,obj_001,chair,chair,environment,0.359,0.727,0.025,-0.0094,0.0267,stationary,True
+73,6083,obj_001,chair,chair,environment,0.3618,0.7273,0.0333,0.0047,0.0337,stationary,True
+74,6167,obj_001,chair,chair,environment,0.3611,0.7277,-0.0083,0.0047,0.0096,stationary,True
+75,6250,obj_001,chair,chair,environment,0.3611,0.7277,0.0,0.0,0.0,stationary,True
+76,6333,obj_001,chair,chair,environment,0.3625,0.727,0.0167,-0.0094,0.0191,stationary,True
+77,6417,obj_001,chair,chair,environment,0.3639,0.7273,0.0167,0.0047,0.0173,stationary,True
+78,6500,obj_001,chair,chair,environment,0.3632,0.7273,-0.0083,0.0,0.0083,stationary,True
+79,6583,obj_001,chair,chair,environment,0.3632,0.7273,0.0,0.0,0.0,stationary,True
+80,6667,obj_001,chair,chair,environment,0.3632,0.7277,0.0,0.0047,0.0047,stationary,True
+81,6750,obj_001,chair,chair,environment,0.3625,0.7277,-0.0083,0.0,0.0083,stationary,True
+82,6833,obj_001,chair,chair,environment,0.3632,0.7281,0.0083,0.0047,0.0096,stationary,True
+83,6917,obj_001,chair,chair,environment,0.3611,0.7285,-0.025,0.0047,0.0254,stationary,True
+84,7000,obj_001,chair,chair,environment,0.3611,0.7277,0.0,-0.0094,0.0094,stationary,True
+85,7083,obj_001,chair,chair,environment,0.3604,0.7262,-0.0083,-0.0188,0.0205,stationary,True
+86,7167,obj_001,chair,chair,environment,0.359,0.7238,-0.0167,-0.0281,0.0327,stationary,True
+87,7250,obj_001,chair,chair,environment,0.3576,0.7219,-0.0167,-0.0234,0.0288,stationary,True
+88,7333,obj_001,chair,chair,environment,0.3479,0.7359,-0.1167,0.1687,0.2052,moving,True
+89,7417,obj_001,chair,chair,environment,0.3438,0.7348,-0.05,-0.0141,0.0519,stationary,True
+90,7500,obj_001,chair,chair,environment,0.3451,0.7332,0.0167,-0.0188,0.0251,stationary,True
+91,7583,obj_001,chair,chair,environment,0.3431,0.7297,-0.025,-0.0422,0.049,stationary,True
+92,7667,obj_001,chair,chair,environment,0.3431,0.7301,0.0,0.0047,0.0047,stationary,True
+93,7750,obj_001,chair,chair,environment,0.3431,0.7316,0.0,0.0187,0.0187,stationary,True
+94,7833,obj_001,chair,chair,environment,0.3417,0.732,-0.0167,0.0047,0.0173,stationary,True
+95,7917,obj_001,chair,chair,environment,0.3424,0.7328,0.0083,0.0094,0.0125,stationary,True
+0,0,obj_002,dining table,dining table,environment,0.8361,0.766,0.0,0.0,0.0,stationary,True
+1,83,obj_002,dining table,dining table,environment,0.8361,0.7656,0.0,-0.0047,0.0047,stationary,True
+2,167,obj_002,dining table,dining table,environment,0.8361,0.7664,0.0,0.0094,0.0094,stationary,True
+3,250,obj_002,dining table,dining table,environment,0.8382,0.7676,0.025,0.0141,0.0287,stationary,True
+4,333,obj_002,dining table,dining table,environment,0.8389,0.7691,0.0083,0.0188,0.0205,stationary,True
+5,417,obj_002,dining table,dining table,environment,0.8375,0.7672,-0.0167,-0.0234,0.0288,stationary,True
+6,500,obj_002,dining table,dining table,environment,0.8361,0.7695,-0.0167,0.0281,0.0327,stationary,True
+7,583,obj_002,dining table,dining table,environment,0.8368,0.7676,0.0083,-0.0234,0.0249,stationary,True
+8,667,obj_002,dining table,dining table,environment,0.8333,0.7664,-0.0417,-0.0141,0.044,stationary,True
+9,750,obj_002,dining table,dining table,environment,0.834,0.7664,0.0083,0.0,0.0083,stationary,True
+10,833,obj_002,dining table,dining table,environment,0.8347,0.766,0.0083,-0.0047,0.0096,stationary,True
+11,917,obj_002,dining table,dining table,environment,0.8354,0.7668,0.0083,0.0094,0.0125,stationary,True
+12,1000,obj_002,dining table,dining table,environment,0.8451,0.7758,0.1167,0.1078,0.1589,moving,True
+13,1083,obj_002,dining table,dining table,environment,0.8493,0.7891,0.05,0.1594,0.167,moving,True
+14,1167,obj_002,dining table,dining table,environment,0.8486,0.7898,-0.0083,0.0094,0.0125,stationary,True
+85,7083,obj_002,dining table,dining table,environment,0.8438,0.7844,-0.0008,-0.0009,0.0012,stationary,True
+86,7167,obj_002,dining table,dining table,environment,0.8493,0.7879,0.0667,0.0422,0.0789,moving,True
+87,7250,obj_002,dining table,dining table,environment,0.8403,0.7824,-0.1083,-0.0656,0.1267,moving,True
+88,7333,obj_002,dining table,dining table,environment,0.8389,0.7781,-0.0167,-0.0516,0.0542,stationary,True
+89,7417,obj_002,dining table,dining table,environment,0.8389,0.7746,0.0,-0.0422,0.0422,stationary,True
+90,7500,obj_002,dining table,dining table,environment,0.8347,0.7695,-0.05,-0.0609,0.0788,moving,True
+91,7583,obj_002,dining table,dining table,environment,0.8368,0.7676,0.025,-0.0234,0.0343,stationary,True
+92,7667,obj_002,dining table,dining table,environment,0.8375,0.7676,0.0083,0.0,0.0083,stationary,True
+93,7750,obj_002,dining table,dining table,environment,0.834,0.7672,-0.0417,-0.0047,0.0419,stationary,True
+94,7833,obj_002,dining table,dining table,environment,0.8347,0.766,0.0083,-0.0141,0.0163,stationary,True
+95,7917,obj_002,dining table,dining table,environment,0.8382,0.768,0.0417,0.0234,0.0478,stationary,True
+1,83,obj_003,chair,chair,environment,0.6556,0.7543,0.0,0.0,0.0,stationary,True
+2,167,obj_003,chair,chair,environment,0.6556,0.7543,0.0,0.0,0.0,stationary,True
+3,250,obj_003,chair,chair,environment,0.6569,0.7539,0.0167,-0.0047,0.0173,stationary,True
+4,333,obj_003,chair,chair,environment,0.6556,0.7543,-0.0167,0.0047,0.0173,stationary,False
+5,417,obj_003,chair,chair,environment,0.6542,0.7547,-0.0167,0.0047,0.0173,stationary,True
+6,500,obj_003,chair,chair,environment,0.6576,0.7551,0.0417,0.0047,0.0419,stationary,True
+7,583,obj_003,chair,chair,environment,0.6583,0.7547,0.0083,-0.0047,0.0096,stationary,True
+8,667,obj_003,chair,chair,environment,0.6611,0.7559,0.0333,0.0141,0.0362,stationary,True
+9,750,obj_003,chair,chair,environment,0.6604,0.7566,-0.0083,0.0094,0.0125,stationary,True
+10,833,obj_003,chair,chair,environment,0.6611,0.7568,0.0083,0.0023,0.0087,stationary,False
+11,917,obj_003,chair,chair,environment,0.6618,0.757,0.0083,0.0023,0.0087,stationary,True
+37,3083,obj_003,chair,chair,environment,0.8361,0.7816,0.0804,0.0114,0.0812,moving,True
+38,3167,obj_003,chair,chair,environment,0.8347,0.7793,-0.0167,-0.0281,0.0327,stationary,True
+39,3250,obj_003,chair,chair,environment,0.8319,0.7766,-0.0333,-0.0328,0.0468,stationary,True
+40,3333,obj_003,chair,chair,environment,0.8319,0.7746,0.0,-0.0234,0.0234,stationary,True
+41,3417,obj_003,chair,chair,environment,0.8354,0.7805,0.0417,0.0703,0.0817,moving,True
+42,3500,obj_003,chair,chair,environment,0.8347,0.7766,-0.0083,-0.0469,0.0476,stationary,True
+43,3583,obj_003,chair,chair,environment,0.8361,0.7773,0.0167,0.0094,0.0191,stationary,True
+44,3667,obj_003,chair,chair,environment,0.8361,0.775,0.0,-0.0281,0.0281,stationary,True
+45,3750,obj_003,chair,chair,environment,0.8354,0.7715,-0.0083,-0.0422,0.043,stationary,True
+46,3833,obj_003,chair,chair,environment,0.8361,0.7707,0.0083,-0.0094,0.0125,stationary,True
+47,3917,obj_003,chair,chair,environment,0.8375,0.7727,0.0167,0.0234,0.0288,stationary,True
+48,4000,obj_003,chair,chair,environment,0.8368,0.7703,-0.0083,-0.0281,0.0293,stationary,True
+49,4083,obj_003,chair,chair,environment,0.8368,0.7707,0.0,0.0047,0.0047,stationary,True
+50,4167,obj_003,chair,chair,environment,0.8375,0.7707,0.0083,0.0,0.0083,stationary,True
+51,4250,obj_003,chair,chair,environment,0.8389,0.7754,0.0167,0.0563,0.0587,stationary,True
+52,4333,obj_003,chair,chair,environment,0.8382,0.7758,-0.0083,0.0047,0.0096,stationary,True
+53,4417,obj_003,chair,chair,environment,0.8389,0.7773,0.0083,0.0188,0.0205,stationary,True
+54,4500,obj_003,chair,chair,environment,0.8382,0.777,-0.0083,-0.0047,0.0096,stationary,True
+55,4583,obj_003,chair,chair,environment,0.8368,0.7801,-0.0167,0.0375,0.041,stationary,True
+56,4667,obj_003,chair,chair,environment,0.8389,0.7766,0.025,-0.0422,0.049,stationary,True
+57,4750,obj_003,chair,chair,environment,0.841,0.7809,0.025,0.0516,0.0573,stationary,True
+58,4833,obj_003,chair,chair,environment,0.8403,0.7812,-0.0083,0.0047,0.0096,stationary,True
+59,4917,obj_003,chair,chair,environment,0.8382,0.7762,-0.025,-0.0609,0.0659,moving,True
+60,5000,obj_003,chair,chair,environment,0.8396,0.7746,0.0167,-0.0187,0.0251,stationary,True
+61,5083,obj_003,chair,chair,environment,0.8389,0.7785,-0.0083,0.0469,0.0476,stationary,True
+62,5167,obj_003,chair,chair,environment,0.8403,0.7797,0.0167,0.0141,0.0218,stationary,True
+63,5250,obj_003,chair,chair,environment,0.8382,0.7785,-0.025,-0.0141,0.0287,stationary,True
+64,5333,obj_003,chair,chair,environment,0.8403,0.7762,0.025,-0.0281,0.0376,stationary,True
+65,5417,obj_003,chair,chair,environment,0.8361,0.7707,-0.05,-0.0656,0.0825,moving,True
+66,5500,obj_003,chair,chair,environment,0.8354,0.7742,-0.0083,0.0422,0.043,stationary,True
+67,5583,obj_003,chair,chair,environment,0.8319,0.7723,-0.0417,-0.0234,0.0478,stationary,True
+68,5667,obj_003,chair,chair,environment,0.8354,0.7789,0.0417,0.0797,0.0899,moving,True
+69,5750,obj_003,chair,chair,environment,0.8347,0.7664,-0.0083,-0.15,0.1502,moving,True
+90,7500,obj_003,chair,chair,environment,0.6653,0.7582,-0.0968,-0.0047,0.0969,moving,True
+91,7583,obj_003,chair,chair,environment,0.6597,0.7578,-0.0667,-0.0047,0.0668,moving,True
+92,7667,obj_003,chair,chair,environment,0.6583,0.757,-0.0167,-0.0094,0.0191,stationary,True
+93,7750,obj_003,chair,chair,environment,0.6604,0.7543,0.025,-0.0328,0.0413,stationary,True
+94,7833,obj_003,chair,chair,environment,0.6625,0.7547,0.025,0.0047,0.0254,stationary,True
+68,5667,obj_004,chair,chair,environment,0.6361,0.7633,,,,stationary,True
+84,7000,obj_005,cup,cup,target,0.8972,0.6426,,,,stationary,True

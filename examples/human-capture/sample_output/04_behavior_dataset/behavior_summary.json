@@ -1,0 +1,13 @@
+{
+  "behavior_id": "behavior_0001",
+  "task": "pick_and_place",
+  "description": "Person interacts with a cup (pick / move / place candidates).",
+  "primary_hand": "right",
+  "primary_object": {
+    "track_id": "obj_005",
+    "label": "cup"
+  },
+  "start_sec": 0.0,
+  "end_sec": 7.92,
+  "events": []
+}

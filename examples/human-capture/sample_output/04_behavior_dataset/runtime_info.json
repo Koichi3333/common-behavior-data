@@ -1,0 +1,30 @@
+{
+  "gpu_name": "Tesla T4",
+  "mujoco_gl": "egl",
+  "tasks": {
+    "pose": {
+      "requested_delegate": "GPU",
+      "actual_delegate": "GPU"
+    },
+    "hands": {
+      "requested_delegate": "GPU",
+      "actual_delegate": "GPU"
+    },
+    "face": {
+      "requested_delegate": "GPU",
+      "actual_delegate": "GPU"
+    },
+    "gesture": {
+      "requested_delegate": "GPU",
+      "actual_delegate": "GPU"
+    },
+    "object": {
+      "requested_delegate": "GPU",
+      "actual_delegate": "GPU"
+    }
+  },
+  "processing_time_sec": 6.2,
+  "average_fps": 15.5,
+  "analysis_fps": 12.0,
+  "frame_count": 96
+}

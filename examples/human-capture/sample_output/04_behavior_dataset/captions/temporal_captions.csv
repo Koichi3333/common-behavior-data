@@ -1,0 +1,3 @@
+window_index,start_sec,end_sec,phase_candidate,objects,caption_en,caption_ja
+0,0.0,3.917,Idle,"['chair', 'dining table']","A woman sitting on a chair reaches out, grabs a glass of water from the table, and drinks from it.",椅子に座っている女性が手を伸ばしてテーブルからコップの水を取り、それを飲みます。
+1,4.0,7.917,Idle,"['chair', 'cup', 'dining table']","A woman sitting on a chair holding a glass of water, places it back on the table, and rests her hands.",椅子に座ってコップを持っている女性が、それをテーブルに戻し、両手を休めます。

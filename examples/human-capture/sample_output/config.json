@@ -1,0 +1,67 @@
+{
+  "video": {
+    "analysis_fps": 15.0,
+    "max_analysis_seconds": 40.0,
+    "export_frame_images": true,
+    "frame_image_width": 320,
+    "output_width": 640
+  },
+  "mediapipe": {
+    "use_gpu": true,
+    "pose": true,
+    "hands": true,
+    "face": true,
+    "gesture": true,
+    "object_detection": true,
+    "num_hands": 2,
+    "mirror_handedness": false
+  },
+  "object": {
+    "target_labels": [
+      "bottle",
+      "cup",
+      "bowl",
+      "box",
+      "ball",
+      "sports ball",
+      "book",
+      "cell phone"
+    ],
+    "label_aliases": {
+      "wine glass": "cup"
+    },
+    "environment_labels": [
+      "dining table",
+      "chair",
+      "couch",
+      "bench",
+      "bed"
+    ],
+    "min_confidence": 0.35,
+    "max_results": 5
+  },
+  "behavior": {
+    "task": "pick_and_place",
+    "enable_interaction_candidates": true,
+    "contact_distance": 0.3,
+    "reach_window": 5,
+    "moving_speed": 0.06
+  },
+  "cleaning": {
+    "max_interpolation_gap_frames": 3,
+    "min_pose_confidence": 0.5,
+    "min_hand_confidence": 0.5,
+    "min_object_confidence": 0.35,
+    "smoothing_alpha": 0.55
+  },
+  "mujoco": {
+    "render_width": 960,
+    "render_height": 720,
+    "use_image_translation": true,
+    "frame_world_width": 1.6
+  },
+  "vrm": {
+    "export_vrma": true,
+    "export_fingers": true
+  }
+}
