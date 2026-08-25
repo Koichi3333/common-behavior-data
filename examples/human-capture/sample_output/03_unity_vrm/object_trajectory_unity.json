@@ -1,0 +1,681 @@
+{
+ "label": "cup",
+ "shape": "cylinder",
+ "fps": 12.0,
+ "size": 0.12,
+ "coordinate_note": "canonical Y-up right-handed; the C# player negates X to match UniVRM's VRM 1.0 import",
+ "frames": [
+  {
+   "t": 0.0,
+   "x": NaN,
+   "y": NaN,
+   "z": 0.3,
+   "source": "fixed_depth_proxy"
+  },
+  {
+   "t": 0.083,
+   "x": NaN,
+   "y": NaN,
+   "z": 0.3,
+   "source": "fixed_depth_proxy"
+  },
+  {
+   "t": 0.167,
+   "x": NaN,
+   "y": NaN,
+   "z": 0.3,
+   "source": "fixed_depth_proxy"
+  },
+  {
+   "t": 0.25,
+   "x": NaN,
+   "y": NaN,
+   "z": 0.3,
+   "source": "fixed_depth_proxy"
+  },
+  {
+   "t": 0.333,
+   "x": NaN,
+   "y": NaN,
+   "z": 0.3,
+   "source": "fixed_depth_proxy"
+  },
+  {
+   "t": 0.417,
+   "x": NaN,
+   "y": NaN,
+   "z": 0.3,
+   "source": "fixed_depth_proxy"
+  },
+  {
+   "t": 0.5,
+   "x": NaN,
+   "y": NaN,
+   "z": 0.3,
+   "source": "fixed_depth_proxy"
+  },
+  {
+   "t": 0.583,
+   "x": NaN,
+   "y": NaN,
+   "z": 0.3,
+   "source": "fixed_depth_proxy"
+  },
+  {
+   "t": 0.667,
+   "x": NaN,
+   "y": NaN,
+   "z": 0.3,
+   "source": "fixed_depth_proxy"
+  },
+  {
+   "t": 0.75,
+   "x": NaN,
+   "y": NaN,
+   "z": 0.3,
+   "source": "fixed_depth_proxy"
+  },
+  {
+   "t": 0.833,
+   "x": NaN,
+   "y": NaN,
+   "z": 0.3,
+   "source": "fixed_depth_proxy"
+  },
+  {
+   "t": 0.917,
+   "x": NaN,
+   "y": NaN,
+   "z": 0.3,
+   "source": "fixed_depth_proxy"
+  },
+  {
+   "t": 1.0,
+   "x": NaN,
+   "y": NaN,
+   "z": 0.3,
+   "source": "fixed_depth_proxy"
+  },
+  {
+   "t": 1.083,
+   "x": NaN,
+   "y": NaN,
+   "z": 0.3,
+   "source": "fixed_depth_proxy"
+  },
+  {
+   "t": 1.167,
+   "x": NaN,
+   "y": NaN,
+   "z": 0.3,
+   "source": "fixed_depth_proxy"
+  },
+  {
+   "t": 1.25,
+   "x": NaN,
+   "y": NaN,
+   "z": 0.3,
+   "source": "fixed_depth_proxy"
+  },
+  {
+   "t": 1.333,
+   "x": NaN,
+   "y": NaN,
+   "z": 0.3,
+   "source": "fixed_depth_proxy"
+  },
+  {
+   "t": 1.417,
+   "x": NaN,
+   "y": NaN,
+   "z": 0.3,
+   "source": "fixed_depth_proxy"
+  },
+  {
+   "t": 1.5,
+   "x": NaN,
+   "y": NaN,
+   "z": 0.3,
+   "source": "fixed_depth_proxy"
+  },
+  {
+   "t": 1.583,
+   "x": NaN,
+   "y": NaN,
+   "z": 0.3,
+   "source": "fixed_depth_proxy"
+  },
+  {
+   "t": 1.667,
+   "x": NaN,
+   "y": NaN,
+   "z": 0.3,
+   "source": "fixed_depth_proxy"
+  },
+  {
+   "t": 1.75,
+   "x": NaN,
+   "y": NaN,
+   "z": 0.3,
+   "source": "fixed_depth_proxy"
+  },
+  {
+   "t": 1.833,
+   "x": NaN,
+   "y": NaN,
+   "z": 0.3,
+   "source": "fixed_depth_proxy"
+  },
+  {
+   "t": 1.917,
+   "x": NaN,
+   "y": NaN,
+   "z": 0.3,
+   "source": "fixed_depth_proxy"
+  },
+  {
+   "t": 2.0,
+   "x": NaN,
+   "y": NaN,
+   "z": 0.3,
+   "source": "fixed_depth_proxy"
+  },
+  {
+   "t": 2.083,
+   "x": NaN,
+   "y": NaN,
+   "z": 0.3,
+   "source": "fixed_depth_proxy"
+  },
+  {
+   "t": 2.167,
+   "x": NaN,
+   "y": NaN,
+   "z": 0.3,
+   "source": "fixed_depth_proxy"
+  },
+  {
+   "t": 2.25,
+   "x": NaN,
+   "y": NaN,
+   "z": 0.3,
+   "source": "fixed_depth_proxy"
+  },
+  {
+   "t": 2.333,
+   "x": NaN,
+   "y": NaN,
+   "z": 0.3,
+   "source": "fixed_depth_proxy"
+  },
+  {
+   "t": 2.417,
+   "x": NaN,
+   "y": NaN,
+   "z": 0.3,
+   "source": "fixed_depth_proxy"
+  },
+  {
+   "t": 2.5,
+   "x": NaN,
+   "y": NaN,
+   "z": 0.3,
+   "source": "fixed_depth_proxy"
+  },
+  {
+   "t": 2.583,
+   "x": NaN,
+   "y": NaN,
+   "z": 0.3,
+   "source": "fixed_depth_proxy"
+  },
+  {
+   "t": 2.667,
+   "x": NaN,
+   "y": NaN,
+   "z": 0.3,
+   "source": "fixed_depth_proxy"
+  },
+  {
+   "t": 2.75,
+   "x": NaN,
+   "y": NaN,
+   "z": 0.3,
+   "source": "fixed_depth_proxy"
+  },
+  {
+   "t": 2.833,
+   "x": NaN,
+   "y": NaN,
+   "z": 0.3,
+   "source": "fixed_depth_proxy"
+  },
+  {
+   "t": 2.917,
+   "x": NaN,
+   "y": NaN,
+   "z": 0.3,
+   "source": "fixed_depth_proxy"
+  },
+  {
+   "t": 3.0,
+   "x": NaN,
+   "y": NaN,
+   "z": 0.3,
+   "source": "fixed_depth_proxy"
+  },
+  {
+   "t": 3.083,
+   "x": NaN,
+   "y": NaN,
+   "z": 0.3,
+   "source": "fixed_depth_proxy"
+  },
+  {
+   "t": 3.167,
+   "x": NaN,
+   "y": NaN,
+   "z": 0.3,
+   "source": "fixed_depth_proxy"
+  },
+  {
+   "t": 3.25,
+   "x": NaN,
+   "y": NaN,
+   "z": 0.3,
+   "source": "fixed_depth_proxy"
+  },
+  {
+   "t": 3.333,
+   "x": NaN,
+   "y": NaN,
+   "z": 0.3,
+   "source": "fixed_depth_proxy"
+  },
+  {
+   "t": 3.417,
+   "x": NaN,
+   "y": NaN,
+   "z": 0.3,
+   "source": "fixed_depth_proxy"
+  },
+  {
+   "t": 3.5,
+   "x": NaN,
+   "y": NaN,
+   "z": 0.3,
+   "source": "fixed_depth_proxy"
+  },
+  {
+   "t": 3.583,
+   "x": NaN,
+   "y": NaN,
+   "z": 0.3,
+   "source": "fixed_depth_proxy"
+  },
+  {
+   "t": 3.667,
+   "x": NaN,
+   "y": NaN,
+   "z": 0.3,
+   "source": "fixed_depth_proxy"
+  },
+  {
+   "t": 3.75,
+   "x": NaN,
+   "y": NaN,
+   "z": 0.3,
+   "source": "fixed_depth_proxy"
+  },
+  {
+   "t": 3.833,
+   "x": NaN,
+   "y": NaN,
+   "z": 0.3,
+   "source": "fixed_depth_proxy"
+  },
+  {
+   "t": 3.917,
+   "x": NaN,
+   "y": NaN,
+   "z": 0.3,
+   "source": "fixed_depth_proxy"
+  },
+  {
+   "t": 4.0,
+   "x": NaN,
+   "y": NaN,
+   "z": 0.3,
+   "source": "fixed_depth_proxy"
+  },
+  {
+   "t": 4.083,
+   "x": NaN,
+   "y": NaN,
+   "z": 0.3,
+   "source": "fixed_depth_proxy"
+  },
+  {
+   "t": 4.167,
+   "x": NaN,
+   "y": NaN,
+   "z": 0.3,
+   "source": "fixed_depth_proxy"
+  },
+  {
+   "t": 4.25,
+   "x": NaN,
+   "y": NaN,
+   "z": 0.3,
+   "source": "fixed_depth_proxy"
+  },
+  {
+   "t": 4.333,
+   "x": NaN,
+   "y": NaN,
+   "z": 0.3,
+   "source": "fixed_depth_proxy"
+  },
+  {
+   "t": 4.417,
+   "x": NaN,
+   "y": NaN,
+   "z": 0.3,
+   "source": "fixed_depth_proxy"
+  },
+  {
+   "t": 4.5,
+   "x": NaN,
+   "y": NaN,
+   "z": 0.3,
+   "source": "fixed_depth_proxy"
+  },
+  {
+   "t": 4.583,
+   "x": NaN,
+   "y": NaN,
+   "z": 0.3,
+   "source": "fixed_depth_proxy"
+  },
+  {
+   "t": 4.667,
+   "x": NaN,
+   "y": NaN,
+   "z": 0.3,
+   "source": "fixed_depth_proxy"
+  },
+  {
+   "t": 4.75,
+   "x": NaN,
+   "y": NaN,
+   "z": 0.3,
+   "source": "fixed_depth_proxy"
+  },
+  {
+   "t": 4.833,
+   "x": NaN,
+   "y": NaN,
+   "z": 0.3,
+   "source": "fixed_depth_proxy"
+  },
+  {
+   "t": 4.917,
+   "x": NaN,
+   "y": NaN,
+   "z": 0.3,
+   "source": "fixed_depth_proxy"
+  },
+  {
+   "t": 5.0,
+   "x": NaN,
+   "y": NaN,
+   "z": 0.3,
+   "source": "fixed_depth_proxy"
+  },
+  {
+   "t": 5.083,
+   "x": NaN,
+   "y": NaN,
+   "z": 0.3,
+   "source": "fixed_depth_proxy"
+  },
+  {
+   "t": 5.167,
+   "x": NaN,
+   "y": NaN,
+   "z": 0.3,
+   "source": "fixed_depth_proxy"
+  },
+  {
+   "t": 5.25,
+   "x": NaN,
+   "y": NaN,
+   "z": 0.3,
+   "source": "fixed_depth_proxy"
+  },
+  {
+   "t": 5.333,
+   "x": NaN,
+   "y": NaN,
+   "z": 0.3,
+   "source": "fixed_depth_proxy"
+  },
+  {
+   "t": 5.417,
+   "x": NaN,
+   "y": NaN,
+   "z": 0.3,
+   "source": "fixed_depth_proxy"
+  },
+  {
+   "t": 5.5,
+   "x": NaN,
+   "y": NaN,
+   "z": 0.3,
+   "source": "fixed_depth_proxy"
+  },
+  {
+   "t": 5.583,
+   "x": NaN,
+   "y": NaN,
+   "z": 0.3,
+   "source": "fixed_depth_proxy"
+  },
+  {
+   "t": 5.667,
+   "x": NaN,
+   "y": NaN,
+   "z": 0.3,
+   "source": "fixed_depth_proxy"
+  },
+  {
+   "t": 5.75,
+   "x": NaN,
+   "y": NaN,
+   "z": 0.3,
+   "source": "fixed_depth_proxy"
+  },
+  {
+   "t": 5.833,
+   "x": NaN,
+   "y": NaN,
+   "z": 0.3,
+   "source": "fixed_depth_proxy"
+  },
+  {
+   "t": 5.917,
+   "x": NaN,
+   "y": NaN,
+   "z": 0.3,
+   "source": "fixed_depth_proxy"
+  },
+  {
+   "t": 6.0,
+   "x": NaN,
+   "y": NaN,
+   "z": 0.3,
+   "source": "fixed_depth_proxy"
+  },
+  {
+   "t": 6.083,
+   "x": NaN,
+   "y": NaN,
+   "z": 0.3,
+   "source": "fixed_depth_proxy"
+  },
+  {
+   "t": 6.167,
+   "x": NaN,
+   "y": NaN,
+   "z": 0.3,
+   "source": "fixed_depth_proxy"
+  },
+  {
+   "t": 6.25,
+   "x": NaN,
+   "y": NaN,
+   "z": 0.3,
+   "source": "fixed_depth_proxy"
+  },
+  {
+   "t": 6.333,
+   "x": NaN,
+   "y": NaN,
+   "z": 0.3,
+   "source": "fixed_depth_proxy"
+  },
+  {
+   "t": 6.417,
+   "x": NaN,
+   "y": NaN,
+   "z": 0.3,
+   "source": "fixed_depth_proxy"
+  },
+  {
+   "t": 6.5,
+   "x": NaN,
+   "y": NaN,
+   "z": 0.3,
+   "source": "fixed_depth_proxy"
+  },
+  {
+   "t": 6.583,
+   "x": NaN,
+   "y": NaN,
+   "z": 0.3,
+   "source": "fixed_depth_proxy"
+  },
+  {
+   "t": 6.667,
+   "x": NaN,
+   "y": NaN,
+   "z": 0.3,
+   "source": "fixed_depth_proxy"
+  },
+  {
+   "t": 6.75,
+   "x": NaN,
+   "y": NaN,
+   "z": 0.3,
+   "source": "fixed_depth_proxy"
+  },
+  {
+   "t": 6.833,
+   "x": NaN,
+   "y": NaN,
+   "z": 0.3,
+   "source": "fixed_depth_proxy"
+  },
+  {
+   "t": 6.917,
+   "x": NaN,
+   "y": NaN,
+   "z": 0.3,
+   "source": "fixed_depth_proxy"
+  },
+  {
+   "t": 7.0,
+   "x": NaN,
+   "y": NaN,
+   "z": 0.3,
+   "source": "detected_2d"
+  },
+  {
+   "t": 7.083,
+   "x": NaN,
+   "y": NaN,
+   "z": 0.3,
+   "source": "last_known_position"
+  },
+  {
+   "t": 7.167,
+   "x": NaN,
+   "y": NaN,
+   "z": 0.3,
+   "source": "last_known_position"
+  },
+  {
+   "t": 7.25,
+   "x": NaN,
+   "y": NaN,
+   "z": 0.3,
+   "source": "last_known_position"
+  },
+  {
+   "t": 7.333,
+   "x": NaN,
+   "y": NaN,
+   "z": 0.3,
+   "source": "last_known_position"
+  },
+  {
+   "t": 7.417,
+   "x": NaN,
+   "y": NaN,
+   "z": 0.3,
+   "source": "last_known_position"
+  },
+  {
+   "t": 7.5,
+   "x": NaN,
+   "y": NaN,
+   "z": 0.3,
+   "source": "last_known_position"
+  },
+  {
+   "t": 7.583,
+   "x": NaN,
+   "y": NaN,
+   "z": 0.3,
+   "source": "last_known_position"
+  },
+  {
+   "t": 7.667,
+   "x": NaN,
+   "y": NaN,
+   "z": 0.3,
+   "source": "last_known_position"
+  },
+  {
+   "t": 7.75,
+   "x": NaN,
+   "y": NaN,
+   "z": 0.3,
+   "source": "last_known_position"
+  },
+  {
+   "t": 7.833,
+   "x": NaN,
+   "y": NaN,
+   "z": 0.3,
+   "source": "last_known_position"
+  },
+  {
+   "t": 7.917,
+   "x": NaN,
+   "y": NaN,
+   "z": 0.3,
+   "source": "last_known_position"
+  }
+ ]
+}

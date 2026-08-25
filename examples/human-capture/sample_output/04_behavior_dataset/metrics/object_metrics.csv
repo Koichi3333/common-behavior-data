@@ -1,0 +1,2 @@
+track_id,label,object_visible_duration_sec,object_path_length_2d,object_displacement_2d,object_average_speed_2d,object_max_speed_2d,object_detection_rate,minimum_hand_object_distance,grasp_candidate_count,carry_duration_sec,release_candidate_count
+obj_005,cup,0.08,,,,,0.01,0.93,0,0,0

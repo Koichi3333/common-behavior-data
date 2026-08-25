@@ -1,0 +1,38 @@
+{
+  "dataset_version": "0.2.0",
+  "demo_name": "human_behavior_demo_2_0",
+  "created_at": "2026-08-24T14:47:49.059914+00:00",
+  "source_video": "source_video.mp4",
+  "source_fps": 24.0,
+  "fps": 12.0,
+  "frame_count": 96,
+  "duration_sec": 7.92,
+  "person_count": 1,
+  "face_landmark_count": 0,
+  "coordinate_system": {
+    "raw": "mediapipe (x=image right, y=image down, z=away from camera)",
+    "canonical": "body_capture (x=right, y=up, z=toward camera / person faces +z)",
+    "adapters": {
+      "mujoco": "z-up, person faces -y",
+      "unity_vrm": "gltf y-up"
+    }
+  },
+  "mediapipe": {
+    "pose": true,
+    "hands": true,
+    "face": true,
+    "gesture": true,
+    "object": true
+  },
+  "outputs": {
+    "mediapipe_overlay": true,
+    "mujoco": true,
+    "vrma": true,
+    "behavior_dataset": true
+  },
+  "temporal_captions": {
+    "model": "gemini-3.5-flash-lite",
+    "count": 2,
+    "path": "captions/temporal_captions.json"
+  }
+}

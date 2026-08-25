@@ -1,0 +1,2 @@
+duration_sec,left_hand_path_length_m,right_hand_path_length_m,left_wrist_average_speed,right_wrist_average_speed,left_wrist_max_speed,right_wrist_max_speed,elbow_range_of_motion_deg,motion_smoothness,left_right_coordination,pose_detection_rate,hand_detection_rate
+7.917,1.274,2.585,0.161,0.326,0.536,1.0,76.9,0.922,0.346,1.0,0.906

@@ -1,0 +1,10 @@
+{
+  "overall_quality": 0.727,
+  "pose_coverage": 1.0,
+  "left_hand_coverage": 0.906,
+  "right_hand_coverage": 0.823,
+  "face_coverage": 0.0,
+  "object_coverage": 1.0,
+  "missing_frame_ratio": 0.0,
+  "notes": []
+}

@@ -1,0 +1,42 @@
+# --- Python ---
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+
+# --- Notebooks ---
+.ipynb_checkpoints/
+
+# --- Secrets: never commit credentials ---
+.env
+.env.*
+*.key
+*.pem
+credentials*
+secrets*
+service_account*.json
+
+# --- Demo run artifacts (regenerate by running the notebooks) ---
+# Sample outputs under examples/*/sample_output/ are committed on purpose;
+# these patterns cover local runs elsewhere in the tree.
+/output/
+/behavior_corpus/
+/upload_zips/
+/_vla_runs/
+**/_vla_runs/
+**/_work/
+*.zip
+demo2_output_bundle*
+vla_checkpoint*.pt
+*.pt
+*.ckpt
+
+# --- OS / editors ---
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# --- Local working material, not part of the public repository ---
+_handover/

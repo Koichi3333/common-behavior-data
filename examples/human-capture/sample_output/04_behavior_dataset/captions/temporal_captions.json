@@ -1,0 +1,34 @@
+{
+  "source": "gemini_api",
+  "model": "gemini-3.5-flash-lite",
+  "generated_at": "2026-08-24T14:49:31.403151+00:00",
+  "window_seconds": 5,
+  "note": "Captions are AI-generated descriptions, not ground truth annotations.",
+  "captions": [
+    {
+      "window_index": 0,
+      "start_sec": 0.0,
+      "end_sec": 3.917,
+      "phase_candidate": "Idle",
+      "objects": [
+        "chair",
+        "dining table"
+      ],
+      "caption_en": "A woman sitting on a chair reaches out, grabs a glass of water from the table, and drinks from it.",
+      "caption_ja": "椅子に座っている女性が手を伸ばしてテーブルからコップの水を取り、それを飲みます。"
+    },
+    {
+      "window_index": 1,
+      "start_sec": 4.0,
+      "end_sec": 7.917,
+      "phase_candidate": "Idle",
+      "objects": [
+        "chair",
+        "cup",
+        "dining table"
+      ],
+      "caption_en": "A woman sitting on a chair holding a glass of water, places it back on the table, and rests her hands.",
+      "caption_ja": "椅子に座ってコップを持っている女性が、それをテーブルに戻し、両手を休めます。"
+    }
+  ]
+}

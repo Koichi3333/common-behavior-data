@@ -1,0 +1,75 @@
+{
+  "note": "Mapping from raw detector labels to the human-confirmed best COCO class. Applied as label_aliases before tracking. Raw labels are preserved in objects/object_detections.csv.",
+  "gemini_blind_judgment": true,
+  "coco_vocabulary_size": 80,
+  "reclassifications": [
+    {
+      "detected_label": "chair",
+      "gemini_candidates": [],
+      "final_class": "chair",
+      "chosen_rank": null,
+      "source": "detector",
+      "role": "environment"
+    },
+    {
+      "detected_label": "dining table",
+      "gemini_candidates": [],
+      "final_class": "dining table",
+      "chosen_rank": null,
+      "source": "detector",
+      "role": "environment"
+    },
+    {
+      "detected_label": "cup",
+      "gemini_candidates": [],
+      "final_class": "cup",
+      "chosen_rank": null,
+      "source": "detector",
+      "role": "target"
+    }
+  ],
+  "label_table": [
+    {
+      "detected_label": "chair",
+      "detection_count": 144,
+      "final_class": "chair",
+      "role": "environment",
+      "source": "detector",
+      "excluded_reason": null,
+      "changed": false
+    },
+    {
+      "detected_label": "person",
+      "detection_count": 96,
+      "final_class": null,
+      "role": null,
+      "source": "skip_label（96回検出 / RECLASSIFY_SKIP_LABELS）",
+      "excluded_reason": "skip_label（96回検出 / RECLASSIFY_SKIP_LABELS）",
+      "changed": false
+    },
+    {
+      "detected_label": "dining table",
+      "detection_count": 26,
+      "final_class": "dining table",
+      "role": "environment",
+      "source": "detector",
+      "excluded_reason": null,
+      "changed": false
+    },
+    {
+      "detected_label": "cup",
+      "detection_count": 1,
+      "final_class": "cup",
+      "role": "target",
+      "source": "detector",
+      "excluded_reason": null,
+      "changed": false
+    }
+  ],
+  "excluded_labels": {
+    "person": "skip_label（96回検出 / RECLASSIFY_SKIP_LABELS）"
+  },
+  "resulting_label_aliases": {
+    "wine glass": "cup"
+  }
+}

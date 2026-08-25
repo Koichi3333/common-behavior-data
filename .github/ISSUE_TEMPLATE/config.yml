@@ -1,0 +1,5 @@
+blank_issues_enabled: true
+contact_links:
+  - name: 💬 Discussions — ideas, integrations, schema design
+    url: https://github.com/Koichi3333/common-behavior-data/discussions
+    about: Open-ended questions, integration ideas, schema debates, and "here is what I am building" belong here.

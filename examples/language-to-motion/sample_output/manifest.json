@@ -1,0 +1,34 @@
+{
+  "note": "Each folder is one behavior dataset generated from the natural-language instruction in 'prompt'. Same schema and adapters as observed Common Behavior Data.",
+  "generation_seed": 0,
+  "smoothing_alpha": 0.2,
+  "lower_body_frozen": true,
+  "lower_body_pose": "sitting",
+  "lower_body_note": "Legs are pinned to the T-pose because the current corpus is seated and small; revisit when more episodes with visible lower body are available.",
+  "generations": [
+    {
+      "index": 1,
+      "prompt": "The person picks up the cup, drinks, and puts it back on the table.",
+      "image_prompt": null,
+      "frames": 96,
+      "duration_sec": 6.4,
+      "folder": "01_the_person_picks_up_the_cup_drinks_and_p"
+    },
+    {
+      "index": 2,
+      "prompt": "The person reaches for the cup on the table.",
+      "image_prompt": null,
+      "frames": 96,
+      "duration_sec": 6.4,
+      "folder": "02_the_person_reaches_for_the_cup_on_the_ta"
+    },
+    {
+      "index": 3,
+      "prompt": "The person carries the cup to another place and releases it.",
+      "image_prompt": null,
+      "frames": 96,
+      "duration_sec": 6.4,
+      "folder": "03_the_person_carries_the_cup_to_another_pl"
+    }
+  ]
+}
