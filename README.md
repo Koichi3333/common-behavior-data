@@ -11,6 +11,10 @@ simulation, AI, and motion applications.
 [![License: Apache 2.0](https://img.shields.io/badge/license-Apache--2.0-blue)](LICENSE)
 [![Demos: 2 end-to-end](https://img.shields.io/badge/demos-2%20end--to--end-brightgreen)](#what-works-today)
 
+[![Read the deck](https://img.shields.io/badge/Technical%20Concept%20Deck-PDF-EC1C24?style=for-the-badge&logo=adobeacrobatreader&logoColor=white)](docs/media/technical-concept-deck.pdf)
+
+*The whole idea — concept, architecture, demos, and roadmap — in one visual overview.*
+
 [日本語 README](README.ja.md) ·
 [Concept](docs/concept.md) ·
 [Architecture](docs/architecture.md) ·
@@ -58,6 +62,12 @@ pose · hands · face and expressions · gestures · bone rotations · joint ang
 object detections and tracks · interaction candidates · behavior phase ·
 temporal captions · motion metrics · quality and provenance metadata
 
+The timeline is meant to be extensible along the same axis. Physical
+interaction is not fully described by kinematics, so sensor-side channels —
+contact and impact, grip and applied force, torque, tactile and IMU streams,
+and material or strength properties — are being considered as future additions
+to the same representation. See [Roadmap](#roadmap).
+
 **Status: experimental.** The schema is evolving and is being driven by real
 adapter implementations rather than designed up front. It is not an established
 standard, it has no industry adoption, and it is not finished. See
@@ -76,7 +86,7 @@ Two end-to-end demos, running in Colab, arranged around the same representation.
 | Status | Working | Working, small-scale prototype |
 | Notebook | [`examples/human-capture`](examples/human-capture/) | [`examples/language-to-motion`](examples/language-to-motion/) |
 
-The point is not either demo on its own. It is that **they meet in the middle**:
+What matters here is not either demo on its own. It is that **they meet in the middle**:
 the representation that describes observed motion is the same representation a
 model learns from, and the same one it generates back into.
 
@@ -101,10 +111,10 @@ flowchart TD
     class A5 planned;
 ```
 
-The design rule that makes this worth doing:
+The design choice behind it:
 
 ```text
-Do not build:            Prefer:
+Instead of:              CBD does:
   Language → Unity         Language
   Language → MuJoCo           ↓
   Language → Robot         Behavior
@@ -128,8 +138,8 @@ CBD; every renderer reads out of it.
 
 - The overlay video is CBD drawn back onto the original pixels
 - MuJoCo gets `humanoid.xml` (model) + `motion.npz` (motion), deliberately separate
-- Unity gets `motion.vrma`, playable on any VRM 1.0 avatar — **Unity is playback
-  and visualisation here, never the inference engine**
+- Unity gets `motion.vrma`, playable on any VRM 1.0 avatar — Unity is used for
+  playback and visualisation here, not as an inference engine
 - Everything else lands in `04_behavior_dataset/`, which is the master data
 
 [![Open Demo A in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/Koichi3333/common-behavior-data/blob/main/examples/human-capture/human_behavior_demo_2_0.ipynb)
@@ -147,16 +157,24 @@ returns through the same adapters.**
 *Three behaviors generated from three English instructions, replayed through
 the Demo A MuJoCo adapter. Nothing downstream knows they were generated.*
 
-Each line of `frames.jsonl` already pairs a prompt (frame image + caption) with
-an answer (bone rotations, hips, finger curls, phase), because they were
-written onto one timeline. So no annotation step is needed — a small causal
+Demo A's output is already a machine-learnable dataset, because **every line of
+`frames.jsonl` is a complete supervised example on its own**: the conditioning
+side (frame image + caption) and the target side (bone rotations, hips, finger
+curls, phase) were written onto the same timeline, at the same timestamp, in the
+same record.
+
+That is the part that usually costs the most. Nothing has to be labelled by
+hand, nothing has to be joined across a video file and a separate annotation
+file, and no timestamps have to be reconciled between a motion track and a text
+track — the pairing is a property of the format, not of a preprocessing script.
+`frames.jsonl` can be read line by line and fed to a model as-is. A small causal
 Transformer with vision and text conditioning trains directly on it, and emits
 `frames.jsonl`, `motion.vrma`, `humanoid.xml`, `motion.npz`, `replay_mujoco.py`.
 
 > ⚠️ **This is not a general-purpose VLA.** At the current scale it is a small
 > VLA-like learning prototype that demonstrates memorisation, interpolation and
 > language-conditioned behavior generation. It does not generalise to unseen
-> instructions. That limit is stated here on purpose, not buried at the bottom.
+> instructions.
 
 [![Open Demo B in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/Koichi3333/common-behavior-data/blob/main/examples/language-to-motion/human_behavior_vla_trainer.ipynb)
 
@@ -190,20 +208,27 @@ frame, and one frame is a complete tuple:**
 ```
 
 Vision + language + motion + object + phase, aligned. That alignment is what
-makes the same file both an observation record and a training sample.
+makes the same file both an observation record and a training sample: the input
+a model would be conditioned on and the output it should predict are already
+sitting in the same line, so **supervision is complete at the frame level** and
+no annotation pass sits between capture and training. Change what you want to
+predict — bone rotations, phase labels, a caption — and the supervision for it
+is already there; only the choice of which fields are input and which are target
+changes.
 
 Alongside it, the same data is projected into column-oriented CSVs
 (`human/`, `objects/`, `interactions/`, `metrics/`) for analysis and for
 adapters that only need one series. Details in
 [`specification/README.md`](specification/README.md).
 
-Three conventions worth calling out, because they are about honesty:
+Three conventions worth calling out, because they change how the data should
+be read:
 
 - **`interaction_events` are candidates.** Heuristics, not ground truth. The
   column names say so.
 - **Derived 3D positions always carry `position_source`** (`detected_2d`,
-  `estimated_from_hand`, `last_known_position`, `fixed_depth_proxy`, …). We do
-  not fabricate depth silently.
+  `estimated_from_hand`, `last_known_position`, `fixed_depth_proxy`, …). Depth
+  that was inferred rather than measured is always marked as such.
 - **Captions are AI-generated descriptions**, recorded with the model that
   produced them.
 
@@ -216,13 +241,13 @@ Three conventions worth calling out, because they are about honesty:
 | CBD → Unity / VRM | **Available** | VRMA export, playback in UniVRM SimpleVrma |
 | CBD → behavior dataset | **Available** | `frames.jsonl` + CSVs |
 | Language → CBD | **Experimental** | Demo B, small learning prototype |
-| CBD → SO-101 / MuJoCo | Planned next | Pick & place reference demo |
+| CBD → robot embodiment (e.g. SO-101) | Planned | Re-embodiment experiment; target platform not yet fixed |
 | CBD ↔ LeRobot | Planned | Integration / contributor target |
 | CBD → Isaac | Planned | Integration target |
 | CBD → ROS 2 | Planned | Integration target |
 
-Nothing marked *Planned* exists as code in this repository. There are no empty
-adapter directories pretending otherwise — see [`docs/roadmap.md`](docs/roadmap.md).
+Nothing marked *Planned* exists as code in this repository yet — see
+[`docs/roadmap.md`](docs/roadmap.md).
 
 ## Try the demos
 
@@ -272,20 +297,33 @@ repository will not pretend otherwise. More in [`docs/ecosystem.md`](docs/ecosys
 The next real question is not more human capture. It is whether the abstraction
 **survives a change of embodiment**.
 
-**Next: SO-101 pick & place.**
-
 ```text
 Human video → CBD → behavior intent / end-effector representation
-                 → SO-101 adapter → MuJoCo SO-101 → task success
+                 → robot adapter → simulated robot → task success
 ```
 
 The goal is explicitly *not* copying human joint angles onto a robot arm. It is
 testing whether behavior intent — reach, grasp, lift, carry, place, release —
-can be re-embodied. Full plan in [`docs/roadmap.md`](docs/roadmap.md).
+can be re-embodied.
+
+**Which embodiment comes first is still open.** A low-cost arm such as SO-101 in
+MuJoCo is one candidate for the first pick & place reference, but the target has
+not been fixed, and the choice should be driven by what someone actually wants
+to connect. If you have a platform in mind, an issue or a discussion is the
+place to raise it.
+
+The other open direction is **what CBD carries**. Today the timeline holds
+vision, language, and kinematics. Behavior in the physical world also involves
+forces: contact and impact events, grip and applied force, torque and load,
+tactile and IMU readings, and material or strength properties of the objects
+involved. Whether these belong on the same timeline as first-class channels, or
+in a separate layer referenced by timestamp, is an open schema question — and
+one worth answering with a real sensor integration rather than in the abstract.
+Full plan in [`docs/roadmap.md`](docs/roadmap.md).
 
 ## Limitations
 
-Visible on purpose. The short version:
+The short version:
 
 - Single-person capture; depth is monocular estimation
 - Interaction detection is heuristic **candidates**, not ground truth
@@ -314,7 +352,8 @@ because of a real integration rather than in the abstract.
 application you would like to connect? Want an adapter that does not exist yet?
 Open a [Discussion](https://github.com/Koichi3333/common-behavior-data/discussions) or an [Issue](https://github.com/Koichi3333/common-behavior-data/issues).
 
-Feedback that a schema decision is wrong is more useful here than a star.
+Feedback that a schema decision is wrong is the most useful thing this project
+can receive right now.
 
 ## Why I'm building this
 
