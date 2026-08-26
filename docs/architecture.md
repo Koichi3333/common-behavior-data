@@ -137,7 +137,9 @@ A recurring misreading is worth pre-empting:
 - **MuJoCo does no physics here.** Demo A and Demo B both use *kinematic
   replay*: assign `qpos`, call `mj_forward`, render. Contacts and forces are not
   simulated, so nothing in this repository is evidence about physical
-  correctness of grasping.
+  correctness of grasping. Whether contact and force belong in the
+  representation itself is a separate, open question — see
+  [Roadmap](roadmap.md#also-open-what-cbd-carries).
 
 Both are consumers. Replacing either would not touch the behavior layer.
 
@@ -156,8 +158,8 @@ bridge can be written by different people without coordinating:
 - how behavior intent (reach / grasp / place) maps onto a body that has none of
   the human's joints
 
-The last one is the SO-101 question in the [roadmap](roadmap.md), and it is the
-part most likely to reshape the schema.
+The last one is the re-embodiment question in the [roadmap](roadmap.md), and it
+is the part most likely to reshape the schema.
 
 ---
 

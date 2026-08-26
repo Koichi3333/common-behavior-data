@@ -18,9 +18,9 @@ Formalising a representation before it has survived contact with several
 consumers produces a specification that is precise about the wrong things.
 
 Two adapters (MuJoCo, VRM) plus one learning consumer is not enough evidence.
-The [SO-101 experiment](../docs/roadmap.md#next-so-101-pick--place) is expected
-to change the schema, because a robot arm has none of the human joints the
-current representation is built around. Publishing a `v1.0` first would mean
+The [re-embodiment experiment](../docs/roadmap.md#next-re-embodiment) is
+expected to change the schema, because a robot arm has none of the human joints
+the current representation is built around. Publishing a `v1.0` first would mean
 either breaking it immediately or bending the robot case to fit a human-shaped
 schema.
 
@@ -227,6 +227,9 @@ Genuinely undecided, and good places to argue:
   Affordances? Articulation? Contact points?
 - **Adapter contract.** What must a consumer find, how does it declare what it
   uses, how does it report what it could not represent?
+- **Force and contact channels.** Grip force, torque, impact, tactile and IMU
+  streams, material properties — same timeline as first-class channels, or a
+  separate layer joined by timestamp?
 - **Multi-person and multi-agent.** Interaction between people is behavior too.
 - **Versioning and migration.** `dataset_version` exists; migration tooling does
   not.

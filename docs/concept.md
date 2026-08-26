@@ -121,8 +121,10 @@ joint angles onto it is meaningless. But *reach, grasp, lift, carry, place,
 release* might survive — as behavior intent plus an end-effector representation,
 re-embodied by an adapter.
 
-That is the SO-101 pick & place experiment in the [roadmap](roadmap.md), and it
-is the point at which this idea either becomes useful or gets falsified.
+That is the re-embodiment experiment in the [roadmap](roadmap.md) — a robot arm
+is the sharpest test, an avatar in VR a milder one, and the target is not fixed
+yet — and it is the point at which this idea either becomes useful or gets
+falsified.
 
 ---
 

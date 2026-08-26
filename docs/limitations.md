@@ -91,8 +91,12 @@ Additional constraints:
 - **Object semantics are thin.** Objects have a class, a track, a role and a
   proxy position. No affordances, no pose, no articulation.
 - **Behavior intent is not yet represented separately from motion.** This is the
-  gap that the SO-101 experiment is designed to expose, since intent is the part
-  that should survive a change of embodiment.
+  gap the re-embodiment experiment is designed to expose, since intent is the
+  part that should survive a change of embodiment.
+- **No force, contact or tactile channels.** The timeline carries vision,
+  language and kinematics only. Grip force, torque, impact and material
+  properties are not represented, and whether they belong on the same timeline
+  is undecided — see [Roadmap](roadmap.md#also-open-what-cbd-carries).
 
 ## Known inconsistencies
 

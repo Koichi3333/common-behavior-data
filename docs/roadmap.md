@@ -17,7 +17,7 @@ an empty adapter directory is worse than an honest roadmap.
 - **Language → CBD** — Demo B, small learning prototype, generated behavior
   replaying through the same adapters
 
-## Next: SO-101 pick & place
+## Next: re-embodiment
 
 The most important open question is not capture quality or model size. It is:
 
@@ -30,14 +30,14 @@ Common Behavior Data
    ↓
 Behavior intent / end-effector representation
    ↓
-SO-101 adapter
+Embodiment adapter
    ↓
-MuJoCo SO-101
+Simulated robot  ← target platform not yet fixed
    ↓
 Task success
 ```
 
-The goal is **not** copying human joint angles onto a robot arm. A 5-DoF arm has
+The goal is **not** copying human joint angles onto a robot arm. A robot arm has
 no spine, no shoulder blade and no fingers; joint-level transfer is meaningless.
 
 What might transfer is the intent sequence:
@@ -46,13 +46,24 @@ What might transfer is the intent sequence:
 Reach → Grasp → Lift → Carry → Place → Release
 ```
 
-If a CBD episode captured from a human can drive an SO-101 in MuJoCo to complete
-a pick & place through that sequence, the representation is doing real work. If
-it cannot, we learn exactly which part of the schema was too human-shaped — which
-is also a useful result, and will be reported as one.
+If a CBD episode captured from a human can drive a robot in simulation to
+complete a pick & place through that sequence, the representation is doing real
+work. If it cannot, we learn exactly which part of the schema was too
+human-shaped — which is also a useful result, and will be reported as one.
 
 Success criterion, stated in advance: **task success in simulation**, not visual
 similarity to the human demonstration.
+
+### Which embodiment comes first is open
+
+The target platform has not been fixed. A low-cost arm such as SO-101 in MuJoCo
+is the leading candidate for the first pick & place reference, because the cost
+barrier to reproducing it on real hardware is low; validating against a
+different physics simulator first is the other option under consideration. A
+robot arm is also not the only body worth testing — a VR or VRM avatar is a
+change of embodiment too, and a milder one to start from. The choice should be
+driven by what someone actually wants to connect, so if you have a platform in
+mind, an issue or a discussion is the place to raise it.
 
 ### What this requires from the schema
 
@@ -63,6 +74,18 @@ similarity to the human demonstration.
 
 Expect the schema to change because of this experiment. That is the intended
 order of events: adapters drive the specification, not the other way around.
+
+## Also open: what CBD carries
+
+Today the timeline holds vision, language, and kinematics. Behavior in the
+physical world also involves forces: contact and impact events, grip and applied
+force, torque and load, tactile and IMU readings, and material or strength
+properties of the objects involved.
+
+Whether these belong on the same timeline as first-class channels, or in a
+separate layer referenced by timestamp, is an open schema question. It is worth
+answering with a real sensor integration rather than in the abstract — the same
+rule as the embodiment question: adapters drive the specification.
 
 ## After that
 
