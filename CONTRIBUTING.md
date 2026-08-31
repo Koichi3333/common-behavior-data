@@ -50,6 +50,30 @@ saves you from building against a version that is about to move.
 **Show & Tell** · **Adapter Requests** · **Integration Ideas** · **Research** ·
 **Industry Use Cases** · **Partnerships**
 
+## Where code goes
+
+`examples/` holds the **initial demos** — two notebooks that run end to end, kept
+as a showcase. Ongoing development happens in four directories, each with its own
+README:
+
+| Directory | What goes there |
+|---|---|
+| [`generator/`](generator/) | Anything that **writes** CBD — video → CBD, language → CBD, captioning and annotation passes |
+| [`adapter/`](adapter/) | Anything that **reads** CBD and converts it for an engine, embodiment or format |
+| [`experiment/`](experiment/) | Research code — learning prototypes, re-embodiment and schema experiments, evaluation |
+| [`tool/`](tool/) | Utilities that help at **any stage** of the pipeline — validation, inspection, visualisation, conversion, statistics |
+
+Two rules of thumb:
+
+- If it targets one specific engine or body, it is an **adapter**, not a tool.
+- An experiment that stabilises **graduates** into `generator/`, `adapter/` or
+  `tool/`. Nothing in `experiment/` is part of the stable surface.
+
+All four are placeholders today: the working generator, adapter and learning
+code still lives inside the notebooks. Extracting a piece of it into the right
+directory is a genuinely useful contribution — open an issue first so two people
+do not extract the same thing.
+
 ## Working on the notebooks
 
 The two notebooks in `examples/` are the technical source of truth for what CBD
@@ -74,6 +98,7 @@ currently is. A few conventions:
 
 ## Writing an adapter
 
+New adapters belong in [`adapter/`](adapter/), one subdirectory per target.
 Until the adapter contract is formalised (see
 [open questions](specification/README.md#open-questions)), the working rules are:
 

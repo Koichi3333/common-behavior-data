@@ -161,6 +161,22 @@ bridge can be written by different people without coordinating:
 The last one is the re-embodiment question in the [roadmap](roadmap.md), and it
 is the part most likely to reshape the schema.
 
+## Where this lives in the repository
+
+The layers above map onto four working directories, each with its own README:
+
+```text
+generator/   → writes CBD          (video → CBD, language → CBD)
+adapter/     → reads CBD           (MuJoCo, Unity / VRM, dataset views, planned robots)
+experiment/  → asks questions of CBD (learning prototypes, re-embodiment, evaluation)
+tool/        → helps at any stage    (validation, inspection, visualisation)
+```
+
+`examples/` stays as the initial end-to-end demos. All four directories are
+placeholders today — the generator, adapter and learning code described on this
+page still lives inside those notebooks, and moving it out is the next
+structural step.
+
 ---
 
 **Next:** [Specification](../specification/README.md) · [Roadmap](roadmap.md) · [Ecosystem](ecosystem.md)

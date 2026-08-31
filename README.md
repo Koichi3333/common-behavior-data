@@ -269,6 +269,32 @@ Prefer to look before running? Both demos ship their real output:
 [`human-capture/sample_output/`](examples/human-capture/sample_output/) and
 [`language-to-motion/sample_output/`](examples/language-to-motion/sample_output/).
 
+## Repository layout
+
+`examples/` is the initial demo: two notebooks that already run end to end, kept
+as a showcase of what the representation does. **Ongoing development happens in
+four directories**, each with its own README:
+
+| Directory | Holds | Status |
+|---|---|---|
+| [`generator/`](generator/) | CBD generators — anything that *writes* behavior data (video → CBD, language → CBD, captioning passes) | placeholder |
+| [`adapter/`](adapter/) | Converters from CBD to a target system — MuJoCo, Unity / VRM, dataset views, and planned robot / ROS 2 / Isaac targets | placeholder |
+| [`experiment/`](experiment/) | Research code — learning prototypes, re-embodiment and schema experiments, evaluation | placeholder |
+| [`tool/`](tool/) | Utilities that help at **any stage** — validation, inspection, visualisation, conversion, dataset statistics | placeholder |
+
+`tool/` is deliberately cross-cutting: whatever is useful at a given stage —
+capture, adapter work, or an experiment — belongs there. A bundle inspector, for
+instance, serves all three equally.
+
+Today all four are placeholders: the working generator, adapter and learning
+code still lives inside the [`examples/`](examples/) notebooks. Extracting it
+into these directories — as reusable code rather than notebook cells — is the
+next structural step, and the demos are expected to get thinner as it happens.
+
+Alongside them: [`specification/`](specification/README.md) for the
+representation, [`docs/`](docs/) for concept, architecture, roadmap and
+limitations.
+
 ## Why open?
 
 Large organisations will win on dataset scale, model size, dedicated hardware,
