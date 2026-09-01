@@ -236,9 +236,10 @@ be read:
 
 | Adapter / connection | Status | Current evidence |
 |---|---|---|
-| Video → CBD | **Available** | Demo A, [`examples/human-capture`](examples/human-capture/) |
-| CBD → MuJoCo humanoid | **Available** | Kinematic replay (`qpos` + `mj_forward`) |
-| CBD → Unity / VRM | **Available** | VRMA export, playback in UniVRM SimpleVrma |
+| Video → CBD | **Available** | [`generator/ver0_example/`](generator/ver0_example/), Demo A |
+| CBD → MediaPipe overlay | **Available** | [`adapter/ver0_example/`](adapter/ver0_example/), redrawn from the dataset |
+| CBD → MuJoCo humanoid | **Available** | [`adapter/ver0_example/`](adapter/ver0_example/), kinematic replay (`qpos` + `mj_forward`) |
+| CBD → Unity / VRM | **Available** | [`adapter/ver0_example/`](adapter/ver0_example/), VRMA export, playback in UniVRM SimpleVrma |
 | CBD → behavior dataset | **Available** | `frames.jsonl` + CSVs |
 | Language → CBD | **Experimental** | Demo B, small learning prototype |
 | CBD → robot embodiment (e.g. SO-101) | Planned | Re-embodiment experiment; target platform not yet fixed |
@@ -249,9 +250,52 @@ be read:
 Nothing marked *Planned* exists as code in this repository yet — see
 [`docs/roadmap.md`](docs/roadmap.md).
 
-## Try the demos
+## Try it
 
-Both notebooks are built for Colab and need no local setup.
+### Recommended: the split generator / adapter notebooks
+
+The Demo A pipeline has been pulled apart into **one generator and one adapter
+per target**, and this is the recommended way to run CBD today:
+
+| Notebook | Role |
+|---|---|
+| [`generator/ver0_example/cbd_generator_video_to_cbd.ipynb`](generator/ver0_example/cbd_generator_video_to_cbd.ipynb) | video → canonical CBD (`cbd_dataset.zip`) |
+| [`adapter/ver0_example/cbd_adapter_mediapipe_overlay.ipynb`](adapter/ver0_example/cbd_adapter_mediapipe_overlay.ipynb) | CBD → overlay video on the original pixels |
+| [`adapter/ver0_example/cbd_adapter_mujoco.ipynb`](adapter/ver0_example/cbd_adapter_mujoco.ipynb) | CBD → `humanoid.xml` + `motion.npz` + rendered mp4 |
+| [`adapter/ver0_example/cbd_adapter_unity_vrm.ipynb`](adapter/ver0_example/cbd_adapter_unity_vrm.ipynb) | CBD → `motion.vrma` for any VRM 1.0 avatar |
+
+`cbd_dataset.zip` is the only thing passed between them — which is the claim of
+this project, made checkable: the generator knows nothing about MuJoCo or VRM,
+and each adapter reads canonical CBD and nothing else.
+
+They run in the Colab UI, but they are **built to run from the Colab CLI, and
+that is the recommended way**: one session carries the dataset from the
+generator into every adapter, no zip has to be re-uploaded between steps, and
+the whole chain is scriptable.
+
+```bash
+colab new -s cbd
+colab upload -s cbd ./source_video.mp4 /content/source_video.mp4
+colab exec   -s cbd -f cbd_generator_video_to_cbd.ipynb        --timeout 1800
+colab exec   -s cbd -f cbd_adapter_mediapipe_overlay.ipynb     --timeout 1800
+colab exec   -s cbd -f cbd_adapter_mujoco.ipynb                --timeout 1800
+colab exec   -s cbd -f cbd_adapter_unity_vrm.ipynb             --timeout 900
+colab download -s cbd \
+  /content/human_behavior_demo_2_0/cbd_dataset.zip ./cbd_dataset.zip
+colab stop -s cbd
+```
+
+Each notebook detects a headless run and never opens an upload widget or embeds
+a video player in that mode — it prints paths instead, so `colab exec` always
+terminates. `--timeout` applies **per cell**.
+
+Details, per-adapter outputs and the fresh-session variant:
+[`generator/README.md`](generator/README.md) ·
+[`adapter/README.md`](adapter/README.md).
+
+### The original end-to-end demos
+
+Both notebooks are built for the Colab UI and need no local setup.
 
 1. Open [`examples/human-capture/human_behavior_demo_2_0.ipynb`](examples/human-capture/human_behavior_demo_2_0.ipynb) in Colab
 2. `Runtime → Change runtime type → T4 GPU` (CPU also completes, just slower)
@@ -277,8 +321,8 @@ four directories**, each with its own README:
 
 | Directory | Holds | Status |
 |---|---|---|
-| [`generator/`](generator/) | CBD generators — anything that *writes* behavior data (video → CBD, language → CBD, captioning passes) | placeholder |
-| [`adapter/`](adapter/) | Converters from CBD to a target system — MuJoCo, Unity / VRM, dataset views, and planned robot / ROS 2 / Isaac targets | placeholder |
+| [`generator/`](generator/) | CBD generators — anything that *writes* behavior data (video → CBD, language → CBD, captioning passes) | [`ver0_example/`](generator/ver0_example/): video → CBD |
+| [`adapter/`](adapter/) | Converters from CBD to a target system — MuJoCo, Unity / VRM, dataset views, and planned robot / ROS 2 / Isaac targets | [`ver0_example/`](adapter/ver0_example/): overlay · MuJoCo · Unity / VRM |
 | [`experiment/`](experiment/) | Research code — learning prototypes, re-embodiment and schema experiments, evaluation | placeholder |
 | [`tool/`](tool/) | Utilities that help at **any stage** — validation, inspection, visualisation, conversion, dataset statistics | placeholder |
 
@@ -286,10 +330,13 @@ four directories**, each with its own README:
 capture, adapter work, or an experiment — belongs there. A bundle inspector, for
 instance, serves all three equally.
 
-Today all four are placeholders: the working generator, adapter and learning
-code still lives inside the [`examples/`](examples/) notebooks. Extracting it
-into these directories — as reusable code rather than notebook cells — is the
-next structural step, and the demos are expected to get thinner as it happens.
+Extraction has started. `generator/ver0_example/` and `adapter/ver0_example/`
+now hold the Demo A pipeline split into one generator and three adapters that
+talk to each other only through `cbd_dataset.zip`, runnable from the Colab CLI —
+see [Try it](#try-it). `experiment/` and `tool/` are still placeholders, and the
+learning code still lives inside the [`examples/`](examples/) notebooks. Turning
+the ver0 notebooks into reusable code rather than notebook cells is the next
+structural step, and the demos are expected to get thinner as it happens.
 
 Alongside them: [`specification/`](specification/README.md) for the
 representation, [`docs/`](docs/) for concept, architecture, roadmap and
