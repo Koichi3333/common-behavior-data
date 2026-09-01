@@ -231,9 +231,10 @@ Demo A の出力は、追加の加工なしにそのまま学習に使えるデ�
 
 | アダプタ / 接続 | ステータス | 現在の根拠 |
 |---|---|---|
-| Video → CBD | **Available** | Demo A, [`examples/human-capture`](examples/human-capture/) |
-| CBD → MuJoCo humanoid | **Available** | Kinematic replay（`qpos` + `mj_forward`） |
-| CBD → Unity / VRM | **Available** | VRMA 出力、UniVRM SimpleVrma で再生 |
+| Video → CBD | **Available** | [`generator/ver0_example/`](generator/ver0_example/)、Demo A |
+| CBD → MediaPipe オーバーレイ | **Available** | [`adapter/ver0_example/`](adapter/ver0_example/)、データセットから再描画 |
+| CBD → MuJoCo humanoid | **Available** | [`adapter/ver0_example/`](adapter/ver0_example/)、Kinematic replay（`qpos` + `mj_forward`） |
+| CBD → Unity / VRM | **Available** | [`adapter/ver0_example/`](adapter/ver0_example/)、VRMA 出力、UniVRM SimpleVrma で再生 |
 | CBD → 行動データセット | **Available** | `frames.jsonl` + CSV群 |
 | Language → CBD | **Experimental** | Demo B、小規模学習プロトタイプ |
 | CBD → ロボット embodiment（例: SO-101） | Planned | 再身体化の実験。対象プラットフォームは未確定 |
@@ -244,9 +245,51 @@ Demo A の出力は、追加の加工なしにそのまま学習に使えるデ�
 *Planned* のものは、このリポジトリにまだコードとして存在しません
 （[`docs/roadmap.md`](docs/roadmap.md)）。
 
-## デモを試す
+## 試す
 
-どちらのノートブックも Colab で動かす前提なので、ローカルの環境構築は不要です。
+### 推奨: 分離された generator / adapter ノートブック
+
+Demo A のパイプラインを、**1 つの generator と、ターゲットごとの adapter** に
+分離しました。現時点で CBD を動かすなら、こちらが推奨です。
+
+| ノートブック | 役割 |
+|---|---|
+| [`generator/ver0_example/cbd_generator_video_to_cbd.ipynb`](generator/ver0_example/cbd_generator_video_to_cbd.ipynb) | 動画 → 正準 CBD（`cbd_dataset.zip`） |
+| [`adapter/ver0_example/cbd_adapter_mediapipe_overlay.ipynb`](adapter/ver0_example/cbd_adapter_mediapipe_overlay.ipynb) | CBD → 元映像に重ねたオーバーレイ動画 |
+| [`adapter/ver0_example/cbd_adapter_mujoco.ipynb`](adapter/ver0_example/cbd_adapter_mujoco.ipynb) | CBD → `humanoid.xml` + `motion.npz` + レンダリング動画 |
+| [`adapter/ver0_example/cbd_adapter_unity_vrm.ipynb`](adapter/ver0_example/cbd_adapter_unity_vrm.ipynb) | CBD → VRM 1.0 アバター用の `motion.vrma` |
+
+やり取りされるのは `cbd_dataset.zip` だけです。generator は MuJoCo も VRM も
+知らず、各 adapter は正準 CBD しか読みません——このプロジェクトの主張が、
+そのまま確認できる形になっています。
+
+Colab UI でも動きますが、**Google Colab CLI から実行できる形式にしてあり、
+そちらが推奨です**。1 つのセッションで generator の出力がそのまま各 adapter に
+渡るため、途中で zip を上げ直す必要がなく、一連の流れをスクリプト化できます。
+
+```bash
+colab new -s cbd
+colab upload -s cbd ./source_video.mp4 /content/source_video.mp4
+colab exec   -s cbd -f cbd_generator_video_to_cbd.ipynb        --timeout 1800
+colab exec   -s cbd -f cbd_adapter_mediapipe_overlay.ipynb     --timeout 1800
+colab exec   -s cbd -f cbd_adapter_mujoco.ipynb                --timeout 1800
+colab exec   -s cbd -f cbd_adapter_unity_vrm.ipynb             --timeout 900
+colab download -s cbd \
+  /content/human_behavior_demo_2_0/cbd_dataset.zip ./cbd_dataset.zip
+colab stop -s cbd
+```
+
+各ノートブックはヘッドレス実行を自動判定し、そのモードではアップロード
+ウィジェットも動画プレイヤーも出さずにパスを表示するだけなので、
+`colab exec` が必ず終了します。`--timeout` は**セル単位**です。
+
+詳細・アダプタごとの出力・別セッションで動かす場合は
+[`generator/README.md`](generator/README.md) と
+[`adapter/README.md`](adapter/README.md) を参照してください。
+
+### 元の end-to-end デモ
+
+どちらのノートブックも Colab UI で動かす前提なので、ローカルの環境構築は不要です。
 
 1. [`examples/human-capture/human_behavior_demo_2_0.ipynb`](examples/human-capture/human_behavior_demo_2_0.ipynb) を Colab で開く
 2. `ランタイム → ランタイムのタイプを変更 → T4 GPU`（CPU でも完走します。遅いだけです）
@@ -271,8 +314,8 @@ Demo A の出力は、追加の加工なしにそのまま学習に使えるデ�
 
 | ディレクトリ | 置くもの | 状況 |
 |---|---|---|
-| [`generator/`](generator/) | CBD 生成器。行動データを *書き出す* もの全般（動画 → CBD、言語 → CBD、キャプション付与など） | プレースホルダ |
-| [`adapter/`](adapter/) | CBD から各ターゲットへの変換。MuJoCo、Unity / VRM、データセットビュー、および今後のロボット / ROS 2 / Isaac 向け | プレースホルダ |
+| [`generator/`](generator/) | CBD 生成器。行動データを *書き出す* もの全般（動画 → CBD、言語 → CBD、キャプション付与など） | [`ver0_example/`](generator/ver0_example/): 動画 → CBD |
+| [`adapter/`](adapter/) | CBD から各ターゲットへの変換。MuJoCo、Unity / VRM、データセットビュー、および今後のロボット / ROS 2 / Isaac 向け | [`ver0_example/`](adapter/ver0_example/): オーバーレイ · MuJoCo · Unity / VRM |
 | [`experiment/`](experiment/) | 実験コード。機械学習プロトタイプ、再身体化やスキーマの実験、評価 | プレースホルダ |
 | [`tool/`](tool/) | CBD 周辺の便利ツール。**各工程で便利に活用できるもの**を格納します（検証、確認、可視化、変換、データセット統計） | プレースホルダ |
 
@@ -280,9 +323,12 @@ Demo A の出力は、追加の加工なしにそのまま学習に使えるデ�
 役に立つものはここに置きます（例: バンドルの中身を確認するツールは、キャプチャ結果の確認にも、
 アダプタへの入力確認にも、学習データの確認にも同じように使えます）。
 
-現時点では 4 つともプレースホルダで、実際に動いている生成・アダプタ・学習のコードは
-まだ [`examples/`](examples/) のノートブックの中にあります。これをノートブックのセルから
-再利用可能なコードとして各ディレクトリへ切り出していくのが次の構造的な一歩で、
+切り出しは始まっています。`generator/ver0_example/` と `adapter/ver0_example/` には、
+Demo A のパイプラインを 1 つの generator と 3 つの adapter に分離し、`cbd_dataset.zip`
+だけでやり取りする形にしたノートブックが入っています（Colab CLI から実行可能。
+[試す](#試す) を参照）。`experiment/` と `tool/` はまだプレースホルダで、学習コードは
+[`examples/`](examples/) のノートブックの中にあります。この ver0 のノートブックを
+セルから再利用可能なコードへ切り出していくのが次の構造的な一歩で、
 その分デモは薄くなっていく想定です。
 
 あわせて、表現そのものは [`specification/`](specification/README.md)、
