@@ -15,7 +15,7 @@ it is the most useful page here.
 | **Generator** | [`generators/video_to_cbd/`](../../generators/video_to_cbd/) → `04_behavior_dataset/` |
 | **Adapter** | [`adapters/isaac_sim_groot_g1/`](../../adapters/isaac_sim_groot_g1/) |
 | **Ran on** | retarget & compose: any machine · **render & PhysX: Google Compute Engine, `g2-standard-16`, 1 × NVIDIA L4**, Isaac Sim 6.0 |
-| **Output** | [`07_groot_g1_v2/`](../../examples/human-capture/sample_output/07_groot_g1_v2/) (current) · [`06_groot_g1/`](../../examples/human-capture/sample_output/06_groot_g1/) (v1, kept as the baseline) |
+| **Output** | [`07_groot_g1_v2/`](../../examples/human-capture/sample_output/07_groot_g1_v2/) — v1's output is an intermediate, not committed |
 | **Video** | `07_groot_g1_v2/groot_g1_v2_simulation.mp4` |
 
 > **Not Colab.** Isaac Sim needs an RTX GPU the Colab runtime does not expose, a
@@ -73,10 +73,12 @@ it is the most useful page here.
 | Linear interpolation across a 4-frame hand dropout | removed a 26.9° single-frame jump the nearest-neighbour fill had created |
 | Object placement: the glass onto the acting hand, the surface solved for its height | hand-contact error 0.0 m over 19 frames — true by construction, and labelled as such |
 
-Between v1 and v2 the trajectory changed by **19.7° RMSE**, 79.7° worst joint.
-Both are kept: `06_groot_g1/` is what an adapter that only asserts what it can
-prove produces; `07_groot_g1_v2/` is what one that fills the gaps and labels
-every fill produces. **The difference between them is the argument.**
+Between v1 and v2 the trajectory changed by **6.93° RMSE**, 79.7° worst joint.
+v1 is what an adapter that only asserts what it can prove produces;
+`07_groot_g1_v2/` is what one that fills the gaps and labels every fill
+produces. **The difference between them is the argument** — and it is kept as
+that measurement (`change_from_v1_deg`, and v1's own 96×43 trajectory as
+`joint_angles_v1_rad`), not as a second copy of the outputs.
 
 ## Known limitations
 

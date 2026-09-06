@@ -8,7 +8,7 @@ three-pane `build_comparison_video.py` extended with the GR00T / Unitree G1
 pane, and rewritten to auto-discover its inputs so it can be run without
 hand-writing a config:
 
-    python build_comparison_4pane.py --sample-output ..     # the dir holding 01_../06_..
+    python build_comparison_4pane.py --sample-output ..     # the dir holding 01_../07_..
     python build_comparison_4pane.py --config comparison_config.json
 
 `--panes` takes a preset name or a comma-separated list of pane keys
@@ -37,10 +37,25 @@ CAPTION_BAND = 96
 # 1080x1350). A fixed portrait cell plus a centred "cover" crop is the only
 # arrangement that gives every pane equal visual weight; "contain" is available
 # for anyone who would rather see letterboxing than lose edges.
+# A pane may carry an optional third element: a crop taken before the cell fit,
+# as fractions (x0, y0, x1, y1) of the source frame. It exists for the G1 pane.
+# That render is framed from the dataset's own image fit -- the whole set, floor
+# included -- so the robot lands about a third of the frame high and reads as a
+# figurine beside three panes that are framed on their subject. The crop keeps
+# the robot, the near half of the table and the glass that rests on it, which is
+# what the pane has to show; the far leg and the empty floor are what it drops.
+# The window sits high in the source on purpose: the render puts the robot near
+# the top of the frame over a long run of floor, and taking that window straight
+# down would leave it standing in a field of grey. Cropping from above instead
+# drops most of that floor and lets the robot sit low in the cell, which is
+# where the other three panes put their subject. About 90 px of floor stays --
+# enough to keep the scale reference the render's own camera was framed for.
+# Fractions rather than pixels so a re-render at another resolution still works.
 PANE_SOURCES = {
     "overlay": ("MediaPipe Overlay", "01_mediapipe_overlay/mediapipe_overlay.mp4"),
     "mujoco": ("MuJoCo", "02_mujoco/mujoco_simulation.mp4"),
-    "groot_g1": ("Isaac Sim / GR00T G1", "06_groot_g1/groot_g1_simulation.mp4"),
+    "groot_g1": ("Isaac Sim / GR00T G1", "07_groot_g1_v2/groot_g1_v2_simulation.mp4",
+                 (0.310, 0.172, 0.857, 0.719)),
     "unity": ("Unity / VRM", "03_unity_vrm/unity_vrm_animation.mp4"),
 }
 # The Unity pane goes last: it is the one recorded by hand, so it is the one
@@ -78,15 +93,33 @@ def put(image, text, x, y, scale=0.55, color=(235, 235, 235), thick=1):
                 color, thick, cv2.LINE_AA)
 
 
-def open_pane(label, path):
+def open_pane(label, path, crop=None):
     if path and Path(path).exists():
         cap = cv2.VideoCapture(str(path))
         if cap.isOpened():
-            return {"cap": cap, "label": label,
+            return {"cap": cap, "label": label, "crop": crop,
                     "fps": cap.get(cv2.CAP_PROP_FPS) or 30.0,
                     "last": None, "last_index": -1}
-    return {"cap": None, "label": label, "fps": 30.0, "last": None,
-            "last_index": -1}
+    return {"cap": None, "label": label, "crop": crop, "fps": 30.0,
+            "last": None, "last_index": -1}
+
+
+def apply_crop(image, crop):
+    """Take (x0, y0, x1, y1) as fractions of the frame, before the cell fit.
+
+    Cropping here rather than at `fit` keeps the two jobs apart: this one says
+    what part of the source is the subject, `fit` says how a subject fills a
+    cell. It also happens before any resize, so nothing is scaled twice.
+    """
+    if not crop:
+        return image
+    h, w = image.shape[:2]
+    x0, y0, x1, y1 = crop
+    a, b = int(round(x0 * w)), int(round(y0 * h))
+    c, d = int(round(x1 * w)), int(round(y1 * h))
+    a, b = max(0, a), max(0, b)
+    c, d = min(w, max(c, a + 1)), min(h, max(d, b + 1))
+    return image[b:d, a:c]
 
 
 def fit(image, cell_w, cell_h, mode):
@@ -125,7 +158,7 @@ def pane_frame(pane, timestamp, cell_w, cell_h, mode):
         pane["last_index"] += 1
     if pane["last"] is None:
         return np.zeros((cell_h, cell_w, 3), np.uint8)
-    return fit(pane["last"], cell_w, cell_h, mode)
+    return fit(apply_crop(pane["last"], pane.get("crop")), cell_w, cell_h, mode)
 
 
 def wrap(text, max_px, scale):
@@ -222,7 +255,8 @@ def main():
     if args.config:
         config = json.loads(Path(args.config).read_text("utf-8"))
         root = Path(args.config).parent
-        entries = [(v["label"], v.get("path")) for v in config["videos"]]
+        entries = [(v["label"], v.get("path"), v.get("crop"))
+                   for v in config["videos"]]
         fps = config["fps"]
         frame_count = config["frame_count"]
         captions = config["captions"]
@@ -236,14 +270,16 @@ def main():
         fps = float(manifest["fps"])
         frame_count = int(manifest["frame_count"])
         keys, filename = resolve_panes(args.panes)
-        entries = [(PANE_SOURCES[k][0], root / PANE_SOURCES[k][1]) for k in keys]
+        entries = [(PANE_SOURCES[k][0], root / PANE_SOURCES[k][1],
+                    PANE_SOURCES[k][2] if len(PANE_SOURCES[k]) > 2 else None)
+                   for k in keys]
         captions = load_captions(dataset, frame_count, fps)
         out_path = Path(args.out or (root / "05_comparison" / filename))
 
     words = {2: "two", 3: "three", 4: "four", 5: "five", 6: "six"}
     title = args.title or ("Motion Comparison -- one dataset, "
                            f"{words.get(len(entries), len(entries))} consumers")
-    panes = [open_pane(label, path) for label, path in entries]
+    panes = [open_pane(label, path, crop) for label, path, crop in entries]
     have = [p["label"] for p in panes if p["cap"] is not None]
     print(f"panes present: {', '.join(have) or 'none'}")
     missing = [p["label"] for p in panes if p["cap"] is None]

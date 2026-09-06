@@ -18,7 +18,7 @@ breaks, and keep improving portability.*
 
 *The whole idea — concept, architecture, demos, and roadmap — in one visual overview.*
 
-[日本語 README](README.ja.md) ·
+[日本語（概要）](README.ja.md) ·
 **[Showcase](showcase/)** ·
 [Concept](docs/concept.md) ·
 [Architecture](docs/architecture.md) ·
@@ -26,7 +26,7 @@ breaks, and keep improving portability.*
 [Roadmap](docs/roadmap.md) ·
 [Limitations](docs/limitations.md)
 
-<img src="docs/media/comparison.gif" width="760" alt="One behavior dataset replayed as a MediaPipe overlay, a MuJoCo humanoid, and a Unity VRM avatar, all on the same timeline">
+<img src="docs/media/comparison.gif" width="760" alt="One behavior dataset replayed as a MediaPipe overlay, a MuJoCo humanoid, an Isaac Sim Unitree G1 and a Unity VRM avatar, all on the same timeline">
 
 *One source video → one behavior dataset → four different targets, same timeline.*
 
@@ -383,7 +383,7 @@ improve it.
 
 ## How you can contribute
 
-Not "contributions are welcome" — here is what would actually help:
+**Contributions are genuinely welcome** — and here is what would help most:
 
 - **Add an adapter** for another simulator, engine, or robot
 - **Build a new generator** — a different video → CBD pipeline, or a new source

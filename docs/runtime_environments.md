@@ -90,10 +90,11 @@ Two things keep this from becoming a private-machine dependency:
    `usd-core`, and so is the video compose. That is most of the adapter's logic,
    and you can read, run and change it on a laptop. Only the middle pass needs
    the GPU box.
-2. **The outputs are committed.** `06_groot_g1/` and `07_groot_g1_v2/` are in
-   the repository, so the result is inspectable — USD stages, joint CSVs, the
-   GR00T-LeRobot dataset, the physics report and the video — by someone who
-   never runs the GPU step at all.
+2. **The output is committed.** `07_groot_g1_v2/` is in the repository, so the
+   result is inspectable — USD stages, joint CSVs, the GR00T-LeRobot dataset,
+   the physics report and the video — by someone who never runs the GPU step at
+   all. v1's `06_groot_g1/` is not: it is the retarget the v2 stages read, it
+   needs no GPU, and stage 1 rebuilds it from canonical CBD on a laptop.
 
 Any machine of that class should reproduce it: `run_groot_g1_docker.sh` takes
 the image and the scratch directory from environment variables and mounts the

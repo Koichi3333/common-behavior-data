@@ -59,7 +59,7 @@ on this clip:
 | `01_mediapipe_overlay/` · `02_mujoco/` · `03_unity_vrm/` | Demo A, and now [`adapters/`](../adapters/) |
 | `04_behavior_dataset/` | the generator — **this is canonical CBD**, everything else is derived from it |
 | `05_comparison/` | the 3-pane and 4-pane comparison builders |
-| `06_groot_g1/` · `07_groot_g1_v2/` | [`adapters/isaac_sim_groot_g1/`](../adapters/isaac_sim_groot_g1/) — v1 and v2 |
+| `07_groot_g1_v2/` | [`adapters/isaac_sim_groot_g1/`](../adapters/isaac_sim_groot_g1/) — v2; v1's `06_groot_g1/` is a gitignored intermediate |
 
 The finished videos, with what each run proved and what it broke, are collected
 in [`showcase/`](../showcase/).

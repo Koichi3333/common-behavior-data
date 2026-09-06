@@ -4,10 +4,12 @@
 
 **One source video becomes reusable behavior data for multiple representations.**
 
-<img src="../../docs/media/comparison.gif" width="760" alt="MediaPipe overlay, MuJoCo humanoid and Unity VRM avatar driven by the same behavior data">
+<img src="../../docs/media/comparison.gif" width="760" alt="MediaPipe overlay, MuJoCo humanoid, Isaac Sim Unitree G1 and Unity VRM avatar driven by the same behavior data">
 
-The three panes above are **not three pipelines**. They are three adapters
-reading the same `04_behavior_dataset/`, aligned on the same timeline.
+The four panes above are **not four pipelines**. They are four adapters
+reading the same `04_behavior_dataset/`, aligned on the same timeline. The
+Colab chain below produces three of them; the G1 pane comes from the GCE run
+([why](../../docs/runtime_environments.md)).
 
 ```text
 Video ──▶ MediaPipe ──▶ Common Behavior Data ──┬──▶ MediaPipe overlay
@@ -104,7 +106,7 @@ sample_output/
 ├── 02_mujoco/                            humanoid.xml, motion.npz, replay script, mp4
 ├── 03_unity_vrm/                         motion.vrma, Unity recording, C# object player
 ├── 04_behavior_dataset/                  ← the master data
-└── 05_comparison/                        three-pane video + build script
+└── 05_comparison/                        3-pane and 4-pane videos + build scripts
 ```
 
 Replay the MuJoCo output locally:

@@ -1,7 +1,7 @@
 # `07_groot_g1_v2/` — the trajectory that survived physics
 
-The v2 output of `adapters/isaac_sim_groot_g1/`. Same input as `06_groot_g1/` —
-nothing but canonical CBD — and five differences that matter:
+The v2 output of `adapters/isaac_sim_groot_g1/`. Same input as v1 — nothing but
+canonical CBD — and five differences that matter:
 
 1. **the real robot.** `g1_29dof_with_hand_rev_1_0.usd` (87 meshes, 43 revolute
    joints, the asset IsaacLab Arena drove), referenced by URL, never vendored.
@@ -32,9 +32,10 @@ nothing but canonical CBD — and five differences that matter:
       robot_v2.usda            the reference and the fixed base
       scene_v2.usda            floor, seat, table, the carried glass, physics scene
     motion_retarget.npz      the retarget this build stands on -- v1's, with the
-                             finger-curl fix. v1's own `06_groot_g1/` is left as
-                             it shipped, because every `change_from_v1` number is
-                             measured against it
+                             finger-curl fix, and what stage 1 produces today.
+                             Every `change_from_v1` number is measured against
+                             it; v1 as it *originally* shipped is kept as
+                             `joint_angles_v1_rad` inside motion.npz
     motion.npz               q_actual, q_target and v1's angles side by side
     motion_v2.npz            q_target after the continuity and foot-contact passes
     g1_joint_trajectory.csv  43 joint angles per frame, q_actual
@@ -61,12 +62,16 @@ nothing but canonical CBD — and five differences that matter:
 
 **Nine of nine**, and the ninth was deferred until there was something to hold.
 
-Distance from v1: **19.72 deg RMSE, 79.7 deg worst joint** — the right wrist
-from the continuity repair, the legs from the foot-contact solve, and the ten
-finger joints from the curl-semantics fix (`right_hand_middle_1` moves
-60.5 deg). v1's `06_groot_g1/` is deliberately left as it shipped, since it is
-the baseline this number is measured against; the corrected retarget this build
-stands on is `motion_retarget.npz`.
+Distance from v1: **6.93 deg RMSE, 79.7 deg worst joint** — the right wrist
+from the continuity repair (`right_wrist_roll` 79.7 deg, `right_wrist_yaw`
+75.3 deg), then the legs from the foot-contact solve and the physics pass
+(`right_ankle_pitch` 24.8 deg, `left_knee` 24.7 deg, `left_ankle_pitch`
+24.2 deg). The baseline is v1 **as stage 1 produces it today**, finger-curl fix
+included — so this figure is what v2's own passes moved, not what v1's bug fix
+moved. v1 as it *originally* shipped is still here, as `joint_angles_v1_rad` in
+`motion.npz`; against that the same `q_actual` reads 19.72 deg RMSE, and the
+12.8 deg between the two figures is the curl fix, in the 14 hand joints. The
+retarget this build stands on is `motion_retarget.npz`.
 
 ## The seat
 
@@ -143,6 +148,10 @@ reason.
 ## Reproducing it
 
 ```bash
+# stage 1 -- the retarget. Writes 06_groot_g1/, which is gitignored: it is an
+# intermediate, and everything below reads it (robot_stage --motion,
+# finalize --v1 both default there). Not optional.
+python cbd_adapter_groot_g1.py --dataset <sample_output>    # or the generator's cbd_dataset.zip
 python v2_preview.py     --dataset <sample_output>          # host, no GPU
 python robot_stage.py    --dataset <sample_output> --asset-root <mirror>
 # Isaac Sim container, GPU:
@@ -162,6 +171,22 @@ python compose_video.py  --frames <frames> --dataset <...>/04_behavior_dataset \
 `finalize` before `compose_video`: finalize rebuilds `groot_lerobot/` from v1's
 copy, and compose is what writes the ego view into it.
 
+**`change_from_v1_deg` is measured against a baseline you can rebuild.** The
+published 6.93 deg RMSE compares `q_actual` against what stage 1 emits today.
+That is deliberate: an earlier cut of this report read 19.72 deg because it
+measured against v1 *as it originally shipped*, before the finger-curl fix, and
+so credited v2 with 12.8 deg of what was really v1's own bug fix. Against
+today's v1 the largest movers are the wrists, ankles, knees and hips — the
+continuity repair, the foot-contact solve and the physics pass, which is what
+v2 actually did.
+
+Re-cutting the baseline changes nothing a consumer reads — verified by diffing
+the whole directory across the two runs. `joint_angles_rad` (`q_actual`),
+`joint_angles_target_rad`, `g1_joint_trajectory.csv`, and `observation.state`
+and `action` in the parquet all come back **identical**; only
+`joint_angles_v1_rad` and `change_from_v1_deg` move, because the baseline is
+what moved.
+
 **The shipped `robot_v2.usda` references a local mirror.** This build was made
 on the GPU VM (see the adapter README's *Where this runs*), so the reference in
 the committed file reads `/mnt/data/assets/isaac/Samples/Groot/Robots/...` and
@@ -171,6 +196,23 @@ opens anywhere. To open the committed files as they are, edit that one
 `prepend references` line in `robot_v2.usda` to the public URL or to your own
 mirror — `motion_v2.usda` and `motion_baked.usda` both sublayer it, so the one
 edit fixes both.
+
+**Without a mirror, `bake_motion.py` produces an empty bake — quietly.** It
+writes one transform per link and finds the links by opening the stage, so an
+unresolved `prepend references` leaves it nothing to write: it prints
+`"links_written": 0`, says `baked:`, and exits 0. Plain `usd-core` cannot fetch
+the public URL either, so the asset has to be on disk. Check `links_written`,
+not the exit code.
+
+**A mirror also changes what `stage_report.json` can measure.** `placement`
+reads each robot link's collider box out of the asset, and it can only do that
+from a *local* path: given a URL it returns "asset not local; links fall back to
+a point plus a margin" (`placement.py`, `link_boxes`). The committed report is
+the mirror-based one, which is where the quoted 22.3 mm of hand-inside-tabletop
+on 10 frames comes from; re-running with the public URL measures the same clip
+as 45 mm on 23 frames. `motion_v2.npz` and `scene_v2.usda` reproduce
+byte-for-byte either way — it is only the link-geometry measurements that
+depend on having the asset on disk.
 
 Mount a local asset mirror at the **same path inside the container** as outside:
 the stage references the asset absolutely, so `-v /path:/path:ro`. On this clip

@@ -1,6 +1,6 @@
 # Concept
 
-[← back to README](../README.md) · [日本語 README](../README.ja.md)
+[← back to README](../README.md) · [日本語（概要）](../README.ja.md)
 
 ## The problem
 
@@ -42,10 +42,12 @@ N × M integrations              ▼        ▼        ▼
 Common Behavior Data (CBD) is an attempt to answer that empirically, by
 building the layer and then trying to break it with real consumers.
 
-<img src="media/comparison.png" width="760" alt="One behavior dataset replayed as a MediaPipe overlay, a MuJoCo humanoid and a Unity VRM avatar on one timeline">
+<img src="media/comparison.png" width="760" alt="One behavior dataset replayed as a MediaPipe overlay, a MuJoCo humanoid, an Isaac Sim Unitree G1 and a Unity VRM avatar on one timeline">
 
-*The current evidence: one behavior dataset, three consumers that share no code,
-one timeline. The claim being tested is that the fourth consumer is cheap.*
+*The current evidence: one behavior dataset, four consumers that share no code,
+one timeline. The fourth is a robot embodiment that was never measured for this
+motion — adding it cost one adapter, and the cost is named in the
+[findings](compatibility_findings.md).*
 
 ## What CBD is
 

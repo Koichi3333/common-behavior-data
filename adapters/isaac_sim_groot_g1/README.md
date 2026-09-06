@@ -18,23 +18,34 @@ proportions are not negotiable?**
 
 ## The output
 
-    examples/human-capture/sample_output/06_groot_g1/
-    ├── g1_robot.usda            the robot  — one Xform per G1 link, at the URDF's origins
-    ├── scene.usda               the set    — floor, backdrop, chair, table, lights, camera
-    ├── motion.usda              the motion — time samples only; sublayers the two above
-    ├── motion.npz               joint angles, root pose and wrist poses as arrays
+    examples/human-capture/sample_output/07_groot_g1_v2/
+    ├── robot_v2.usda            the robot  — references NVIDIA's G1 asset, pins the base
+    ├── scene_v2.usda            the set    — floor, seat, table, the carried glass, physics
+    ├── motion_v2.usda           the live stage — sublayers the two above, for the solver
+    ├── motion_baked.usda        the motion — time samples only; the stage to open
+    ├── motion.npz               q_actual, q_target and v1's angles side by side
+    ├── motion_v2.npz            q_target after the continuity and foot-contact passes
+    ├── motion_retarget.npz      the retarget this build stands on
     ├── g1_joint_trajectory.csv  the 43 joint angles per frame, in the GR00T order
     ├── groot_lerobot/           a GR00T-LeRobot v2.1 dataset
     │   ├── meta/{info,modality,tasks,episodes,stats}.json(l)
     │   ├── data/chunk-000/episode_000000.parquet
     │   └── videos/chunk-000/observation.images.ego_view/episode_000000.mp4
-    ├── adapter_report.json      residuals, joints on their limits, what it could not do
-    ├── README_GROOT_G1.md
-    └── groot_g1_simulation.mp4
+    ├── settle_final.json/.npz   the physics result, and every deviation
+    ├── stage_report.json        the seat fit, the placement, the repairs, the invariants
+    ├── adapter_report.json      what this publishes and how far it moved
+    ├── README_GROOT_G1_V2.md
+    └── groot_g1_v2_simulation.mp4
 
-Model, set and motion are three separate layers (adapter rule 3). `motion.usda`
-is the stage to open, and nothing in it is Isaac-specific — `usdview
-motion.usda` works.
+Model, set and motion are three separate layers (adapter rule 3).
+`motion_baked.usda` is the stage to open, and nothing in it is Isaac-specific —
+`usdview motion_baked.usda` works.
+
+**v1's output directory, `06_groot_g1/`, is not committed.** Stage 1 writes it
+from canonical CBD and the v2 stages read the retarget out of it, so it is an
+intermediate: gitignored, and recreated by re-running stage 1. The one thing
+worth keeping from it travels inside v2 instead — `adapter_report.json` holds
+`change_from_v1_deg` and `motion.npz` holds `joint_angles_v1_rad`.
 
 ## Where this runs — and why it is not Colab
 
@@ -56,10 +67,19 @@ motion.usda` works.
 | Robot asset | NVIDIA's public `g1_29dof_with_hand_rev_1_0.usd`, mirrored locally — not committed here |
 | A full v2 run | ≈15 min PhysX settle + ≈10 min render with a warm shader cache |
 
-**Only step 2 below needs any of that.** Steps 1 and 3 — the retarget that turns
-canonical CBD into a 43-DoF trajectory and a USD stage, and the video compose —
-are plain Python on any machine, and they are where most of this adapter's logic
-lives. You can read, run and modify the retarget without a GPU at all.
+**Only `physics_settle.py` and `groot_g1_render.py` need the GPU** — steps 3 and
+4 below. The retarget that turns canonical CBD into a 43-DoF trajectory, the v2
+stage, the finalize and the video compose are plain Python on any machine, and
+they are where most of this adapter's logic lives. You can read, run and modify
+the retarget without a GPU at all. `bake_motion.py` needs no GPU either, but it
+does need the robot asset to resolve, so in practice it runs on the same machine
+— see step 3.
+
+The mirror in the *Robot asset* row is a directory on that VM
+(`/mnt/data/assets/isaac/...`), not something this repository ships or expects
+you to have. Without one, `robot_stage.py` falls back to NVIDIA's public asset
+server, which is correct for the stage it writes but coarsens one measurement —
+see [`README_GROOT_G1_V2.md`][v2readme].
 
 Nothing about that VM's identity is recorded here or matters to the result: no
 project, network, or host names. What matters is the class of machine —
@@ -72,10 +92,13 @@ documented environment where it does not.*
 
 ## Running it
 
-Three steps; only the second needs a GPU and an Isaac Sim install.
+The shipped output is v2, and v2 is a chain: the retarget runs first and
+everything after it reads the retarget. Only `physics_settle.py` and
+`groot_g1_render.py` need a GPU and an Isaac Sim install; every other stage runs
+on a laptop.
 
-**1 — CBD to G1.** numpy and `usd-core`; `pyarrow` for the parquet file. No
-Isaac Sim, no GPU:
+**1 — CBD to G1: the retarget.** numpy and `usd-core`; `pyarrow` for the parquet
+file. No Isaac Sim, no GPU:
 
 ```bash
 pip install numpy usd-core pyarrow
@@ -92,34 +115,73 @@ python cbd_adapter_groot_g1.py --dataset ./cbd_dataset.zip
 python cbd_adapter_groot_g1.py --dataset ./cbd_dataset.zip --workdir /tmp/cbd --output /tmp/out
 ```
 
-**2 — render.** Inside the Isaac Sim runtime. Two cameras: the film camera and
-the robot's own head camera on `d435_link`, which is what the GR00T dataset's
+**Do not skip this step because `06_groot_g1/` is missing from the repository.**
+It is gitignored — an intermediate, not a deliverable — and every stage below
+reads the retarget out of it: `robot_stage.py --motion` and `finalize.py --v1`
+both default to `<dataset>/06_groot_g1`. This is the one stage that turns
+canonical CBD into joint angles, and nothing downstream repeats it.
+
+**2 — the v2 stage.** Host, `usd-core`. Writes `07_groot_g1_v2/` with the real
+G1 referenced, the scene solved and the base pinned:
+
+```bash
+# v2_preview is optional -- it prints what the four host-side passes change
+python v2_preview.py  --dataset ../../examples/human-capture/sample_output
+python robot_stage.py --dataset ../../examples/human-capture/sample_output
+```
+
+**3 — physics, then bake.** `physics_settle.py` drives `q_target` through PhysX
+inside the Isaac Sim runtime — this is the GPU step. `bake_motion.py` then
+writes what came back as time samples on a stage that opens anywhere.
+
+`bake_motion.py` needs no GPU, but it does need **the robot asset to resolve**:
+it writes a transform per link, and it finds the links by opening the stage. A
+`prepend references` that does not resolve — a mirror path you do not have, or
+the public URL, which plain `usd-core` cannot fetch — leaves it with no links to
+write. It **reports `"links_written": 0` and exits 0**, so check that number
+rather than the exit code. In practice this stage belongs beside the physics
+pass, on the machine that has the asset.
+
+**4 — render.** Also inside the runtime. Two cameras: the film camera and the
+robot's own head camera on `d435_link`, which is what the GR00T dataset's
 `observation.images.ego_view` has to be.
 
 ```bash
-# NGC container (handles the caches and the uid-1234 mounts for you)
+# NGC container (handles the caches and the uid-1234 mounts for you).
+# It renders whichever stage it is pointed at; as shipped that is v1's.
 ./run_groot_g1_docker.sh ../../examples/human-capture/sample_output
 
-# or a local install
+# or a local install, on the v2 stage
 /isaac-sim/python.sh groot_g1_render.py \
-    --stage ../../examples/human-capture/sample_output/06_groot_g1/motion.usda \
+    --stage ../../examples/human-capture/sample_output/07_groot_g1_v2/motion_baked.usda \
     --out /tmp/g1_frames
 ```
 
-**3 — compose.** Back on the host, with OpenCV and ffmpeg. Writes both videos:
-the film one, and the clean ego view into the GR00T dataset.
+**5 — finalize, then compose.** Back on the host, with numpy, pyarrow, OpenCV
+and ffmpeg. `finalize.py` publishes `q_actual` — the trajectory, the CSV, the
+patched GR00T-LeRobot dataset and the report — and `compose_video.py` writes
+both videos into it. Finalize first: it rebuilds `groot_lerobot/` from v1's
+copy, and compose is what writes the ego view into that.
 
 ```bash
+python finalize.py --dataset ../../examples/human-capture/sample_output
 python compose_video.py --frames /tmp/g1_frames \
     --dataset ../../examples/human-capture/sample_output/04_behavior_dataset \
-    --out-dir ../../examples/human-capture/sample_output/06_groot_g1
+    --out-dir ../../examples/human-capture/sample_output/07_groot_g1_v2 \
+    --name groot_g1_v2_simulation.mp4
 ```
 
-The comparison video that puts this pane beside the other three:
+The exact flags for stages 3 and 4, and the asset-mirror note that goes with
+them, are in [`README_GROOT_G1_V2.md`][v2readme].
+
+[v2readme]: ../../examples/human-capture/sample_output/07_groot_g1_v2/README_GROOT_G1_V2.md#reproducing-it
+
+The comparison video that puts this pane beside the other three. It needs no
+GPU — it reads the four finished mp4s — and the Isaac pane is v2's:
 
 ```bash
 python ../../examples/human-capture/sample_output/05_comparison/build_comparison_4pane.py \
-    --sample-output ../../examples/human-capture/sample_output --panes groot
+    --sample-output ../../examples/human-capture/sample_output
 ```
 
 ## Design notes
@@ -187,8 +249,8 @@ pane line up.
 
 Three of these four were v1's position and **v2 reverses them**; the reversal is
 the subject of [the v2 section below](#v2--the-corrections-the-errors-and-what-is-left).
-They are kept here because `06_groot_g1/` is still on disk and its report still
-says them.
+They are kept here because stage 1 still takes these positions in code, and
+anyone re-running it gets an output that says them.
 
 - **No policy is run, and none is implied.** *Still true in v2.* This adapter
   writes the two things a GR00T G1 stack consumes — a joint-space trajectory and
@@ -267,14 +329,14 @@ the torso frame can rebase it with the waist angles in the same row.
 | `v2_preview.py` | anywhere | runs the four host-side passes and prints the diff |
 | `robot_stage.py` | anywhere | usd-core; writes the stage, references the asset |
 | `physics_settle.py` | inside Isaac Sim | Isaac Sim 6.0, an RTX GPU |
-| `bake_motion.py` | anywhere | usd-core; bakes `q_actual` to time samples |
+| `bake_motion.py` | anywhere the asset resolves | usd-core; bakes `q_actual` to time samples |
 | `finalize.py` | anywhere | numpy, pyarrow |
 
 `g1_kinematics.json` holds joint origins, axes, limits and link masses taken
 from the official Unitree G1 URDF (`g1_29dof_with_hand.urdf`) — kinematic
-parameters only, no meshes and no inertia tensors. The shells in
-`g1_robot.usda` are capsules spanning those same joint origins, so the robot in
-the render has the G1's proportions and no vendor mesh is redistributed here.
+parameters only, no meshes and no inertia tensors. The shells in the v1 stage's
+`g1_robot.usda` are capsules spanning those same joint origins, so that robot
+has the G1's proportions and no vendor mesh is redistributed here.
 See [`THIRD_PARTY_NOTICES.md`](../../THIRD_PARTY_NOTICES.md).
 
 v2 additionally **references** NVIDIA's own G1 asset

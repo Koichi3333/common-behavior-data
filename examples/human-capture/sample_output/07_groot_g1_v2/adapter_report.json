@@ -1098,17 +1098,17 @@
   }
  },
  "change_from_v1_deg": {
-  "rmse": 19.72,
+  "rmse": 6.932,
   "max": 79.653,
   "per_joint_max": {
    "right_wrist_roll_joint": 79.653,
    "right_wrist_yaw_joint": 75.307,
-   "right_hand_middle_1_joint": 60.514,
-   "right_hand_middle_0_joint": 54.444,
-   "left_hand_middle_1_joint": 51.737,
-   "left_hand_index_1_joint": 50.89,
-   "left_hand_middle_0_joint": 46.568,
-   "left_hand_index_0_joint": 45.79
+   "right_ankle_pitch_joint": 24.792,
+   "left_knee_joint": 24.674,
+   "left_ankle_pitch_joint": 24.167,
+   "right_hip_pitch_joint": 23.57,
+   "right_knee_joint": 21.917,
+   "left_hip_pitch_joint": 19.276
   }
  },
  "writes": [

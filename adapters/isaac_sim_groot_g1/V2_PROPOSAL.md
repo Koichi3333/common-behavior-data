@@ -6,8 +6,8 @@ change none of its behaviour until they are wired in.
 
 ## The problem, in v1's own words
 
-`06_groot_g1/adapter_report.json` is unusually honest, and reading it is how
-this proposal started:
+v1's `adapter_report.json` is unusually honest, and reading it is how this
+proposal started:
 
 > - *"the right knee sits **19 cm across the body midline** from its hip, which
 >   a monocular capture of a seated subject does produce. **The retarget
@@ -427,8 +427,11 @@ Final measurement, on the published stage:
 | `invariant.seated.knee_min` | >= 60 | 102.1 deg | ok |
 | `invariant.seated.knee_max` | <= 140 | 122.1 deg | ok |
 
-**Eight of eight.** The published angles sit 4.38 deg RMSE from v1's, 79.7 deg
-at the worst joint -- the legs, from the foot solve, and the right wrist, below.
+**Eight of eight.** The published angles sit 79.7 deg from v1's at the worst
+joint -- the right wrist, below, and then the legs from the foot solve. This
+table is a snapshot of that build; the shipped figures are in
+`07_groot_g1_v2/adapter_report.json`, which the placement and grasp work below
+moved again.
 
 ### The last failure was also upstream
 
@@ -532,7 +535,7 @@ and the invariants above are already written to grade it.
 Tags alone are not a brake. `provenance.check_floor()` fails a run when
 `measured + derived` drops below **70 %** of the weighted output. Below that the
 result stops being evidence that canonical CBD can drive this target, which is
-the claim the whole `06_groot_g1/` output exists to make.
+the claim this adapter's whole output exists to make.
 
 Sample dataset: **measured 91.8 % / derived 8.2 %, PASS.** With the detector
 fully disabled: **94.6 %, PASS**, with 5.4 % synthesized and declared.

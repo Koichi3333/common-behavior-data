@@ -19,7 +19,7 @@ that made the result and the directory that holds it, so nothing can drift out
 of sync.
 
 <div align="center">
-<img src="../docs/media/comparison.gif" width="760" alt="One behavior dataset replayed as a MediaPipe overlay, a MuJoCo humanoid, and a Unity VRM avatar, all on the same timeline">
+<img src="../docs/media/comparison.gif" width="760" alt="One behavior dataset replayed as a MediaPipe overlay, a MuJoCo humanoid, an Isaac Sim Unitree G1 and a Unity VRM avatar, all on the same timeline">
 
 *One source video → one behavior dataset → different renderers, same timeline.*
 </div>
