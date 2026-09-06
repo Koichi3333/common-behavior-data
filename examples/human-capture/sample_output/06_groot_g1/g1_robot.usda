@@ -1,0 +1,1092 @@
+#usda 1.0
+(
+    defaultPrim = "World"
+    metersPerUnit = 1
+    upAxis = "Z"
+)
+
+def Xform "World"
+{
+    def Xform "G1"
+    {
+        quatf xformOp:orient = (0.70710677, 0, 0, -0.70710677)
+        uniform token[] xformOpOrder = ["xformOp:orient"]
+
+        def Scope "Looks"
+        {
+            def Material "Shell"
+            {
+                token outputs:surface.connect = </World/G1/Looks/Shell/Shader.outputs:surface>
+
+                def Shader "Shader"
+                {
+                    uniform token info:id = "UsdPreviewSurface"
+                    color3f inputs:diffuseColor = (0.93, 0.93, 0.94)
+                    float inputs:metallic = 0
+                    float inputs:roughness = 0.35
+                    token outputs:surface
+                }
+            }
+
+            def Material "Joint"
+            {
+                token outputs:surface.connect = </World/G1/Looks/Joint/Shader.outputs:surface>
+
+                def Shader "Shader"
+                {
+                    uniform token info:id = "UsdPreviewSurface"
+                    color3f inputs:diffuseColor = (0.13, 0.13, 0.15)
+                    float inputs:metallic = 0.4
+                    float inputs:roughness = 0.45
+                    token outputs:surface
+                }
+            }
+
+            def Material "Accent"
+            {
+                token outputs:surface.connect = </World/G1/Looks/Accent/Shader.outputs:surface>
+
+                def Shader "Shader"
+                {
+                    uniform token info:id = "UsdPreviewSurface"
+                    color3f inputs:diffuseColor = (0.24, 0.26, 0.3)
+                    float inputs:metallic = 0.2
+                    float inputs:roughness = 0.5
+                    token outputs:surface
+                }
+            }
+
+            def Material "Visor"
+            {
+                token outputs:surface.connect = </World/G1/Looks/Visor/Shader.outputs:surface>
+
+                def Shader "Shader"
+                {
+                    uniform token info:id = "UsdPreviewSurface"
+                    color3f inputs:diffuseColor = (0.05, 0.05, 0.06)
+                    float inputs:metallic = 0.1
+                    float inputs:roughness = 0.12
+                    token outputs:surface
+                }
+            }
+        }
+
+        def Xform "pelvis"
+        {
+            quatf xformOp:orient = (1, 0, 0, 0)
+            double3 xformOp:translate = (0, 0, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+
+            def Xform "pelvis_contour_link"
+            {
+                quatf xformOp:orient = (1, 0, 0, 0)
+                double3 xformOp:translate = (0, 0, 0)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+            }
+
+            def Xform "left_hip_pitch_link"
+            {
+                quatf xformOp:orient = (1, 0, 0, 0)
+                double3 xformOp:translate = (0, 0.064452, -0.1027)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+
+                def Xform "left_hip_roll_link"
+                {
+                    quatf xformOp:orient = (0.9961787, 0, -0.08733858, 0)
+                    double3 xformOp:translate = (0, 0.052, -0.030465)
+                    uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+
+                    def Xform "left_hip_yaw_link"
+                    {
+                        quatf xformOp:orient = (1, 0, 0, 0)
+                        double3 xformOp:translate = (0.025001, 0, -0.12412)
+                        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+
+                        def Xform "left_knee_link"
+                        {
+                            quatf xformOp:orient = (0.9961787, 0, 0.08733858, 0)
+                            double3 xformOp:translate = (-0.078273, 0.0021489, -0.17734)
+                            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+
+                            def Xform "left_ankle_pitch_link"
+                            {
+                                quatf xformOp:orient = (1, 0, 0, 0)
+                                double3 xformOp:translate = (0, -0.0000944, -0.30001)
+                                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+
+                                def Xform "left_ankle_roll_link"
+                                {
+                                    quatf xformOp:orient = (1, 0, 0, 0)
+                                    double3 xformOp:translate = (0, 0, -0.017558)
+                                    uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+
+                                    def Cube "sole" (
+                                        prepend apiSchemas = ["MaterialBindingAPI"]
+                                    )
+                                    {
+                                        rel material:binding = </World/G1/Looks/Joint>
+                                        double size = 2
+                                        float3 xformOp:scale = (0.0975, 0.0475, 0.014)
+                                        double3 xformOp:translate = (0.022, 0, -0.03)
+                                        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+                                    }
+                                }
+                            }
+
+                            def Capsule "shell_left_ankle_pitch_link" (
+                                prepend apiSchemas = ["MaterialBindingAPI"]
+                            )
+                            {
+                                uniform token axis = "Z"
+                                double height = 0.22001001485177124
+                                rel material:binding = </World/G1/Looks/Shell>
+                                double radius = 0.04
+                                quatf xformOp:orient = (0.00015732809, 1, 0, -0)
+                                double3 xformOp:translate = (0, -0.0000472, -0.150005)
+                                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+                            }
+
+                            def Sphere "hub" (
+                                prepend apiSchemas = ["MaterialBindingAPI"]
+                            )
+                            {
+                                rel material:binding = </World/G1/Looks/Accent>
+                                double radius = 0.046
+                                double3 xformOp:translate = (0, 0, 0)
+                                uniform token[] xformOpOrder = ["xformOp:translate"]
+                            }
+                        }
+
+                        def Capsule "shell_left_knee_link" (
+                            prepend apiSchemas = ["MaterialBindingAPI"]
+                        )
+                        {
+                            uniform token axis = "Z"
+                            double height = 0.1018575660122916
+                            rel material:binding = </World/G1/Looks/Shell>
+                            double radius = 0.046
+                            quatf xformOp:orient = (0.2064033, -0.026852628, -0.97809845, 0)
+                            double3 xformOp:translate = (-0.0391365, 0.00107445, -0.08867)
+                            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+                        }
+
+                        def Sphere "hub" (
+                            prepend apiSchemas = ["MaterialBindingAPI"]
+                        )
+                        {
+                            rel material:binding = </World/G1/Looks/Accent>
+                            double radius = 0.052
+                            double3 xformOp:translate = (0, 0, 0)
+                            uniform token[] xformOpOrder = ["xformOp:translate"]
+                        }
+                    }
+
+                    def Capsule "shell_left_hip_yaw_link" (
+                        prepend apiSchemas = ["MaterialBindingAPI"]
+                    )
+                    {
+                        uniform token axis = "Z"
+                        double height = 0.030612891922584234
+                        rel material:binding = </World/G1/Looks/Accent>
+                        double radius = 0.048
+                        quatf xformOp:orient = (0.099219665, -0, 0.99506557, 0)
+                        double3 xformOp:translate = (0.0125005, 0, -0.06206)
+                        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+                    }
+                }
+
+                def Capsule "shell_left_hip_roll_link" (
+                    prepend apiSchemas = ["MaterialBindingAPI"]
+                )
+                {
+                    uniform token axis = "Z"
+                    double height = 0.001
+                    rel material:binding = </World/G1/Looks/Accent>
+                    double radius = 0.05
+                    quatf xformOp:orient = (0.4972423, -0.8676117, 0, 0)
+                    double3 xformOp:translate = (0, 0.026, -0.0152325)
+                    uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+                }
+            }
+
+            def Xform "right_hip_pitch_link"
+            {
+                quatf xformOp:orient = (1, 0, 0, 0)
+                double3 xformOp:translate = (0, -0.064452, -0.1027)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+
+                def Xform "right_hip_roll_link"
+                {
+                    quatf xformOp:orient = (0.9961787, 0, -0.08733858, 0)
+                    double3 xformOp:translate = (0, -0.052, -0.030465)
+                    uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+
+                    def Xform "right_hip_yaw_link"
+                    {
+                        quatf xformOp:orient = (1, 0, 0, 0)
+                        double3 xformOp:translate = (0.025001, 0, -0.12412)
+                        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+
+                        def Xform "right_knee_link"
+                        {
+                            quatf xformOp:orient = (0.9961787, 0, 0.08733858, 0)
+                            double3 xformOp:translate = (-0.078273, -0.0021489, -0.17734)
+                            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+
+                            def Xform "right_ankle_pitch_link"
+                            {
+                                quatf xformOp:orient = (1, 0, 0, 0)
+                                double3 xformOp:translate = (0, 0.0000944, -0.30001)
+                                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+
+                                def Xform "right_ankle_roll_link"
+                                {
+                                    quatf xformOp:orient = (1, 0, 0, 0)
+                                    double3 xformOp:translate = (0, 0, -0.017558)
+                                    uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+
+                                    def Cube "sole" (
+                                        prepend apiSchemas = ["MaterialBindingAPI"]
+                                    )
+                                    {
+                                        rel material:binding = </World/G1/Looks/Joint>
+                                        double size = 2
+                                        float3 xformOp:scale = (0.0975, 0.0475, 0.014)
+                                        double3 xformOp:translate = (0.022, 0, -0.03)
+                                        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+                                    }
+                                }
+                            }
+
+                            def Capsule "shell_right_ankle_pitch_link" (
+                                prepend apiSchemas = ["MaterialBindingAPI"]
+                            )
+                            {
+                                uniform token axis = "Z"
+                                double height = 0.22001001485177124
+                                rel material:binding = </World/G1/Looks/Shell>
+                                double radius = 0.04
+                                quatf xformOp:orient = (0.00015732809, -1, 0, 0)
+                                double3 xformOp:translate = (0, 0.0000472, -0.150005)
+                                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+                            }
+
+                            def Sphere "hub" (
+                                prepend apiSchemas = ["MaterialBindingAPI"]
+                            )
+                            {
+                                rel material:binding = </World/G1/Looks/Accent>
+                                double radius = 0.046
+                                double3 xformOp:translate = (0, 0, 0)
+                                uniform token[] xformOpOrder = ["xformOp:translate"]
+                            }
+                        }
+
+                        def Capsule "shell_right_knee_link" (
+                            prepend apiSchemas = ["MaterialBindingAPI"]
+                        )
+                        {
+                            uniform token axis = "Z"
+                            double height = 0.1018575660122916
+                            rel material:binding = </World/G1/Looks/Shell>
+                            double radius = 0.046
+                            quatf xformOp:orient = (0.2064033, 0.026852628, -0.97809845, 0)
+                            double3 xformOp:translate = (-0.0391365, -0.00107445, -0.08867)
+                            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+                        }
+
+                        def Sphere "hub" (
+                            prepend apiSchemas = ["MaterialBindingAPI"]
+                        )
+                        {
+                            rel material:binding = </World/G1/Looks/Accent>
+                            double radius = 0.052
+                            double3 xformOp:translate = (0, 0, 0)
+                            uniform token[] xformOpOrder = ["xformOp:translate"]
+                        }
+                    }
+
+                    def Capsule "shell_right_hip_yaw_link" (
+                        prepend apiSchemas = ["MaterialBindingAPI"]
+                    )
+                    {
+                        uniform token axis = "Z"
+                        double height = 0.030612891922584234
+                        rel material:binding = </World/G1/Looks/Accent>
+                        double radius = 0.048
+                        quatf xformOp:orient = (0.099219665, -0, 0.99506557, 0)
+                        double3 xformOp:translate = (0.0125005, 0, -0.06206)
+                        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+                    }
+                }
+
+                def Capsule "shell_right_hip_roll_link" (
+                    prepend apiSchemas = ["MaterialBindingAPI"]
+                )
+                {
+                    uniform token axis = "Z"
+                    double height = 0.001
+                    rel material:binding = </World/G1/Looks/Accent>
+                    double radius = 0.05
+                    quatf xformOp:orient = (0.4972423, 0.8676117, 0, -0)
+                    double3 xformOp:translate = (0, -0.026, -0.0152325)
+                    uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+                }
+            }
+
+            def Xform "waist_yaw_link"
+            {
+                quatf xformOp:orient = (1, 0, 0, 0)
+                double3 xformOp:translate = (0, 0, 0)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+
+                def Xform "waist_roll_link"
+                {
+                    quatf xformOp:orient = (1, 0, 0, 0)
+                    double3 xformOp:translate = (-0.0039635, 0, 0.035)
+                    uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+
+                    def Xform "torso_link"
+                    {
+                        quatf xformOp:orient = (1, 0, 0, 0)
+                        double3 xformOp:translate = (0, 0, 0.019)
+                        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+
+                        def Xform "head_link"
+                        {
+                            quatf xformOp:orient = (1, 0, 0, 0)
+                            double3 xformOp:translate = (0.0039635, 0, -0.054)
+                            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+                        }
+
+                        def Xform "d435_link"
+                        {
+                            quatf xformOp:orient = (0.91495967, 0, 0.4035453, 0)
+                            double3 xformOp:translate = (0.0576235, 0.01753, 0.41987)
+                            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+
+                            def Camera "ego_cam"
+                            {
+                                float2 clippingRange = (0.02, 100)
+                                float focalLength = 15.131432
+                                float horizontalAperture = 20.955
+                                float verticalAperture = 15.71625
+                                quatf xformOp:orient = (0.5, 0.5, -0.5, -0.5)
+                                uniform token[] xformOpOrder = ["xformOp:orient"]
+                            }
+                        }
+
+                        def Xform "left_shoulder_pitch_link"
+                        {
+                            quatf xformOp:orient = (0.99026406, 0.13920148, 0.000013847247, -0.00009868838)
+                            double3 xformOp:translate = (0.0039563, 0.10022, 0.23778)
+                            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+
+                            def Xform "left_shoulder_roll_link"
+                            {
+                                quatf xformOp:orient = (0.99026823, -0.13917178, 0, 0)
+                                double3 xformOp:translate = (0, 0.038, -0.013831)
+                                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+
+                                def Xform "left_shoulder_yaw_link"
+                                {
+                                    quatf xformOp:orient = (1, 0, 0, 0)
+                                    double3 xformOp:translate = (0, 0.00624, -0.1032)
+                                    uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+
+                                    def Xform "left_elbow_link"
+                                    {
+                                        quatf xformOp:orient = (1, 0, 0, 0)
+                                        double3 xformOp:translate = (0.015783, 0, -0.080518)
+                                        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+
+                                        def Xform "left_wrist_roll_link"
+                                        {
+                                            quatf xformOp:orient = (1, 0, 0, 0)
+                                            double3 xformOp:translate = (0.1, 0.0018879, -0.01)
+                                            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+
+                                            def Xform "left_wrist_pitch_link"
+                                            {
+                                                quatf xformOp:orient = (1, 0, 0, 0)
+                                                double3 xformOp:translate = (0.038, 0, 0)
+                                                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+
+                                                def Xform "left_wrist_yaw_link"
+                                                {
+                                                    quatf xformOp:orient = (1, 0, 0, 0)
+                                                    double3 xformOp:translate = (0.046, 0, 0)
+                                                    uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+
+                                                    def Xform "left_hand_palm_link"
+                                                    {
+                                                        quatf xformOp:orient = (1, 0, 0, 0)
+                                                        double3 xformOp:translate = (0.0415, 0.003, 0)
+                                                        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+
+                                                        def Xform "left_hand_thumb_0_link"
+                                                        {
+                                                            quatf xformOp:orient = (1, 0, 0, 0)
+                                                            double3 xformOp:translate = (0.0255, 0, 0)
+                                                            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+
+                                                            def Xform "left_hand_thumb_1_link"
+                                                            {
+                                                                quatf xformOp:orient = (1, 0, 0, 0)
+                                                                double3 xformOp:translate = (-0.0025, -0.0193, 0)
+                                                                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+
+                                                                def Xform "left_hand_thumb_2_link"
+                                                                {
+                                                                    quatf xformOp:orient = (1, 0, 0, 0)
+                                                                    double3 xformOp:translate = (0, -0.0458, 0)
+                                                                    uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+
+                                                                    def Capsule "tip" (
+                                                                        prepend apiSchemas = ["MaterialBindingAPI"]
+                                                                    )
+                                                                    {
+                                                                        uniform token axis = "Z"
+                                                                        double height = 0.022000000000000002
+                                                                        rel material:binding = </World/G1/Looks/Joint>
+                                                                        double radius = 0.009
+                                                                        quatf xformOp:orient = (0.70710677, 0.70710677, 0, -0)
+                                                                        double3 xformOp:translate = (0, -0.02, 0)
+                                                                        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+                                                                    }
+                                                                }
+
+                                                                def Capsule "shell_left_hand_thumb_2_link" (
+                                                                    prepend apiSchemas = ["MaterialBindingAPI"]
+                                                                )
+                                                                {
+                                                                    uniform token axis = "Z"
+                                                                    double height = 0.027800000000000002
+                                                                    rel material:binding = </World/G1/Looks/Joint>
+                                                                    double radius = 0.009
+                                                                    quatf xformOp:orient = (0.70710677, 0.70710677, 0, -0)
+                                                                    double3 xformOp:translate = (0, -0.0229, 0)
+                                                                    uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+                                                                }
+                                                            }
+                                                        }
+
+                                                        def Xform "left_hand_middle_0_link"
+                                                        {
+                                                            quatf xformOp:orient = (1, 0, 0, 0)
+                                                            double3 xformOp:translate = (0.0777, 0.0016, -0.0285)
+                                                            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+
+                                                            def Xform "left_hand_middle_1_link"
+                                                            {
+                                                                quatf xformOp:orient = (1, 0, 0, 0)
+                                                                double3 xformOp:translate = (0.0458, 0, 0)
+                                                                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+
+                                                                def Capsule "tip" (
+                                                                    prepend apiSchemas = ["MaterialBindingAPI"]
+                                                                )
+                                                                {
+                                                                    uniform token axis = "Z"
+                                                                    double height = 0.027
+                                                                    rel material:binding = </World/G1/Looks/Joint>
+                                                                    double radius = 0.009
+                                                                    quatf xformOp:orient = (0.70710677, 0, 0.70710677, 0)
+                                                                    double3 xformOp:translate = (0.0225, 0, 0)
+                                                                    uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+                                                                }
+                                                            }
+
+                                                            def Capsule "shell_left_hand_middle_1_link" (
+                                                                prepend apiSchemas = ["MaterialBindingAPI"]
+                                                            )
+                                                            {
+                                                                uniform token axis = "Z"
+                                                                double height = 0.027800000000000002
+                                                                rel material:binding = </World/G1/Looks/Joint>
+                                                                double radius = 0.009
+                                                                quatf xformOp:orient = (0.70710677, 0, 0.70710677, 0)
+                                                                double3 xformOp:translate = (0.0229, 0, 0)
+                                                                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+                                                            }
+                                                        }
+
+                                                        def Xform "left_hand_index_0_link"
+                                                        {
+                                                            quatf xformOp:orient = (1, 0, 0, 0)
+                                                            double3 xformOp:translate = (0.0777, 0.0016, 0.0285)
+                                                            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+
+                                                            def Xform "left_hand_index_1_link"
+                                                            {
+                                                                quatf xformOp:orient = (1, 0, 0, 0)
+                                                                double3 xformOp:translate = (0.0458, 0, 0)
+                                                                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+
+                                                                def Capsule "tip" (
+                                                                    prepend apiSchemas = ["MaterialBindingAPI"]
+                                                                )
+                                                                {
+                                                                    uniform token axis = "Z"
+                                                                    double height = 0.027
+                                                                    rel material:binding = </World/G1/Looks/Joint>
+                                                                    double radius = 0.009
+                                                                    quatf xformOp:orient = (0.70710677, 0, 0.70710677, 0)
+                                                                    double3 xformOp:translate = (0.0225, 0, 0)
+                                                                    uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+                                                                }
+                                                            }
+
+                                                            def Capsule "shell_left_hand_index_1_link" (
+                                                                prepend apiSchemas = ["MaterialBindingAPI"]
+                                                            )
+                                                            {
+                                                                uniform token axis = "Z"
+                                                                double height = 0.027800000000000002
+                                                                rel material:binding = </World/G1/Looks/Joint>
+                                                                double radius = 0.009
+                                                                quatf xformOp:orient = (0.70710677, 0, 0.70710677, 0)
+                                                                double3 xformOp:translate = (0.0229, 0, 0)
+                                                                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+                                                            }
+                                                        }
+
+                                                        def Capsule "shell_left_hand_middle_0_link" (
+                                                            prepend apiSchemas = ["MaterialBindingAPI"]
+                                                        )
+                                                        {
+                                                            uniform token axis = "Z"
+                                                            double height = 0.05877741237801531
+                                                            rel material:binding = </World/G1/Looks/Joint>
+                                                            double radius = 0.012
+                                                            quatf xformOp:orient = (0.57258326, -0.016878719, 0.8196728, 0)
+                                                            double3 xformOp:translate = (0.03885, 0.0008, -0.01425)
+                                                            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+                                                        }
+
+                                                        def Capsule "shell_left_hand_index_0_link" (
+                                                            prepend apiSchemas = ["MaterialBindingAPI"]
+                                                        )
+                                                        {
+                                                            uniform token axis = "Z"
+                                                            double height = 0.05877741237801531
+                                                            rel material:binding = </World/G1/Looks/Joint>
+                                                            double radius = 0.012
+                                                            quatf xformOp:orient = (0.8198466, -0.0117881475, 0.5724619, 0)
+                                                            double3 xformOp:translate = (0.03885, 0.0008, 0.01425)
+                                                            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+                                                        }
+
+                                                        def Cube "palm" (
+                                                            prepend apiSchemas = ["MaterialBindingAPI"]
+                                                        )
+                                                        {
+                                                            rel material:binding = </World/G1/Looks/Shell>
+                                                            double size = 2
+                                                            float3 xformOp:scale = (0.039, 0.014, 0.036)
+                                                            double3 xformOp:translate = (0.038, 0, 0)
+                                                            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+                                                        }
+                                                    }
+                                                }
+
+                                                def Capsule "shell_left_wrist_yaw_link" (
+                                                    prepend apiSchemas = ["MaterialBindingAPI"]
+                                                )
+                                                {
+                                                    uniform token axis = "Z"
+                                                    double height = 0.001
+                                                    rel material:binding = </World/G1/Looks/Joint>
+                                                    double radius = 0.024
+                                                    quatf xformOp:orient = (0.70710677, 0, 0.70710677, 0)
+                                                    double3 xformOp:translate = (0.023, 0, 0)
+                                                    uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+                                                }
+                                            }
+                                        }
+
+                                        def Capsule "shell_left_wrist_roll_link" (
+                                            prepend apiSchemas = ["MaterialBindingAPI"]
+                                        )
+                                        {
+                                            uniform token axis = "Z"
+                                            double height = 0.040516487037749196
+                                            rel material:binding = </World/G1/Looks/Shell>
+                                            double radius = 0.03
+                                            quatf xformOp:orient = (0.67101187, -0.013995277, 0.74131453, 0)
+                                            double3 xformOp:translate = (0.05, 0.00094395, -0.005)
+                                            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+                                        }
+
+                                        def Sphere "hub" (
+                                            prepend apiSchemas = ["MaterialBindingAPI"]
+                                        )
+                                        {
+                                            rel material:binding = </World/G1/Looks/Accent>
+                                            double radius = 0.036
+                                            double3 xformOp:translate = (0, 0, 0)
+                                            uniform token[] xformOpOrder = ["xformOp:translate"]
+                                        }
+                                    }
+
+                                    def Capsule "shell_left_elbow_link" (
+                                        prepend apiSchemas = ["MaterialBindingAPI"]
+                                    )
+                                    {
+                                        uniform token axis = "Z"
+                                        double height = 0.01405029806770966
+                                        rel material:binding = </World/G1/Looks/Shell>
+                                        double radius = 0.034
+                                        quatf xformOp:orient = (0.09663101, -0, 0.99532026, 0)
+                                        double3 xformOp:translate = (0.0078915, 0, -0.040259)
+                                        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+                                    }
+                                }
+
+                                def Capsule "shell_left_shoulder_yaw_link" (
+                                    prepend apiSchemas = ["MaterialBindingAPI"]
+                                )
+                                {
+                                    uniform token axis = "Z"
+                                    double height = 0.023388479048683172
+                                    rel material:binding = </World/G1/Looks/Accent>
+                                    double radius = 0.04
+                                    quatf xformOp:orient = (0.030191207, -0.99954414, 0, 0)
+                                    double3 xformOp:translate = (0, 0.00312, -0.0516)
+                                    uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+                                }
+
+                                def Sphere "hub" (
+                                    prepend apiSchemas = ["MaterialBindingAPI"]
+                                )
+                                {
+                                    rel material:binding = </World/G1/Looks/Accent>
+                                    double radius = 0.046
+                                    double3 xformOp:translate = (0, 0, 0)
+                                    uniform token[] xformOpOrder = ["xformOp:translate"]
+                                }
+                            }
+                        }
+
+                        def Xform "right_shoulder_pitch_link"
+                        {
+                            quatf xformOp:orient = (0.99026406, -0.13920148, 0.000013847247, 0.00009868838)
+                            double3 xformOp:translate = (0.0039563, -0.10021, 0.23778)
+                            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+
+                            def Xform "right_shoulder_roll_link"
+                            {
+                                quatf xformOp:orient = (0.99026823, 0.13917178, 0, 0)
+                                double3 xformOp:translate = (0, -0.038, -0.013831)
+                                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+
+                                def Xform "right_shoulder_yaw_link"
+                                {
+                                    quatf xformOp:orient = (1, 0, 0, 0)
+                                    double3 xformOp:translate = (0, -0.00624, -0.1032)
+                                    uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+
+                                    def Xform "right_elbow_link"
+                                    {
+                                        quatf xformOp:orient = (1, 0, 0, 0)
+                                        double3 xformOp:translate = (0.015783, 0, -0.080518)
+                                        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+
+                                        def Xform "right_wrist_roll_link"
+                                        {
+                                            quatf xformOp:orient = (1, 0, 0, 0)
+                                            double3 xformOp:translate = (0.1, -0.0018879, -0.01)
+                                            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+
+                                            def Xform "right_wrist_pitch_link"
+                                            {
+                                                quatf xformOp:orient = (1, 0, 0, 0)
+                                                double3 xformOp:translate = (0.038, 0, 0)
+                                                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+
+                                                def Xform "right_wrist_yaw_link"
+                                                {
+                                                    quatf xformOp:orient = (1, 0, 0, 0)
+                                                    double3 xformOp:translate = (0.046, 0, 0)
+                                                    uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+
+                                                    def Xform "right_hand_palm_link"
+                                                    {
+                                                        quatf xformOp:orient = (1, 0, 0, 0)
+                                                        double3 xformOp:translate = (0.0415, -0.003, 0)
+                                                        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+
+                                                        def Xform "right_hand_thumb_0_link"
+                                                        {
+                                                            quatf xformOp:orient = (1, 0, 0, 0)
+                                                            double3 xformOp:translate = (0.0255, 0, 0)
+                                                            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+
+                                                            def Xform "right_hand_thumb_1_link"
+                                                            {
+                                                                quatf xformOp:orient = (1, 0, 0, 0)
+                                                                double3 xformOp:translate = (-0.0025, 0.0193, 0)
+                                                                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+
+                                                                def Xform "right_hand_thumb_2_link"
+                                                                {
+                                                                    quatf xformOp:orient = (1, 0, 0, 0)
+                                                                    double3 xformOp:translate = (0, 0.0458, 0)
+                                                                    uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+
+                                                                    def Capsule "tip" (
+                                                                        prepend apiSchemas = ["MaterialBindingAPI"]
+                                                                    )
+                                                                    {
+                                                                        uniform token axis = "Z"
+                                                                        double height = 0.022000000000000002
+                                                                        rel material:binding = </World/G1/Looks/Joint>
+                                                                        double radius = 0.009
+                                                                        quatf xformOp:orient = (0.70710677, -0.70710677, 0, 0)
+                                                                        double3 xformOp:translate = (0, 0.02, 0)
+                                                                        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+                                                                    }
+                                                                }
+
+                                                                def Capsule "shell_right_hand_thumb_2_link" (
+                                                                    prepend apiSchemas = ["MaterialBindingAPI"]
+                                                                )
+                                                                {
+                                                                    uniform token axis = "Z"
+                                                                    double height = 0.027800000000000002
+                                                                    rel material:binding = </World/G1/Looks/Joint>
+                                                                    double radius = 0.009
+                                                                    quatf xformOp:orient = (0.70710677, -0.70710677, 0, 0)
+                                                                    double3 xformOp:translate = (0, 0.0229, 0)
+                                                                    uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+                                                                }
+                                                            }
+                                                        }
+
+                                                        def Xform "right_hand_middle_0_link"
+                                                        {
+                                                            quatf xformOp:orient = (1, 0, 0, 0)
+                                                            double3 xformOp:translate = (0.0777, -0.0016, -0.0285)
+                                                            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+
+                                                            def Xform "right_hand_middle_1_link"
+                                                            {
+                                                                quatf xformOp:orient = (1, 0, 0, 0)
+                                                                double3 xformOp:translate = (0.0458, 0, 0)
+                                                                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+
+                                                                def Capsule "tip" (
+                                                                    prepend apiSchemas = ["MaterialBindingAPI"]
+                                                                )
+                                                                {
+                                                                    uniform token axis = "Z"
+                                                                    double height = 0.027
+                                                                    rel material:binding = </World/G1/Looks/Joint>
+                                                                    double radius = 0.009
+                                                                    quatf xformOp:orient = (0.70710677, 0, 0.70710677, 0)
+                                                                    double3 xformOp:translate = (0.0225, 0, 0)
+                                                                    uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+                                                                }
+                                                            }
+
+                                                            def Capsule "shell_right_hand_middle_1_link" (
+                                                                prepend apiSchemas = ["MaterialBindingAPI"]
+                                                            )
+                                                            {
+                                                                uniform token axis = "Z"
+                                                                double height = 0.027800000000000002
+                                                                rel material:binding = </World/G1/Looks/Joint>
+                                                                double radius = 0.009
+                                                                quatf xformOp:orient = (0.70710677, 0, 0.70710677, 0)
+                                                                double3 xformOp:translate = (0.0229, 0, 0)
+                                                                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+                                                            }
+                                                        }
+
+                                                        def Xform "right_hand_index_0_link"
+                                                        {
+                                                            quatf xformOp:orient = (1, 0, 0, 0)
+                                                            double3 xformOp:translate = (0.0777, -0.0016, 0.0285)
+                                                            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+
+                                                            def Xform "right_hand_index_1_link"
+                                                            {
+                                                                quatf xformOp:orient = (1, 0, 0, 0)
+                                                                double3 xformOp:translate = (0.0458, 0, 0)
+                                                                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+
+                                                                def Capsule "tip" (
+                                                                    prepend apiSchemas = ["MaterialBindingAPI"]
+                                                                )
+                                                                {
+                                                                    uniform token axis = "Z"
+                                                                    double height = 0.027
+                                                                    rel material:binding = </World/G1/Looks/Joint>
+                                                                    double radius = 0.009
+                                                                    quatf xformOp:orient = (0.70710677, 0, 0.70710677, 0)
+                                                                    double3 xformOp:translate = (0.0225, 0, 0)
+                                                                    uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+                                                                }
+                                                            }
+
+                                                            def Capsule "shell_right_hand_index_1_link" (
+                                                                prepend apiSchemas = ["MaterialBindingAPI"]
+                                                            )
+                                                            {
+                                                                uniform token axis = "Z"
+                                                                double height = 0.027800000000000002
+                                                                rel material:binding = </World/G1/Looks/Joint>
+                                                                double radius = 0.009
+                                                                quatf xformOp:orient = (0.70710677, 0, 0.70710677, 0)
+                                                                double3 xformOp:translate = (0.0229, 0, 0)
+                                                                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+                                                            }
+                                                        }
+
+                                                        def Capsule "shell_right_hand_middle_0_link" (
+                                                            prepend apiSchemas = ["MaterialBindingAPI"]
+                                                        )
+                                                        {
+                                                            uniform token axis = "Z"
+                                                            double height = 0.05877741237801531
+                                                            rel material:binding = </World/G1/Looks/Joint>
+                                                            double radius = 0.012
+                                                            quatf xformOp:orient = (0.57258326, 0.016878719, 0.8196728, -0)
+                                                            double3 xformOp:translate = (0.03885, -0.0008, -0.01425)
+                                                            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+                                                        }
+
+                                                        def Capsule "shell_right_hand_index_0_link" (
+                                                            prepend apiSchemas = ["MaterialBindingAPI"]
+                                                        )
+                                                        {
+                                                            uniform token axis = "Z"
+                                                            double height = 0.05877741237801531
+                                                            rel material:binding = </World/G1/Looks/Joint>
+                                                            double radius = 0.012
+                                                            quatf xformOp:orient = (0.8198466, 0.0117881475, 0.5724619, -0)
+                                                            double3 xformOp:translate = (0.03885, -0.0008, 0.01425)
+                                                            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+                                                        }
+
+                                                        def Cube "palm" (
+                                                            prepend apiSchemas = ["MaterialBindingAPI"]
+                                                        )
+                                                        {
+                                                            rel material:binding = </World/G1/Looks/Shell>
+                                                            double size = 2
+                                                            float3 xformOp:scale = (0.039, 0.014, 0.036)
+                                                            double3 xformOp:translate = (0.038, 0, 0)
+                                                            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+                                                        }
+                                                    }
+                                                }
+
+                                                def Capsule "shell_right_wrist_yaw_link" (
+                                                    prepend apiSchemas = ["MaterialBindingAPI"]
+                                                )
+                                                {
+                                                    uniform token axis = "Z"
+                                                    double height = 0.001
+                                                    rel material:binding = </World/G1/Looks/Joint>
+                                                    double radius = 0.024
+                                                    quatf xformOp:orient = (0.70710677, 0, 0.70710677, 0)
+                                                    double3 xformOp:translate = (0.023, 0, 0)
+                                                    uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+                                                }
+                                            }
+                                        }
+
+                                        def Capsule "shell_right_wrist_roll_link" (
+                                            prepend apiSchemas = ["MaterialBindingAPI"]
+                                        )
+                                        {
+                                            uniform token axis = "Z"
+                                            double height = 0.040516487037749196
+                                            rel material:binding = </World/G1/Looks/Shell>
+                                            double radius = 0.03
+                                            quatf xformOp:orient = (0.67101187, 0.013995277, 0.74131453, -0)
+                                            double3 xformOp:translate = (0.05, -0.00094395, -0.005)
+                                            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+                                        }
+
+                                        def Sphere "hub" (
+                                            prepend apiSchemas = ["MaterialBindingAPI"]
+                                        )
+                                        {
+                                            rel material:binding = </World/G1/Looks/Accent>
+                                            double radius = 0.036
+                                            double3 xformOp:translate = (0, 0, 0)
+                                            uniform token[] xformOpOrder = ["xformOp:translate"]
+                                        }
+                                    }
+
+                                    def Capsule "shell_right_elbow_link" (
+                                        prepend apiSchemas = ["MaterialBindingAPI"]
+                                    )
+                                    {
+                                        uniform token axis = "Z"
+                                        double height = 0.01405029806770966
+                                        rel material:binding = </World/G1/Looks/Shell>
+                                        double radius = 0.034
+                                        quatf xformOp:orient = (0.09663101, -0, 0.99532026, 0)
+                                        double3 xformOp:translate = (0.0078915, 0, -0.040259)
+                                        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+                                    }
+                                }
+
+                                def Capsule "shell_right_shoulder_yaw_link" (
+                                    prepend apiSchemas = ["MaterialBindingAPI"]
+                                )
+                                {
+                                    uniform token axis = "Z"
+                                    double height = 0.023388479048683172
+                                    rel material:binding = </World/G1/Looks/Accent>
+                                    double radius = 0.04
+                                    quatf xformOp:orient = (0.030191207, 0.99954414, 0, -0)
+                                    double3 xformOp:translate = (0, -0.00312, -0.0516)
+                                    uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+                                }
+
+                                def Sphere "hub" (
+                                    prepend apiSchemas = ["MaterialBindingAPI"]
+                                )
+                                {
+                                    rel material:binding = </World/G1/Looks/Accent>
+                                    double radius = 0.046
+                                    double3 xformOp:translate = (0, 0, 0)
+                                    uniform token[] xformOpOrder = ["xformOp:translate"]
+                                }
+                            }
+                        }
+
+                        def Cube "chest" (
+                            prepend apiSchemas = ["MaterialBindingAPI"]
+                        )
+                        {
+                            rel material:binding = </World/G1/Looks/Shell>
+                            double size = 2
+                            float3 xformOp:scale = (0.075, 0.0975, 0.1225)
+                            double3 xformOp:translate = (0.008, 0, 0.108)
+                            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+                        }
+
+                        def Cube "chest_plate" (
+                            prepend apiSchemas = ["MaterialBindingAPI"]
+                        )
+                        {
+                            rel material:binding = </World/G1/Looks/Accent>
+                            double size = 2
+                            float3 xformOp:scale = (0.009, 0.059, 0.064)
+                            double3 xformOp:translate = (0.085, 0, 0.118)
+                            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+                        }
+
+                        def Cube "spine" (
+                            prepend apiSchemas = ["MaterialBindingAPI"]
+                        )
+                        {
+                            rel material:binding = </World/G1/Looks/Accent>
+                            double size = 2
+                            float3 xformOp:scale = (0.055, 0.0925, 0.0425)
+                            double3 xformOp:translate = (0, 0, -0.045)
+                            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+                        }
+
+                        def Cube "yoke" (
+                            prepend apiSchemas = ["MaterialBindingAPI"]
+                        )
+                        {
+                            rel material:binding = </World/G1/Looks/Accent>
+                            double size = 2
+                            float3 xformOp:scale = (0.06, 0.1175, 0.031)
+                            double3 xformOp:translate = (0.004, 0, 0.24)
+                            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+                        }
+
+                        def Cylinder "neck" (
+                            prepend apiSchemas = ["MaterialBindingAPI"]
+                        )
+                        {
+                            uniform token axis = "Z"
+                            double height = 0.05
+                            rel material:binding = </World/G1/Looks/Joint>
+                            double radius = 0.033
+                            double3 xformOp:translate = (0, 0, 0.305)
+                            uniform token[] xformOpOrder = ["xformOp:translate"]
+                        }
+
+                        def Sphere "head" (
+                            prepend apiSchemas = ["MaterialBindingAPI"]
+                        )
+                        {
+                            rel material:binding = </World/G1/Looks/Shell>
+                            double radius = 0.066
+                            float3 xformOp:scale = (0.86, 0.95, 1.02)
+                            double3 xformOp:translate = (-0.008, 0, 0.38)
+                            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+                        }
+
+                        def Cube "visor" (
+                            prepend apiSchemas = ["MaterialBindingAPI"]
+                        )
+                        {
+                            rel material:binding = </World/G1/Looks/Visor>
+                            double size = 2
+                            float3 xformOp:scale = (0.008, 0.0525, 0.018)
+                            double3 xformOp:translate = (0.04, 0, 0.368)
+                            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+                        }
+
+                        def Cylinder "ear_r" (
+                            prepend apiSchemas = ["MaterialBindingAPI"]
+                        )
+                        {
+                            uniform token axis = "Y"
+                            double height = 0.016
+                            rel material:binding = </World/G1/Looks/Joint>
+                            double radius = 0.022
+                            double3 xformOp:translate = (-0.01, -0.062, 0.388)
+                            uniform token[] xformOpOrder = ["xformOp:translate"]
+                        }
+
+                        def Cylinder "ear_l" (
+                            prepend apiSchemas = ["MaterialBindingAPI"]
+                        )
+                        {
+                            uniform token axis = "Y"
+                            double height = 0.016
+                            rel material:binding = </World/G1/Looks/Joint>
+                            double radius = 0.022
+                            double3 xformOp:translate = (-0.01, 0.062, 0.388)
+                            uniform token[] xformOpOrder = ["xformOp:translate"]
+                        }
+                    }
+                }
+            }
+
+            def Cube "block" (
+                prepend apiSchemas = ["MaterialBindingAPI"]
+            )
+            {
+                rel material:binding = </World/G1/Looks/Shell>
+                double size = 2
+                float3 xformOp:scale = (0.0725, 0.105, 0.07)
+                double3 xformOp:translate = (0, 0, -0.04)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+            }
+
+            def Cube "waistband" (
+                prepend apiSchemas = ["MaterialBindingAPI"]
+            )
+            {
+                rel material:binding = </World/G1/Looks/Accent>
+                double size = 2
+                float3 xformOp:scale = (0.0625, 0.0925, 0.025)
+                double3 xformOp:translate = (0, 0, 0.03)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
+            }
+        }
+    }
+}
+

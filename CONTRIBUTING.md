@@ -52,27 +52,36 @@ saves you from building against a version that is about to move.
 
 ## Where code goes
 
-`examples/` holds the **initial demos** — two notebooks that run end to end, kept
-as a showcase. Ongoing development happens in four directories, each with its own
-README:
+Every directory has one role, and one README that states it:
 
-| Directory | What goes there |
-|---|---|
-| [`generator/`](generator/) | Anything that **writes** CBD — video → CBD, language → CBD, captioning and annotation passes |
-| [`adapter/`](adapter/) | Anything that **reads** CBD and converts it for an engine, embodiment or format |
-| [`experiment/`](experiment/) | Research code — learning prototypes, re-embodiment and schema experiments, evaluation |
-| [`tool/`](tool/) | Utilities that help at **any stage** of the pipeline — validation, inspection, visualisation, conversion, statistics |
+| Directory | Role | What goes there |
+|---|---|---|
+| [`generators/`](generators/) | **Create CBD** | Anything that **writes** CBD — video → CBD, language → CBD, captioning and annotation passes |
+| [`adapters/`](adapters/) | **Use CBD somewhere** | Anything that **reads** CBD and converts it for an engine, embodiment or format |
+| [`tools/`](tools/) | **Prepare and manipulate assets** | Independent utilities — video prep, masking, asset creation, comparison, dataset inspection |
+| [`experiments/`](experiments/) | **Try something with CBD** | Research code that uses existing generators and adapters — learning prototypes, re-embodiment, evaluation |
+| [`examples/`](examples/) | **Initial Minimum Experience** | The original end-to-end notebooks, preserved as they are |
+| [`showcase/`](showcase/) | **See what CBD can do** | Results, with what worked and what broke. Links, not copies |
 
-Two rules of thumb:
+Rules of thumb:
 
 - If it targets one specific engine or body, it is an **adapter**, not a tool.
-- An experiment that stabilises **graduates** into `generator/`, `adapter/` or
-  `tool/`. Nothing in `experiment/` is part of the stable surface.
+- **Do not factor shared logic out of adapters into `tools/`.** Adapters stay
+  self-contained on purpose — physics assumptions and body structures differ too
+  much for a shared helper to be right for all of them. Share the *finding*
+  instead: [`docs/compatibility_findings.md`](docs/compatibility_findings.md).
+- An experiment that stabilises **graduates** into `generators/`, `adapters/` or
+  `tools/`, after repeated success and a clear interface. Nothing in
+  `experiments/` is part of the stable surface, and nothing stable may import
+  from it.
+- **Do not create empty directories** for future work. Put the idea in the
+  roadmap; add the directory when there is code.
 
-All four are placeholders today: the working generator, adapter and learning
-code still lives inside the notebooks. Extracting a piece of it into the right
-directory is a genuinely useful contribution — open an issue first so two people
-do not extract the same thing.
+`generators/` and `adapters/` hold working code. `tools/` and `experiments/` are
+still mostly signposts — the learning code lives inside the `examples/`
+notebooks, and extracting a piece of it into the right directory is a genuinely
+useful contribution. Open an issue first so two people do not extract the same
+thing.
 
 ## Working on the notebooks
 
@@ -98,8 +107,8 @@ currently is. A few conventions:
 
 ## Writing an adapter
 
-New adapters belong in [`adapter/`](adapter/), one subdirectory per target.
-Until the adapter contract is formalised (see
+New adapters belong in [`adapters/`](adapters/), **one subdirectory per target,
+self-contained**. Until the adapter contract is formalised (see
 [open questions](specification/README.md#open-questions)), the working rules are:
 
 1. **Read canonical data**, not another adapter's output
@@ -110,6 +119,27 @@ Until the adapter contract is formalised (see
    become `grasp` downstream
 5. **Report what you could not represent**, rather than silently approximating it
 6. **Preserve provenance** — if you derive a position, say how
+
+7. **Stay self-contained.** Keep your retarget, contact, physics, placement and
+   validation machinery inside your own directory, even if another adapter has
+   something that looks similar. Portability and readability of one adapter beat
+   code DRY across all of them.
+8. **State where you run.** If your target cannot run in Colab, say so at the
+   top of your README, name the class of machine you used (GPU, memory, runtime
+   version) — never a project, host or account — and commit your outputs so the
+   result is readable without that machine. See
+   [`docs/runtime_environments.md`](docs/runtime_environments.md).
+
+And when you are done, write down what you learned, not just what you built:
+
+```text
+What worked · What broke · What was corrected · Why · How much it changed · What is unresolved
+```
+
+Classify each finding as a **source**, **generator**, **specification** or
+**target** issue — they have different owners — and add it to
+[`docs/compatibility_findings.md`](docs/compatibility_findings.md). A finding
+with a number attached is worth several without one.
 
 If a rule blocks you, that is interesting. Say so in an issue: it probably means
 the schema is missing something.

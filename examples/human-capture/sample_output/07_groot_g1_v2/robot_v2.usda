@@ -1,0 +1,26 @@
+#usda 1.0
+(
+    defaultPrim = "World"
+    metersPerUnit = 1
+    upAxis = "Z"
+)
+
+def Xform "World"
+{
+    def Xform "G1" (
+        prepend references = @/mnt/data/assets/isaac/Samples/Groot/Robots/g1_29dof_with_hand_rev_1_0.usd@
+    )
+    {
+        double3 xformOp:translate = (-0.0015450528590008616, 0.0002714282090892084, 0.5929)
+    }
+
+    def PhysicsFixedJoint "G1_base_fix"
+    {
+        rel physics:body1 = </World/G1/pelvis>
+        point3f physics:localPos0 = (-0.0015450529, 0.0002714282, 0.5929)
+        point3f physics:localPos1 = (0, 0, 0)
+        quatf physics:localRot0 = (1, 0, 0, 0)
+        quatf physics:localRot1 = (1, 0, 0, 0)
+    }
+}
+

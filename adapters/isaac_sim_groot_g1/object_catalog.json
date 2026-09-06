@@ -1,0 +1,1240 @@
+{
+  "_note": "Class-level metric priors for the COCO-80 vocabulary -- the closed set the CBD generator's MediaPipe object detector emits. Closed vocabulary is why this file can be complete rather than a growing pile of special cases, and why the adapter needs no language model to know how big a chair is.",
+  "_schema": {
+    "dims_m": "[width, depth, height] of the upright bounding box, metres",
+    "body": "static = collider only; dynamic = rigid body with mass",
+    "mass_kg": "used only when body is dynamic",
+    "support": "surfaces other things rest on, height from the object's base",
+    "afford": "sit | lie | grasp | contain | support",
+    "asset": "path under _asset_root; null means build a parametric primitive",
+    "source": "catalog = measured/verified asset; prior = class-level estimate",
+    "note": "optional: why this entry is shaped the way it is, when the reason is not obvious from the fields"
+  },
+  "_asset_root": "https://omniverse-content-production.s3-us-west-2.amazonaws.com/Assets/Isaac/6.0/Isaac",
+  "_asset_note": "Every non-null asset was verified to return HTTP 200 on 2026-09-04. Paths here are never guessed: an entry gets an asset only after a HEAD check, because the library's naming is not predictable (Environments/Office/Props/SM_Chair_A1.usd, for one, is 404). Assets are referenced, never vendored -- they are NVIDIA's.",
+  "classes": {
+    "person": {
+      "dims_m": [
+        0.5,
+        0.3,
+        1.7
+      ],
+      "body": "static",
+      "mass_kg": 70,
+      "support": [],
+      "afford": [],
+      "asset": null,
+      "source": "prior"
+    },
+    "bicycle": {
+      "dims_m": [
+        1.7,
+        0.5,
+        1.05
+      ],
+      "body": "static",
+      "mass_kg": 12,
+      "support": [],
+      "afford": [],
+      "asset": null,
+      "source": "prior"
+    },
+    "car": {
+      "dims_m": [
+        4.4,
+        1.8,
+        1.5
+      ],
+      "body": "static",
+      "mass_kg": 1400,
+      "support": [],
+      "afford": [],
+      "asset": null,
+      "source": "prior"
+    },
+    "motorcycle": {
+      "dims_m": [
+        2.1,
+        0.7,
+        1.1
+      ],
+      "body": "static",
+      "mass_kg": 200,
+      "support": [],
+      "afford": [],
+      "asset": null,
+      "source": "prior"
+    },
+    "airplane": {
+      "dims_m": [
+        30.0,
+        30.0,
+        10.0
+      ],
+      "body": "static",
+      "mass_kg": 50000,
+      "support": [],
+      "afford": [],
+      "asset": null,
+      "source": "prior"
+    },
+    "bus": {
+      "dims_m": [
+        12.0,
+        2.5,
+        3.2
+      ],
+      "body": "static",
+      "mass_kg": 12000,
+      "support": [],
+      "afford": [],
+      "asset": null,
+      "source": "prior"
+    },
+    "train": {
+      "dims_m": [
+        20.0,
+        3.0,
+        4.0
+      ],
+      "body": "static",
+      "mass_kg": 40000,
+      "support": [],
+      "afford": [],
+      "asset": null,
+      "source": "prior"
+    },
+    "truck": {
+      "dims_m": [
+        7.0,
+        2.5,
+        3.0
+      ],
+      "body": "static",
+      "mass_kg": 8000,
+      "support": [],
+      "afford": [],
+      "asset": null,
+      "source": "prior"
+    },
+    "boat": {
+      "dims_m": [
+        5.0,
+        2.0,
+        1.5
+      ],
+      "body": "static",
+      "mass_kg": 800,
+      "support": [],
+      "afford": [],
+      "asset": null,
+      "source": "prior"
+    },
+    "traffic light": {
+      "dims_m": [
+        0.3,
+        0.3,
+        1.0
+      ],
+      "body": "static",
+      "mass_kg": 10,
+      "support": [],
+      "afford": [],
+      "asset": null,
+      "source": "prior"
+    },
+    "fire hydrant": {
+      "dims_m": [
+        0.35,
+        0.35,
+        0.75
+      ],
+      "body": "static",
+      "mass_kg": 70,
+      "support": [],
+      "afford": [],
+      "asset": null,
+      "source": "prior"
+    },
+    "stop sign": {
+      "dims_m": [
+        0.75,
+        0.05,
+        2.2
+      ],
+      "body": "static",
+      "mass_kg": 15,
+      "support": [],
+      "afford": [],
+      "asset": null,
+      "source": "prior"
+    },
+    "parking meter": {
+      "dims_m": [
+        0.2,
+        0.2,
+        1.3
+      ],
+      "body": "static",
+      "mass_kg": 20,
+      "support": [],
+      "afford": [],
+      "asset": null,
+      "source": "prior"
+    },
+    "bench": {
+      "dims_m": [
+        1.5,
+        0.5,
+        0.85
+      ],
+      "body": "static",
+      "mass_kg": 30,
+      "support": [
+        {
+          "name": "seat",
+          "h": 0.45
+        }
+      ],
+      "afford": [
+        "sit"
+      ],
+      "asset": null,
+      "source": "prior"
+    },
+    "bird": {
+      "dims_m": [
+        0.2,
+        0.1,
+        0.15
+      ],
+      "body": "dynamic",
+      "mass_kg": 0.3,
+      "support": [],
+      "afford": [],
+      "asset": null,
+      "source": "prior"
+    },
+    "cat": {
+      "dims_m": [
+        0.5,
+        0.2,
+        0.3
+      ],
+      "body": "dynamic",
+      "mass_kg": 4,
+      "support": [],
+      "afford": [],
+      "asset": null,
+      "source": "prior"
+    },
+    "dog": {
+      "dims_m": [
+        0.8,
+        0.3,
+        0.6
+      ],
+      "body": "dynamic",
+      "mass_kg": 20,
+      "support": [],
+      "afford": [],
+      "asset": null,
+      "source": "prior"
+    },
+    "horse": {
+      "dims_m": [
+        2.2,
+        0.7,
+        1.6
+      ],
+      "body": "static",
+      "mass_kg": 500,
+      "support": [],
+      "afford": [],
+      "asset": null,
+      "source": "prior"
+    },
+    "sheep": {
+      "dims_m": [
+        1.2,
+        0.4,
+        0.9
+      ],
+      "body": "static",
+      "mass_kg": 70,
+      "support": [],
+      "afford": [],
+      "asset": null,
+      "source": "prior"
+    },
+    "cow": {
+      "dims_m": [
+        2.2,
+        0.7,
+        1.5
+      ],
+      "body": "static",
+      "mass_kg": 700,
+      "support": [],
+      "afford": [],
+      "asset": null,
+      "source": "prior"
+    },
+    "elephant": {
+      "dims_m": [
+        5.0,
+        2.0,
+        3.0
+      ],
+      "body": "static",
+      "mass_kg": 4000,
+      "support": [],
+      "afford": [],
+      "asset": null,
+      "source": "prior"
+    },
+    "bear": {
+      "dims_m": [
+        1.8,
+        0.9,
+        1.2
+      ],
+      "body": "static",
+      "mass_kg": 300,
+      "support": [],
+      "afford": [],
+      "asset": null,
+      "source": "prior"
+    },
+    "zebra": {
+      "dims_m": [
+        2.2,
+        0.7,
+        1.5
+      ],
+      "body": "static",
+      "mass_kg": 350,
+      "support": [],
+      "afford": [],
+      "asset": null,
+      "source": "prior"
+    },
+    "giraffe": {
+      "dims_m": [
+        3.0,
+        1.0,
+        5.0
+      ],
+      "body": "static",
+      "mass_kg": 1200,
+      "support": [],
+      "afford": [],
+      "asset": null,
+      "source": "prior"
+    },
+    "backpack": {
+      "dims_m": [
+        0.32,
+        0.2,
+        0.45
+      ],
+      "body": "dynamic",
+      "mass_kg": 1.2,
+      "support": [],
+      "afford": [
+        "grasp"
+      ],
+      "asset": null,
+      "source": "prior"
+    },
+    "umbrella": {
+      "dims_m": [
+        0.15,
+        0.15,
+        0.9
+      ],
+      "body": "dynamic",
+      "mass_kg": 0.4,
+      "support": [],
+      "afford": [
+        "grasp"
+      ],
+      "asset": null,
+      "source": "prior"
+    },
+    "handbag": {
+      "dims_m": [
+        0.35,
+        0.15,
+        0.28
+      ],
+      "body": "dynamic",
+      "mass_kg": 0.8,
+      "support": [],
+      "afford": [
+        "grasp"
+      ],
+      "asset": null,
+      "source": "prior"
+    },
+    "tie": {
+      "dims_m": [
+        0.08,
+        0.01,
+        0.5
+      ],
+      "body": "dynamic",
+      "mass_kg": 0.1,
+      "support": [],
+      "afford": [
+        "grasp"
+      ],
+      "asset": null,
+      "source": "prior"
+    },
+    "suitcase": {
+      "dims_m": [
+        0.45,
+        0.25,
+        0.65
+      ],
+      "body": "dynamic",
+      "mass_kg": 4,
+      "support": [
+        {
+          "name": "top",
+          "h": 0.65
+        }
+      ],
+      "afford": [
+        "grasp"
+      ],
+      "asset": null,
+      "source": "prior"
+    },
+    "frisbee": {
+      "dims_m": [
+        0.27,
+        0.27,
+        0.03
+      ],
+      "body": "dynamic",
+      "mass_kg": 0.18,
+      "support": [],
+      "afford": [
+        "grasp"
+      ],
+      "asset": null,
+      "source": "prior"
+    },
+    "skis": {
+      "dims_m": [
+        1.7,
+        0.1,
+        0.05
+      ],
+      "body": "dynamic",
+      "mass_kg": 3,
+      "support": [],
+      "afford": [
+        "grasp"
+      ],
+      "asset": null,
+      "source": "prior"
+    },
+    "snowboard": {
+      "dims_m": [
+        1.5,
+        0.3,
+        0.03
+      ],
+      "body": "dynamic",
+      "mass_kg": 3,
+      "support": [],
+      "afford": [
+        "grasp"
+      ],
+      "asset": null,
+      "source": "prior"
+    },
+    "sports ball": {
+      "dims_m": [
+        0.22,
+        0.22,
+        0.22
+      ],
+      "body": "dynamic",
+      "mass_kg": 0.45,
+      "support": [],
+      "afford": [
+        "grasp"
+      ],
+      "asset": null,
+      "source": "prior"
+    },
+    "kite": {
+      "dims_m": [
+        1.0,
+        0.05,
+        0.6
+      ],
+      "body": "dynamic",
+      "mass_kg": 0.3,
+      "support": [],
+      "afford": [
+        "grasp"
+      ],
+      "asset": null,
+      "source": "prior"
+    },
+    "baseball bat": {
+      "dims_m": [
+        0.07,
+        0.07,
+        0.85
+      ],
+      "body": "dynamic",
+      "mass_kg": 0.9,
+      "support": [],
+      "afford": [
+        "grasp"
+      ],
+      "asset": null,
+      "source": "prior"
+    },
+    "baseball glove": {
+      "dims_m": [
+        0.25,
+        0.15,
+        0.3
+      ],
+      "body": "dynamic",
+      "mass_kg": 0.6,
+      "support": [],
+      "afford": [
+        "grasp"
+      ],
+      "asset": null,
+      "source": "prior"
+    },
+    "skateboard": {
+      "dims_m": [
+        0.8,
+        0.22,
+        0.11
+      ],
+      "body": "dynamic",
+      "mass_kg": 3,
+      "support": [
+        {
+          "name": "deck",
+          "h": 0.11
+        }
+      ],
+      "afford": [
+        "grasp"
+      ],
+      "asset": null,
+      "source": "prior"
+    },
+    "surfboard": {
+      "dims_m": [
+        2.0,
+        0.5,
+        0.07
+      ],
+      "body": "dynamic",
+      "mass_kg": 7,
+      "support": [],
+      "afford": [
+        "grasp"
+      ],
+      "asset": null,
+      "source": "prior"
+    },
+    "tennis racket": {
+      "dims_m": [
+        0.28,
+        0.03,
+        0.68
+      ],
+      "body": "dynamic",
+      "mass_kg": 0.3,
+      "support": [],
+      "afford": [
+        "grasp"
+      ],
+      "asset": null,
+      "source": "prior"
+    },
+    "bottle": {
+      "dims_m": [
+        0.07,
+        0.07,
+        0.24
+      ],
+      "body": "dynamic",
+      "mass_kg": 0.5,
+      "support": [],
+      "afford": [
+        "grasp",
+        "contain"
+      ],
+      "asset": "Props/YCB/Axis_Aligned/006_mustard_bottle.usd",
+      "source": "catalog"
+    },
+    "wine glass": {
+      "dims_m": [
+        0.08,
+        0.08,
+        0.2
+      ],
+      "body": "dynamic",
+      "mass_kg": 0.2,
+      "support": [],
+      "afford": [
+        "grasp",
+        "contain"
+      ],
+      "asset": null,
+      "source": "prior"
+    },
+    "cup": {
+      "dims_m": [
+        0.09,
+        0.09,
+        0.1
+      ],
+      "body": "dynamic",
+      "mass_kg": 0.35,
+      "support": [],
+      "afford": [
+        "grasp",
+        "contain"
+      ],
+      "asset": null,
+      "source": "prior",
+      "note": "Primitive on purpose. What CBD carries is the COCO class `cup` and a caption saying \"a glass of water\" -- not which cup. The YCB 025_mug this used to point at is a specific mug with a handle, and standing it in the scene asserts a shape nothing measured. An upright cylinder at the class's own metric dimensions is exactly the class-level knowledge and no more, which is what `source: prior` means. `wine glass` is primitive for the same reason."
+    },
+    "fork": {
+      "dims_m": [
+        0.03,
+        0.02,
+        0.19
+      ],
+      "body": "dynamic",
+      "mass_kg": 0.05,
+      "support": [],
+      "afford": [
+        "grasp"
+      ],
+      "asset": null,
+      "source": "prior"
+    },
+    "knife": {
+      "dims_m": [
+        0.03,
+        0.02,
+        0.22
+      ],
+      "body": "dynamic",
+      "mass_kg": 0.08,
+      "support": [],
+      "afford": [
+        "grasp"
+      ],
+      "asset": null,
+      "source": "prior"
+    },
+    "spoon": {
+      "dims_m": [
+        0.04,
+        0.02,
+        0.18
+      ],
+      "body": "dynamic",
+      "mass_kg": 0.05,
+      "support": [],
+      "afford": [
+        "grasp"
+      ],
+      "asset": null,
+      "source": "prior"
+    },
+    "bowl": {
+      "dims_m": [
+        0.16,
+        0.16,
+        0.07
+      ],
+      "body": "dynamic",
+      "mass_kg": 0.3,
+      "support": [
+        {
+          "name": "rim",
+          "h": 0.07
+        }
+      ],
+      "afford": [
+        "grasp",
+        "contain"
+      ],
+      "asset": "Props/YCB/Axis_Aligned/024_bowl.usd",
+      "source": "catalog"
+    },
+    "banana": {
+      "dims_m": [
+        0.19,
+        0.05,
+        0.04
+      ],
+      "body": "dynamic",
+      "mass_kg": 0.12,
+      "support": [],
+      "afford": [
+        "grasp"
+      ],
+      "asset": "Props/YCB/Axis_Aligned/011_banana.usd",
+      "source": "catalog"
+    },
+    "apple": {
+      "dims_m": [
+        0.08,
+        0.08,
+        0.08
+      ],
+      "body": "dynamic",
+      "mass_kg": 0.15,
+      "support": [],
+      "afford": [
+        "grasp"
+      ],
+      "asset": null,
+      "source": "prior"
+    },
+    "sandwich": {
+      "dims_m": [
+        0.12,
+        0.1,
+        0.05
+      ],
+      "body": "dynamic",
+      "mass_kg": 0.2,
+      "support": [],
+      "afford": [
+        "grasp"
+      ],
+      "asset": null,
+      "source": "prior"
+    },
+    "orange": {
+      "dims_m": [
+        0.08,
+        0.08,
+        0.08
+      ],
+      "body": "dynamic",
+      "mass_kg": 0.15,
+      "support": [],
+      "afford": [
+        "grasp"
+      ],
+      "asset": null,
+      "source": "prior"
+    },
+    "broccoli": {
+      "dims_m": [
+        0.12,
+        0.12,
+        0.15
+      ],
+      "body": "dynamic",
+      "mass_kg": 0.3,
+      "support": [],
+      "afford": [
+        "grasp"
+      ],
+      "asset": null,
+      "source": "prior"
+    },
+    "carrot": {
+      "dims_m": [
+        0.04,
+        0.04,
+        0.18
+      ],
+      "body": "dynamic",
+      "mass_kg": 0.08,
+      "support": [],
+      "afford": [
+        "grasp"
+      ],
+      "asset": null,
+      "source": "prior"
+    },
+    "hot dog": {
+      "dims_m": [
+        0.15,
+        0.05,
+        0.05
+      ],
+      "body": "dynamic",
+      "mass_kg": 0.15,
+      "support": [],
+      "afford": [
+        "grasp"
+      ],
+      "asset": null,
+      "source": "prior"
+    },
+    "pizza": {
+      "dims_m": [
+        0.32,
+        0.32,
+        0.03
+      ],
+      "body": "dynamic",
+      "mass_kg": 0.8,
+      "support": [],
+      "afford": [
+        "grasp"
+      ],
+      "asset": null,
+      "source": "prior"
+    },
+    "donut": {
+      "dims_m": [
+        0.1,
+        0.1,
+        0.04
+      ],
+      "body": "dynamic",
+      "mass_kg": 0.06,
+      "support": [],
+      "afford": [
+        "grasp"
+      ],
+      "asset": null,
+      "source": "prior"
+    },
+    "cake": {
+      "dims_m": [
+        0.22,
+        0.22,
+        0.1
+      ],
+      "body": "dynamic",
+      "mass_kg": 1.0,
+      "support": [
+        {
+          "name": "top",
+          "h": 0.1
+        }
+      ],
+      "afford": [
+        "grasp"
+      ],
+      "asset": null,
+      "source": "prior"
+    },
+    "chair": {
+      "dims_m": [
+        0.45,
+        0.45,
+        0.9
+      ],
+      "body": "static",
+      "mass_kg": 6,
+      "support": [
+        {
+          "name": "seat",
+          "h": 0.45
+        }
+      ],
+      "afford": [
+        "sit"
+      ],
+      "asset": null,
+      "source": "prior"
+    },
+    "couch": {
+      "dims_m": [
+        2.0,
+        0.9,
+        0.85
+      ],
+      "body": "static",
+      "mass_kg": 45,
+      "support": [
+        {
+          "name": "seat",
+          "h": 0.42
+        }
+      ],
+      "afford": [
+        "sit"
+      ],
+      "asset": null,
+      "source": "prior"
+    },
+    "potted plant": {
+      "dims_m": [
+        0.3,
+        0.3,
+        0.6
+      ],
+      "body": "static",
+      "mass_kg": 5,
+      "support": [],
+      "afford": [],
+      "asset": null,
+      "source": "prior"
+    },
+    "bed": {
+      "dims_m": [
+        1.4,
+        2.0,
+        0.55
+      ],
+      "body": "static",
+      "mass_kg": 60,
+      "support": [
+        {
+          "name": "mattress",
+          "h": 0.55
+        }
+      ],
+      "afford": [
+        "sit",
+        "lie"
+      ],
+      "asset": null,
+      "source": "prior"
+    },
+    "dining table": {
+      "dims_m": [
+        1.2,
+        0.8,
+        0.75
+      ],
+      "body": "static",
+      "mass_kg": 25,
+      "support": [
+        {
+          "name": "top",
+          "h": 0.75
+        }
+      ],
+      "afford": [
+        "support"
+      ],
+      "asset": "Props/Mounts/table.usd",
+      "source": "catalog"
+    },
+    "toilet": {
+      "dims_m": [
+        0.4,
+        0.7,
+        0.78
+      ],
+      "body": "static",
+      "mass_kg": 30,
+      "support": [
+        {
+          "name": "seat",
+          "h": 0.4
+        }
+      ],
+      "afford": [
+        "sit"
+      ],
+      "asset": null,
+      "source": "prior"
+    },
+    "tv": {
+      "dims_m": [
+        1.1,
+        0.08,
+        0.65
+      ],
+      "body": "static",
+      "mass_kg": 12,
+      "support": [],
+      "afford": [],
+      "asset": null,
+      "source": "prior"
+    },
+    "laptop": {
+      "dims_m": [
+        0.32,
+        0.22,
+        0.24
+      ],
+      "body": "dynamic",
+      "mass_kg": 1.8,
+      "support": [],
+      "afford": [
+        "grasp"
+      ],
+      "asset": null,
+      "source": "prior"
+    },
+    "mouse": {
+      "dims_m": [
+        0.06,
+        0.11,
+        0.04
+      ],
+      "body": "dynamic",
+      "mass_kg": 0.1,
+      "support": [],
+      "afford": [
+        "grasp"
+      ],
+      "asset": null,
+      "source": "prior"
+    },
+    "remote": {
+      "dims_m": [
+        0.05,
+        0.17,
+        0.02
+      ],
+      "body": "dynamic",
+      "mass_kg": 0.12,
+      "support": [],
+      "afford": [
+        "grasp"
+      ],
+      "asset": null,
+      "source": "prior"
+    },
+    "keyboard": {
+      "dims_m": [
+        0.44,
+        0.13,
+        0.02
+      ],
+      "body": "dynamic",
+      "mass_kg": 0.6,
+      "support": [],
+      "afford": [
+        "grasp"
+      ],
+      "asset": null,
+      "source": "prior"
+    },
+    "cell phone": {
+      "dims_m": [
+        0.07,
+        0.15,
+        0.01
+      ],
+      "body": "dynamic",
+      "mass_kg": 0.19,
+      "support": [],
+      "afford": [
+        "grasp"
+      ],
+      "asset": null,
+      "source": "prior"
+    },
+    "microwave": {
+      "dims_m": [
+        0.5,
+        0.38,
+        0.3
+      ],
+      "body": "static",
+      "mass_kg": 15,
+      "support": [
+        {
+          "name": "top",
+          "h": 0.3
+        }
+      ],
+      "afford": [
+        "support"
+      ],
+      "asset": null,
+      "source": "prior"
+    },
+    "oven": {
+      "dims_m": [
+        0.6,
+        0.6,
+        0.85
+      ],
+      "body": "static",
+      "mass_kg": 60,
+      "support": [
+        {
+          "name": "top",
+          "h": 0.85
+        }
+      ],
+      "afford": [
+        "support"
+      ],
+      "asset": null,
+      "source": "prior"
+    },
+    "toaster": {
+      "dims_m": [
+        0.28,
+        0.17,
+        0.19
+      ],
+      "body": "static",
+      "mass_kg": 1.5,
+      "support": [],
+      "afford": [],
+      "asset": null,
+      "source": "prior"
+    },
+    "sink": {
+      "dims_m": [
+        0.55,
+        0.45,
+        0.2
+      ],
+      "body": "static",
+      "mass_kg": 12,
+      "support": [
+        {
+          "name": "rim",
+          "h": 0.2
+        }
+      ],
+      "afford": [
+        "contain"
+      ],
+      "asset": null,
+      "source": "prior"
+    },
+    "refrigerator": {
+      "dims_m": [
+        0.7,
+        0.7,
+        1.8
+      ],
+      "body": "static",
+      "mass_kg": 90,
+      "support": [
+        {
+          "name": "top",
+          "h": 1.8
+        }
+      ],
+      "afford": [
+        "support"
+      ],
+      "asset": null,
+      "source": "prior"
+    },
+    "book": {
+      "dims_m": [
+        0.15,
+        0.03,
+        0.22
+      ],
+      "body": "dynamic",
+      "mass_kg": 0.4,
+      "support": [],
+      "afford": [
+        "grasp"
+      ],
+      "asset": null,
+      "source": "prior"
+    },
+    "clock": {
+      "dims_m": [
+        0.3,
+        0.05,
+        0.3
+      ],
+      "body": "static",
+      "mass_kg": 1.0,
+      "support": [],
+      "afford": [],
+      "asset": null,
+      "source": "prior"
+    },
+    "vase": {
+      "dims_m": [
+        0.12,
+        0.12,
+        0.25
+      ],
+      "body": "dynamic",
+      "mass_kg": 1.0,
+      "support": [],
+      "afford": [
+        "grasp",
+        "contain"
+      ],
+      "asset": null,
+      "source": "prior"
+    },
+    "scissors": {
+      "dims_m": [
+        0.08,
+        0.01,
+        0.2
+      ],
+      "body": "dynamic",
+      "mass_kg": 0.06,
+      "support": [],
+      "afford": [
+        "grasp"
+      ],
+      "asset": "Props/YCB/Axis_Aligned/037_scissors.usd",
+      "source": "catalog"
+    },
+    "teddy bear": {
+      "dims_m": [
+        0.2,
+        0.15,
+        0.3
+      ],
+      "body": "dynamic",
+      "mass_kg": 0.3,
+      "support": [],
+      "afford": [
+        "grasp"
+      ],
+      "asset": null,
+      "source": "prior"
+    },
+    "hair drier": {
+      "dims_m": [
+        0.09,
+        0.22,
+        0.2
+      ],
+      "body": "dynamic",
+      "mass_kg": 0.6,
+      "support": [],
+      "afford": [
+        "grasp"
+      ],
+      "asset": null,
+      "source": "prior"
+    },
+    "toothbrush": {
+      "dims_m": [
+        0.02,
+        0.02,
+        0.19
+      ],
+      "body": "dynamic",
+      "mass_kg": 0.02,
+      "support": [],
+      "afford": [
+        "grasp"
+      ],
+      "asset": null,
+      "source": "prior"
+    }
+  }
+}

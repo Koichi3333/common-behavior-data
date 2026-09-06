@@ -24,6 +24,11 @@ labels: adapter
 <!-- The most useful part of this issue. What could you not express?
      Behavior intent? Object pose? Contact points? Units? -->
 
+## Where would it run?
+
+- [ ] Google Colab (the default — see `docs/runtime_environments.md`)
+- [ ] Somewhere else <!-- if so, what class of machine? GPU, memory, runtime version -->
+
 ## Are you planning to build it?
 
 - [ ] Yes, I want to implement it

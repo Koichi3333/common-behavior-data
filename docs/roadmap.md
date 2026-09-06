@@ -91,15 +91,52 @@ rule as the embodiment question: adapters drive the specification.
 
 Ordered by what would teach us the most, not by effort.
 
+The **Isaac adapter** that used to head this list has landed, and landed on
+hardware ([`adapters/isaac_sim_groot_g1/`](../adapters/isaac_sim_groot_g1/)): the
+same dataset onto a Unitree G1, the machine NVIDIA GR00T drives, rendered in
+Isaac Sim. A second simulator was the real test of engine independence and the
+schema survived it — the adapter reads only `04_behavior_dataset/`, converts
+frames once at its boundary, and needed no change to the representation. Going
+straight to a *robot* rather than to a figure built from the subject's own
+measurements made the test sharper: fixed link lengths and hard joint limits are
+what say whether the representation carries enough. It does — but only for
+kinematics, and the adapter is precise about the cost. The motion has to be
+*solved* rather than copied, the set has to be scaled to the robot by a number
+the schema cannot supply, and both ankle pitch joints sit on their limit for the
+whole sample clip.
+
+What it surfaced is four gaps worth taking to the schema. Canonical space
+declares no real scale — and that is not merely unstated but load-bearing once a
+1.32 m robot has to sit on furniture derived from a taller subject. Four bones
+(`chest`, `neck`, and both shoulders) are always written as identity, so the
+robot's waist moves in yaw only. An adapter that wants to place props in 3D has
+to re-derive the image-to-canonical mapping itself from
+`human/pose_landmarks.csv`. And the missing force and contact channels are
+exactly what stands between a joint-space replay and a dynamically feasible G1
+trajectory — the adapter writes a GR00T-LeRobot dataset a policy could be
+trained on, and cannot say whether the robot could hold the pose. See
+[specification → open questions](../specification/README.md#open-questions).
+
+**v2 of that adapter took the last of those on** (`07_groot_g1_v2/`): the real
+G1 asset, the capture corrected before it is retargeted, the trajectory driven
+through PhysX and published as what came back, and the objects the clip acts on
+placed rather than described. It narrows the schema request rather than
+answering it. What is missing is not "force and contact" in general but three
+specific things: a **validity signal on `phase`** (all 96 frames of the sample
+read `Idle` while the wrist travels 0.31 → 0.55 m), a **support relation**
+saying what the subject rests on and what rests on what, and **rotation for the
+four bones that carry none** — the reason a reach to the subject's side comes
+out as a reach to the robot's front, which is the single largest remaining
+error in the output.
+
 | Direction | Why it matters |
 |---|---|
 | **Schema extraction** | Turn "what the notebooks emit" into a validatable schema with a compatibility checker |
 | **Object trajectory generation** | Demo B currently generates only the human body; behavior involving objects needs the objects |
 | **LeRobot interoperability** | The most natural neighbour in the robot-learning ecosystem; a conversion in both directions would test the schema hard |
 | **ROS 2 bridge** | Makes CBD reachable from existing robot stacks |
-| **Isaac adapter** | A second simulator is the real test of engine independence |
 | **Blender / Unreal exporters** | Extends reach into content pipelines, and stresses the avatar side of the schema |
-| **IK and retargeting library** | Shared machinery every embodiment adapter otherwise reinvents |
+| **IK and retargeting library** | Shared machinery every embodiment adapter otherwise reinvents — `isaac_sim_groot_g1/` now has a working direction-matching solver, a contact-polygon foot solve and an object placement solver that the next embodiment should not have to rewrite |
 | **Evaluation tooling** | How do you say one behavior dataset is *better* than another? Currently unanswered |
 | **Multi-person capture** | Interaction between people is behavior too |
 | **Motion tokenisation / diffusion** | Better generation once the corpus justifies it |

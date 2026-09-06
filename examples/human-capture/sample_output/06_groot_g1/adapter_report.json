@@ -1,0 +1,240 @@
+{
+  "adapter": "cbd_adapter_groot_g1",
+  "target": "NVIDIA GR00T / Unitree G1 (29 body DoF + two Dex3 hands) in Isaac Sim",
+  "generated_at": "2026-09-03T22:30:26.597122+00:00",
+  "source_dataset": {
+    "manifest": "../04_behavior_dataset/manifest.json",
+    "dataset_version": "0.2.0",
+    "frame_count": 96,
+    "fps": 12.0
+  },
+  "reads": [
+    "timeline/frames.jsonl (bone_rotations_xyzw, hips_position, pose_canonical, finger_curls_rad, phase, caption)",
+    "human/pose_landmarks.csv (paired normalized-image and canonical landmarks, for the image-plane fit)",
+    "objects/object_detections.csv (chair / dining table boxes)",
+    "manifest.json, behavior_summary.json"
+  ],
+  "writes": [
+    "g1_robot.usda",
+    "scene.usda",
+    "motion.usda",
+    "motion.npz",
+    "g1_joint_trajectory.csv",
+    "groot_lerobot/",
+    "groot_g1_simulation.mp4"
+  ],
+  "robot": {
+    "model": "g1_29dof_with_hand",
+    "kinematics_source": "g1_29dof_with_hand.urdf, the official Unitree G1 description (unitree_ros), as redistributed in NVIDIA GR00T-WholeBodyControl at gr00t_wbc/control/robot_model/model_data/g1/",
+    "degrees_of_freedom": 43,
+    "total_mass_kg": 36.168,
+    "pelvis_to_ankle_m": 0.7661,
+    "shoulder_to_palm_m": 0.3154,
+    "note": "hardware. Not one number here is derived from the dataset, and none of it was stretched to fit the subject"
+  },
+  "coordinate_conversion": {
+    "canonical": "Y-up, right-handed, subject faces +Z",
+    "robot": "URDF/ROS: Z-up, X forward, Y left, origin at the pelvis",
+    "target_stage": "USD Z-up, metres, robot faces -Y",
+    "canonical_to_robot": "(x, y, z) -> (z, x, y); a permutation with determinant +1, so a rotation and not a flip",
+    "robot_to_stage": "-90 deg about Z, carried by the /World/G1 root Xform"
+  },
+  "retarget": {
+    "method": "per-frame damped least squares on segment *direction* residuals, warm-started from the previous frame, with the URDF's joint limits as box constraints",
+    "matched": "upper arm, forearm, hand axis and palm normal (arms); thigh, shank and foot forward (legs); the torso's rotation relative to the pelvis, decomposed in the waist chain's own Z-X-Y order (waist)",
+    "not_matched": "absolute positions in metres. The G1's segments are shorter than the subject's, so matching a reach in metres would need either a resized robot or a fabricated pose",
+    "subject_dimensions_m": {
+      "sh_half": 0.1692,
+      "hip_half": 0.1364,
+      "hip_to_shoulder": 0.4267,
+      "spine1": 0.1792,
+      "spine2": 0.2475,
+      "neck": 0.02,
+      "head_off": 0.0635,
+      "upper_arm": 0.2638,
+      "lower_arm": 0.2177,
+      "hand": 0.0799,
+      "upper_leg": 0.395,
+      "lower_leg": 0.3449,
+      "foot": 0.1806,
+      "floor_y": -0.7094,
+      "pelvis_to_ankle": 0.7399
+    },
+    "direction_error_deg": {
+      "left_upper_arm": {
+        "mean_deg": 0.09,
+        "max_deg": 0.3
+      },
+      "left_forearm": {
+        "mean_deg": 1.71,
+        "max_deg": 3.43
+      },
+      "left_hand_axis": {
+        "mean_deg": 5.47,
+        "max_deg": 10.63
+      },
+      "left_palm_normal": {
+        "mean_deg": 6.21,
+        "max_deg": 13.75
+      },
+      "left_thigh": {
+        "mean_deg": 2.91,
+        "max_deg": 5.17
+      },
+      "left_shank": {
+        "mean_deg": 0.98,
+        "max_deg": 3.56
+      },
+      "left_foot_forward": {
+        "mean_deg": 16.1,
+        "max_deg": 22.75
+      },
+      "right_upper_arm": {
+        "mean_deg": 0.47,
+        "max_deg": 1.46
+      },
+      "right_forearm": {
+        "mean_deg": 3.46,
+        "max_deg": 7.17
+      },
+      "right_hand_axis": {
+        "mean_deg": 12.56,
+        "max_deg": 24.66
+      },
+      "right_palm_normal": {
+        "mean_deg": 10.66,
+        "max_deg": 65.08
+      },
+      "right_thigh": {
+        "mean_deg": 5.69,
+        "max_deg": 9.35
+      },
+      "right_shank": {
+        "mean_deg": 1.59,
+        "max_deg": 4.02
+      },
+      "right_foot_forward": {
+        "mean_deg": 28.27,
+        "max_deg": 38.44
+      },
+      "all_segments": {
+        "mean_deg": 6.87,
+        "max_deg": 65.08
+      }
+    },
+    "joints_resting_on_a_limit": {
+      "left_hip_roll_joint": {
+        "frames": 8,
+        "of": 96,
+        "limit_rad": [
+          -0.5236,
+          2.9671
+        ]
+      },
+      "left_ankle_pitch_joint": {
+        "frames": 96,
+        "of": 96,
+        "limit_rad": [
+          -0.8727,
+          0.5236
+        ]
+      },
+      "right_ankle_pitch_joint": {
+        "frames": 96,
+        "of": 96,
+        "limit_rad": [
+          -0.8727,
+          0.5236
+        ]
+      },
+      "right_wrist_roll_joint": {
+        "frames": 2,
+        "of": 96,
+        "limit_rad": [
+          -1.9722,
+          1.9722
+        ]
+      }
+    },
+    "clipped_outside_the_solver": {}
+  },
+  "scale": {
+    "value": 0.83516,
+    "definition": "robot seated pelvis height (from its retargeted leg pose, with factory link lengths) divided by the subject's pelvis height above the derived floor",
+    "applied_to": "floor, chair, table and camera -- not to the robot",
+    "foot_clearance_above_floor_m": {
+      "median_m": -0.0008,
+      "min_m": -0.0483,
+      "max_m": 0.0574
+    }
+  },
+  "set_placement": {
+    "scale": [
+      "the whole set is scaled by 0.8352 about the floor plane -- the ratio of the robot's own seated pelvis height (from its retargeted leg pose, with its factory link lengths) to the subject's. The robot is not resized; the room is"
+    ],
+    "chair": [
+      "seat height: derived from the canonical pelvis position (the subject is sitting on it)",
+      "width and back height: projected_to_plane from the median of 144 `chair` detections"
+    ],
+    "table": [
+      "top height: the height the right hand reached at frame 29 (t=2.42s), its furthest reach",
+      "radius and X: projected_to_plane from the median of 26 `dining table` detections"
+    ]
+  },
+  "camera": {
+    "focal_length_mm": 53.727,
+    "horizontal_aperture_mm": 20.955,
+    "position_stage": [
+      0.0185,
+      -2.5055,
+      0.8017
+    ],
+    "rotate_xyz_deg": [
+      90.0,
+      0.0,
+      0.0
+    ],
+    "horizontal_fov_deg": 22.07,
+    "plane_fit": {
+      "sx": 1.170074097984318,
+      "cx": -0.5629028136947511,
+      "sy": -2.1501194388091096,
+      "cy": 1.3256248643827835,
+      "residual_x_m": 0.0314,
+      "residual_y_m": 0.0274,
+      "samples": 3168
+    }
+  },
+  "groot_dataset": {
+    "layout": "LeRobot v2.1",
+    "embodiment": "Isaac Lab Arena G1 (43-DoF joint space, `modality.json` groups: left_leg, right_leg, waist, left_arm, left_hand, right_arm, right_hand)",
+    "state_and_action": "the 43 joint angles in radians, in that order",
+    "action_definition": "action[t] = state[t+1], last frame repeated -- a kinematic replay, not a policy rollout",
+    "eef_pose": "[x, y, z, qw, qx, qy, qz] of each hand's palm link, **in the pelvis frame** (X forward, Y left, Z up), left then right",
+    "files": {
+      "episode": "groot_lerobot/data/chunk-000/episode_000000.parquet",
+      "ego_view_video": "groot_lerobot/videos/chunk-000/observation.images.ego_view/episode_000000.mp4",
+      "ego_view_written_by": "compose_video.py, after groot_g1_render.py"
+    }
+  },
+  "filled_or_interpolated": [
+    "finger curls: 9/96 left frames had no hand detection and were filled from the nearest detected frame",
+    "finger curls: 17/96 right frames had no hand detection and were filled from the nearest detected frame",
+    "root translation: hips_position is a translation offset with an arbitrary origin, so it is de-meaned and added to the canonical hip centre; that keeps the root consistent with the same landmark set the floor height is measured from",
+    "canonical landmarks: the right knee sits 19 cm across the body midline from its hip, which a monocular capture of a seated subject does produce. The retarget reproduces it rather than correcting it",
+    "canonical landmarks: the right ankle sits 19 cm across the body midline from its hip, which a monocular capture of a seated subject does produce. The retarget reproduces it rather than correcting it",
+    "canonical landmarks: the left wrist sits 9 cm across the body midline from its shoulder, which a monocular capture of a seated subject does produce. The retarget reproduces it rather than correcting it",
+    "canonical landmarks: the right wrist sits 22 cm across the body midline from its shoulder, which a monocular capture of a seated subject does produce. The retarget reproduces it rather than correcting it"
+  ],
+  "not_represented": [
+    "the primary object: no glass, cup or other prop is placed. This clip carries 1 `cup` detection(s) over 96 frames, 0 interaction event(s), and no per-frame canonical position for it, so there is no evidence the object was ever grasped or moved. The table's height is still derived from the primary hand's furthest reach -- see set_placement",
+    "physics: this is a kinematic replay. The stage carries no rigid bodies, no articulation drives and no contact, so nothing here is a dynamically feasible G1 trajectory -- joint velocity, torque and balance limits are not checked",
+    "the head: the G1's 29-DoF configuration has no neck joint, so the subject's head orientation is dropped entirely",
+    "ring and little fingers: the Dex3 hand has three fingers, so two of the five CBD finger curls have nowhere to go",
+    "thumb abduction: the CBD schema has no thumb abduction channel, so `thumb_0` is driven to 0.6 rad of opposition in proportion to the measured thumb flexion. That is an adapter choice, not a measurement",
+    "bones with no rotation signal in the dataset (written as identity, not estimated), so the joints that would have carried them stay at zero: chest, neck, left_shoulder, right_shoulder",
+    "face: no face landmarks or blendshapes in the dataset"
+  ],
+  "promoted_candidates": false,
+  "policy_was_run": false
+}

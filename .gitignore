@@ -40,3 +40,11 @@ Thumbs.db
 
 # --- Local working material, not part of the public repository ---
 _handover/
+
+# --- Local staging material, not part of the public repository ---
+# The Isaac Sim work was carried out on a GPU VM and handed over as a folder
+# containing the VM's own operational notes (host names, zones, project IDs).
+# Only the reproducible part was merged into the tree; the environment is
+# described, without identifying details, in docs/runtime_environments.md.
+google compute engine updates behavior/
+common_behavior_data_repository_refactor_instructions_v2.md

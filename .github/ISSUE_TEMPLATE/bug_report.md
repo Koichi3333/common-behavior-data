@@ -11,6 +11,9 @@ labels: bug
 
 - [ ] Demo A — `examples/human-capture`
 - [ ] Demo B — `examples/language-to-motion`
+- [ ] `generators/`
+- [ ] `adapters/` (which target: )
+- [ ] `tools/` / `experiments/`
 - [ ] Documentation
 - [ ] Sample output / data
 
@@ -18,7 +21,7 @@ Cell number (if applicable):
 
 ## Environment
 
-- Runtime: <!-- Colab T4 / Colab CPU / local -->
+- Runtime: <!-- Colab T4 / Colab CPU / local / GPU VM (say which class of machine) -->
 - Anything unusual about the input video or corpus:
 
 ## Error output

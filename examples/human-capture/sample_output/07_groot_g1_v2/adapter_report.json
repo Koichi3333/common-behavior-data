@@ -1,0 +1,1122 @@
+{
+ "adapter": "cbd_adapter_groot_g1 v2",
+ "publishes": "q_actual -- the trajectory after the physics pass",
+ "source": {
+  "built": {
+   "robot": {
+    "asset": "/mnt/data/assets/isaac/Samples/Groot/Robots/g1_29dof_with_hand_rev_1_0.usd",
+    "root_pos": [
+     -0.0015,
+     0.0003,
+     0.5929
+    ],
+    "root_yaw_deg": 0.0,
+    "fixed_base": true
+   },
+   "scene": [
+    {
+     "name": "floor",
+     "kind": "plane",
+     "z": 0.0,
+     "provenance": "derived -- lowest foot landmark"
+    },
+    {
+     "name": "seat",
+     "kind": "box",
+     "size": [
+      0.1099,
+      0.2853,
+      0.06
+     ],
+     "centre_xy": [
+      -0.0925,
+      0.0
+     ],
+     "top_z": 0.4404,
+     "provenance": "derived -- fitted to the commanded pose: soles on the floor puts the pelvis origin at 0.5929 m; its underside, 0.1475 m lower, is where the seat top goes. It reaches to x=-0.038, carved back until no leg link ever comes within 0.064 m of it -- and is 0.060 m thick, not a block to the floor, and 5 mm clear of the pelvis because a pinned robot needs scenery, not a contact"
+    },
+    {
+     "name": "cup",
+     "kind": "carried",
+     "source": "primitive",
+     "asset": null,
+     "asset_scale": 1.0,
+     "samples": 96,
+     "fps": 12.0,
+     "catalog_body": "dynamic",
+     "catalog_mass_kg": 0.35,
+     "collision": "none -- the object is animated, not simulated. A kinematic body here cost 9.52 deg of tracking RMSE against 0.165 deg without it, because nothing closes the hand on it and the body ends up inside the hand",
+     "provenance": "derived -- the right hand's grasp centre -- the midpoint of the palm and the middle fingertip, so the object is where a closed hand would hold it -- over frames 20-83, the span from the first hold to the last. Outside it the object rests on its surface at the pick-up and put-down positions"
+    },
+    {
+     "name": "dining table",
+     "kind": "support_surface",
+     "top_z": 0.7125,
+     "size": [
+      0.8219,
+      0.5479,
+      0.035
+     ],
+     "centre_xy": [
+      0.5803,
+      0.2513
+     ],
+     "yaw_deg": 113.42,
+     "legs": 4,
+     "leg_side_m": 0.05,
+     "collision": "disabled -- scenery, see the placement report",
+     "provenance": "derived -- its top is solved for the target, not taken from the catalog: the cup rests at 0.7468 m, so the surface is at 0.7125 m. The catalog's 0.75 m at scene scale would be 0.5137 m -- the same rule the seat follows, and the two agree to 0.199 m. Footprint at the one scene scale, oriented with its near edge across the reach, pulled back 0.000 m and lowered 0.000 m. No height clears the reach -- the hand is inside the plane the object rests on, by 22 mm at worst on 10 frames of the approach and the withdrawal -- so the surface is scenery: geometry with its collider disabled. Nothing rests on it but an object the hand carries kinematically, and the overlap is the reach's to fix"
+    }
+   ],
+   "motion": {
+    "sublayers": [
+     "./scene_v2.usda",
+     "./robot_v2.usda"
+    ],
+    "fps": 12.0,
+    "frames": 96
+   },
+   "seat_fit": {
+    "root_z_m": 0.5929,
+    "seat_top_m": 0.4404,
+    "thickness_m": 0.06,
+    "clearance_m": 0.005,
+    "fits": true,
+    "forward_edge_m": -0.0376,
+    "centre_xy": [
+     -0.0925,
+     0.0
+    ],
+    "size_xy": [
+     0.1099,
+     0.2853
+    ],
+    "foot_drop_m": {
+     "min": 0.5919,
+     "max": 0.5929,
+     "spread": 0.001
+    },
+    "commanded_sole_z_m": {
+     "min": -0.0,
+     "max": 0.001
+    },
+    "why": "soles on the floor puts the pelvis origin at 0.5929 m; its underside, 0.1475 m lower, is where the seat top goes. It reaches to x=-0.038, carved back until no leg link ever comes within 0.064 m of it -- and is 0.060 m thick, not a block to the floor, and 5 mm clear of the pelvis because a pinned robot needs scenery, not a contact",
+    "source": "root from the retarget's own pelvis trajectory"
+   },
+   "fixed_base_approximation": {
+    "axis_spread_m": [
+     0.001,
+     0.0464,
+     0.0151
+    ],
+    "max_offset_m": 0.0258
+   },
+   "foot_contact": {
+    "joints_touched": [
+     "left_ankle_pitch_joint",
+     "left_ankle_roll_joint",
+     "left_hip_pitch_joint",
+     "left_hip_roll_joint",
+     "left_hip_yaw_joint",
+     "left_knee_joint",
+     "right_ankle_pitch_joint",
+     "right_ankle_roll_joint",
+     "right_hip_pitch_joint",
+     "right_hip_roll_joint",
+     "right_hip_yaw_joint",
+     "right_knee_joint"
+    ],
+    "measured_on": "the four sole corners of each foot, not the point under the ankle",
+    "sole_z_before_m": {
+     "min": -0.1178,
+     "max": 0.1819
+    },
+    "sole_z_after_m": {
+     "min": -0.0,
+     "max": 0.0035
+    },
+    "sole_tilt_before_m": {
+     "max": 0.1013
+    },
+    "sole_tilt_after_m": {
+     "max": 0.0008
+    },
+    "penetration_before_m": 0.1178,
+    "penetration_after_m": 0.0,
+    "worst_joint_change_deg": {
+     "right_ankle_pitch_joint": 24.716,
+     "left_knee_joint": 24.668,
+     "left_ankle_pitch_joint": 24.121,
+     "right_hip_pitch_joint": 23.527,
+     "right_knee_joint": 21.966,
+     "left_hip_pitch_joint": 19.231
+    },
+    "max_change_deg": 24.716,
+    "tolerance_m": 0.005,
+    "contact": {
+     "rule": "seated with no locomotion phase -- both feet down for the whole clip",
+     "source": "derived",
+     "frames_in_contact": [
+      96,
+      96
+     ]
+    }
+   },
+   "continuity": {
+    "rule": "interpolate through a run clipped to a joint limit when the step at its boundary is both > 20 deg and > 5x the joint's median step",
+    "repaired": [
+     {
+      "joint": "right_wrist_roll_joint",
+      "chain_repaired": [
+       "right_wrist_roll_joint",
+       "right_wrist_pitch_joint",
+       "right_wrist_yaw_joint"
+      ],
+      "frames": [
+       69,
+       70
+      ],
+      "was_deg": [
+       -113.0,
+       -113.0
+      ],
+      "now_deg": [
+       -33.87,
+       -33.41
+      ],
+      "boundary_jump_deg": 80.05,
+      "joint_habit_deg": 2.482
+     }
+    ],
+    "worst_step_deg": {
+     "before": 87.11,
+     "after": 29.06
+    }
+   },
+   "placement": {
+    "placed": [
+     {
+      "label": "cup",
+      "kind": "carried",
+      "rest_before_m": [
+       0.3839,
+       0.1663,
+       0.7468
+      ],
+      "rest_after_m": [
+       0.3305,
+       0.1364,
+       0.7468
+      ],
+      "held_frames": [
+       20,
+       83
+      ],
+      "hold_phase_frames": [
+       21,
+       83
+      ],
+      "tier": "derived",
+      "why": "the right hand's grasp centre -- the midpoint of the palm and the middle fingertip, so the object is where a closed hand would hold it -- over frames 20-83, the span from the first hold to the last. Outside it the object rests on its surface at the pick-up and put-down positions",
+      "grasp_transition_m": [
+       0.028,
+       0.0
+      ]
+     },
+     {
+      "label": "dining table",
+      "kind": "support_surface",
+      "centre_xy_m": [
+       0.5803,
+       0.2513
+      ],
+      "top_z_m": 0.7125,
+      "size_m": [
+       0.8219,
+       0.5479,
+       0.7125
+      ],
+      "yaw_deg": 113.42,
+      "near_edge_m": 0.3584,
+      "edge_pulled_back_m": 0.0,
+      "top_lowered_m": 0.0,
+      "edge_bound_by_object": false,
+      "top_thickness_m": 0.035,
+      "leg_side_m": 0.05,
+      "leg_inset": 0.08,
+      "legs_clear_of_robot": true,
+      "solid": false,
+      "overlap_m": 0.0223,
+      "overlap_frames": [
+       13,
+       14,
+       15,
+       16,
+       17,
+       18,
+       84,
+       85,
+       86,
+       87
+      ],
+      "solid_rejected": {
+       "best_solid_top_m": 0.5904,
+       "task_top_m": 0.7125
+      },
+      "tier": "derived",
+      "why": "its top is solved for the target, not taken from the catalog: the cup rests at 0.7468 m, so the surface is at 0.7125 m. The catalog's 0.75 m at scene scale would be 0.5137 m -- the same rule the seat follows, and the two agree to 0.199 m. Footprint at the one scene scale, oriented with its near edge across the reach, pulled back 0.000 m and lowered 0.000 m. No height clears the reach -- the hand is inside the plane the object rests on, by 22 mm at worst on 10 frames of the approach and the withdrawal -- so the surface is scenery: geometry with its collider disabled. Nothing rests on it but an object the hand carries kinematically, and the overlap is the reach's to fix"
+     }
+    ],
+    "image_estimates": {
+     "chair": {
+      "position_m": [
+       -0.5013,
+       -0.1303,
+       0.2396
+      ],
+      "depth_ratio": 1.244,
+      "tier": "derived",
+      "why": "width 0.319 m against catalog 0.450 m; height 0.820 m against catalog 0.900 m -> depth ratio 1.244",
+      "camera_distance_m": 3.0,
+      "camera_distance_tier": "prior -- CBD records no camera intrinsics"
+     },
+     "dining table": {
+      "position_m": [
+       -0.1015,
+       0.2999,
+       0.2327
+      ],
+      "depth_ratio": 1.0494,
+      "tier": "derived",
+      "why": "width unusable -- the box is cropped by the frame edge; height 0.715 m against catalog 0.750 m -> depth ratio 1.049",
+      "camera_distance_m": 3.0,
+      "camera_distance_tier": "prior -- CBD records no camera intrinsics"
+     },
+     "cup": {
+      "position_m": [
+       0.3651,
+       0.2769,
+       0.4803
+      ],
+      "depth_ratio": 0.8223,
+      "tier": "derived",
+      "why": "width 0.091 m against catalog 0.090 m; height 0.146 m against catalog 0.100 m -> depth ratio 0.822",
+      "camera_distance_m": 3.0,
+      "camera_distance_tier": "prior -- CBD records no camera intrinsics"
+     }
+    },
+    "handled": "cup",
+    "acting_hand": "right",
+    "notes": [
+     "chair: the seat is solved from the robot's own pose by `invariants.seat_from_pose`, not placed from its box"
+    ],
+    "rule": "physical consistency, then the task, then the image -- the design's priority order, applied in that sequence",
+    "hand_contact": {
+     "status": "ok",
+     "worst_m": 0.0,
+     "frames": 19,
+     "by": "construction -- the handled object is placed on the hand"
+    },
+    "image_plane_fit": {
+     "sx": 1.170074097984318,
+     "cx": -0.5629028136947511,
+     "sy": -2.1501194388091096,
+     "cy": 1.3256248643827835,
+     "residual_x_m": 0.0314,
+     "residual_y_m": 0.0274,
+     "samples": 3168
+    },
+    "link_collision_boxes": "46 links, from the asset's own collision bounds"
+   },
+   "root_z_m": 0.5929,
+   "root_z_why": "seated invariant: pelvis sits at the seat top with the thigh horizontal"
+  },
+  "invariants": [
+   {
+    "name": "seated",
+    "source": "measured",
+    "evidence": "median knee flexion 109 deg over all 96 frames",
+    "requires": [
+     "the pelvis rests on a support surface (+/- 0.02 m)",
+     "both soles stay on the floor (+/- 0.02 m)",
+     "knee flexion stays inside 60-140 deg"
+    ],
+    "seat_top_m": 0.4404,
+    "hip_axis_m": 0.3526,
+    "root_z_m": 0.5929,
+    "seat_why": "soles on the floor puts the pelvis origin at 0.5929 m; its underside, 0.1475 m lower, is where the seat top goes. It reaches to x=-0.038, carved back until no leg link ever comes within 0.064 m of it -- and is 0.060 m thick, not a block to the floor, and 5 mm clear of the pelvis because a pinned robot needs scenery, not a contact",
+    "breaks_if": "the seat keeps its human-scale catalog height, or the physics pass is allowed to drop the root to the floor"
+   },
+   {
+    "name": "hand_contact",
+    "source": "derived",
+    "evidence": "19 frames labelled hold",
+    "requires": [
+     "the acting hand is within 2 cm of the handled object for every hold frame"
+    ],
+    "frames": [
+     21,
+     83
+    ],
+    "breaks_if": "the reach is matched in joint angles only -- the G1's arm is shorter than the subject's, so equal angles land the hand short"
+   }
+  ],
+  "scene_scale": {
+   "scale": 0.6849,
+   "why": "seat 0.3082 m (solved for the G1) over catalog 0.450 m -- hip axis at knee height 0.3526 (shank 0.3176 + sole 0.0350); seat top one thigh half-thickness (0.0444) below it; pelvis origin 0.2573 above it",
+   "anchor": "seated"
+  },
+  "stage_deviations": {
+   "definition": {
+    "asked": "what the stage aimed at",
+    "got": "what came out",
+    "error": "abs |got-asked|, or the one-sided overshoot for a bound",
+    "status": "ok / FAIL against tolerance; informational when there is none"
+   },
+   "passed": false,
+   "counts": {
+    "total": 14,
+    "checked": 8,
+    "failed": 3
+   },
+   "failures": [
+    {
+     "quantity": "retarget.worst_command_step",
+     "stage": "retarget",
+     "asked": 0.0,
+     "got": 87.10840093821825,
+     "error": 87.10840093821825,
+     "unit": "deg",
+     "tolerance": 30.0,
+     "status": "FAIL",
+     "how": "largest single-frame command step before the repair"
+    },
+    {
+     "quantity": "retarget.commanded_feet_on_floor",
+     "stage": "retarget",
+     "asked": 0.0,
+     "got": 0.1819357787769923,
+     "error": 0.1819357787769923,
+     "unit": "m",
+     "tolerance": 0.02,
+     "status": "FAIL",
+     "how": "worst sole corner, before the contact solve"
+    },
+    {
+     "quantity": "retarget.commanded_foot_penetration",
+     "stage": "retarget",
+     "asked": 0.0,
+     "got": 0.11780394291594554,
+     "error": 0.11780394291594554,
+     "unit": "m",
+     "tolerance": 0.005,
+     "status": "FAIL",
+     "how": "deepest sole corner below the floor before the solve -- the toe, which the single-point model could not see"
+    }
+   ],
+   "by_stage": {
+    "retarget": [
+     {
+      "quantity": "retarget.worst_command_step",
+      "stage": "retarget",
+      "asked": 0.0,
+      "got": 87.10840093821825,
+      "error": 87.10840093821825,
+      "unit": "deg",
+      "tolerance": 30.0,
+      "status": "FAIL",
+      "how": "largest single-frame command step before the repair"
+     },
+     {
+      "quantity": "retarget.worst_command_step_repaired",
+      "stage": "retarget",
+      "asked": 0.0,
+      "got": 29.0625129750122,
+      "error": 29.0625129750122,
+      "unit": "deg",
+      "tolerance": 30.0,
+      "status": "ok",
+      "how": "after the repair"
+     },
+     {
+      "quantity": "retarget.commanded_feet_on_floor",
+      "stage": "retarget",
+      "asked": 0.0,
+      "got": 0.1819357787769923,
+      "error": 0.1819357787769923,
+      "unit": "m",
+      "tolerance": 0.02,
+      "status": "FAIL",
+      "how": "worst sole corner, before the contact solve"
+     },
+     {
+      "quantity": "retarget.corrected_feet_on_floor",
+      "stage": "retarget",
+      "asked": 0.0,
+      "got": 0.003543273423662119,
+      "error": 0.003543273423662119,
+      "unit": "m",
+      "tolerance": 0.02,
+      "status": "ok",
+      "how": "worst sole corner, after the contact solve"
+     },
+     {
+      "quantity": "retarget.commanded_foot_penetration",
+      "stage": "retarget",
+      "asked": 0.0,
+      "got": 0.11780394291594554,
+      "error": 0.11780394291594554,
+      "unit": "m",
+      "tolerance": 0.005,
+      "status": "FAIL",
+      "how": "deepest sole corner below the floor before the solve -- the toe, which the single-point model could not see"
+     },
+     {
+      "quantity": "retarget.corrected_foot_penetration",
+      "stage": "retarget",
+      "asked": 0.0,
+      "got": 2.4357541844710617e-05,
+      "error": 2.4357541844710617e-05,
+      "unit": "m",
+      "tolerance": 0.005,
+      "status": "ok",
+      "how": "deepest sole corner below the floor after the solve"
+     }
+    ],
+    "scene": [
+     {
+      "quantity": "scene.cup.image_vs_hand",
+      "stage": "scene",
+      "asked": 0.0,
+      "got": 0.28912581043229246,
+      "error": 0.28912581043229246,
+      "unit": "m",
+      "tolerance": null,
+      "status": "informational",
+      "how": "how far the image-derived position is from the hand that holds it -- the object is placed on the hand (priority 2) and this is what that costs against the image (priority 4)",
+      "note": "the gap is in the retarget's arm direction, not in the placement: the waist carries no chest rotation, so a reach to the subject's side comes out as a reach to the robot's front"
+     },
+     {
+      "quantity": "scene.cup.pickup_above_surface",
+      "stage": "scene",
+      "asked": 0.0,
+      "got": 0.024681064386496643,
+      "error": 0.024681064386496643,
+      "unit": "m",
+      "tolerance": null,
+      "status": "informational",
+      "how": "the trajectory takes the object at one height and sets it down at another; the surface goes under the lower of the two so the object never penetrates it, which leaves the pick-up starting this far above it"
+     },
+     {
+      "quantity": "scene.cup.grasp_transition",
+      "stage": "scene",
+      "asked": 0.0,
+      "got": 0.02802923550106921,
+      "error": 0.02802923550106921,
+      "unit": "m",
+      "tolerance": null,
+      "status": "informational",
+      "how": "how far the object moves on the frame the hand takes it -- the closest this trajectory brings the hand to the object where it rests"
+     },
+     {
+      "quantity": "scene.dining table.height_solved_vs_catalog",
+      "stage": "scene",
+      "asked": 0.5137,
+      "got": 0.7125151188388487,
+      "error": 0.19881511883884861,
+      "unit": "m",
+      "tolerance": null,
+      "status": "informational",
+      "how": "a support surface is solved for the target; the catalog height at scene scale is what it would have been"
+     },
+     {
+      "quantity": "scene.dining table.reach_overlap",
+      "stage": "scene",
+      "asked": 0.0,
+      "got": 0.0223,
+      "error": 0.0223,
+      "unit": "m",
+      "tolerance": null,
+      "status": "informational",
+      "how": "how far the acting arm reaches inside the surface it reaches over, with every link at the radius of its own collision mesh -- a reach defect, which is why the surface is scenery rather than a collider"
+     },
+     {
+      "quantity": "scene.dining table.top_lowered",
+      "stage": "scene",
+      "asked": 0.0,
+      "got": 0.0,
+      "error": 0.0,
+      "unit": "m",
+      "tolerance": null,
+      "status": "informational",
+      "how": "how far the surface had to drop below the height the object rests at, so the reach that takes the object does not pass through it"
+     },
+     {
+      "quantity": "scene.dining table.legs_clear_of_robot",
+      "stage": "scene",
+      "asked": 0.0,
+      "got": 0.0,
+      "error": 0.0,
+      "unit": "bool",
+      "tolerance": 0.0,
+      "status": "ok",
+      "how": "no robot link is inside a leg on any frame"
+     },
+     {
+      "quantity": "invariant.hand_contact",
+      "stage": "scene",
+      "asked": 0.0,
+      "got": 0.0,
+      "error": 0.0,
+      "unit": "m",
+      "tolerance": 0.02,
+      "status": "ok",
+      "how": "acting hand's grasp centre to the handled object, over every hold frame",
+      "note": "satisfied by construction: the object is placed on the hand. What it does not say is whether the hand is where the subject's was -- that is `scene.<object>.image_vs_hand`"
+     }
+    ]
+   }
+  },
+  "stage_provenance": {
+   "tiers": {
+    "definition": {
+     "measured": "canonical CBD carries it",
+     "derived": "geometry from canonical CBD",
+     "prior": "class-level constant (catalog / anthropometry)",
+     "synthesized": "authored by the adapter to keep the target consistent",
+     "unavailable": "nothing filled it -- a defect, not an outcome"
+    },
+    "weight_is": "channels x frames covered",
+    "ratio": {
+     "measured": 0.0,
+     "derived": 0.9984,
+     "prior": 0.0,
+     "synthesized": 0.0016,
+     "unavailable": 0.0
+    }
+   },
+   "evidence": {
+    "measured_plus_derived": 0.9984,
+    "floor": 0.7,
+    "passed": true,
+    "note": "measured+derived 99.8% >= floor 70%"
+   },
+   "unavailable": [],
+   "spec_feedback": {},
+   "by_tier": {
+    "measured": [],
+    "derived": [
+     {
+      "quantity": "joint.legs",
+      "rule": "leg joints solved so the soles reach the floor the contact mask asserts",
+      "weight": 1152.0
+     },
+     {
+      "quantity": "object.cup.position",
+      "rule": "placed on the acting hand's grasp centre: the phase signal says it is held, and an object that is held is where the hand is",
+      "weight": 96.0
+     },
+     {
+      "quantity": "object.dining table.position",
+      "rule": "the surface under the handled object: its height from where that object rests, its footprint at the scene scale",
+      "weight": 1.0
+     }
+    ],
+    "prior": [],
+    "synthesized": [
+     {
+      "quantity": "joint.continuity",
+      "rule": "clipped wrist run interpolated -- the commanded orientation was outside the joint's range and coming out of it was a step no drive can follow",
+      "weight": 2.0
+     }
+    ],
+    "unavailable": []
+   }
+  }
+ },
+ "physics": {
+  "settings": {
+   "substeps": 16,
+   "stiffness": 40000.0,
+   "damping": 1200.0,
+   "settle_steps": 240,
+   "root_mode": "free"
+  },
+  "articulation_root": "/World/G1/pelvis",
+  "drive_api": "apply_action(ArticulationAction)",
+  "tracking": {
+   "rmse_deg": 0.1802,
+   "max_deg": 3.3146,
+   "per_joint_max_deg": {
+    "left_hip_pitch_joint": 0.183,
+    "left_hip_roll_joint": 0.216,
+    "left_hip_yaw_joint": 0.143,
+    "left_knee_joint": 0.176,
+    "left_ankle_pitch_joint": 0.204,
+    "left_ankle_roll_joint": 0.315,
+    "right_hip_pitch_joint": 0.091,
+    "right_hip_roll_joint": 0.385,
+    "right_hip_yaw_joint": 0.115,
+    "right_knee_joint": 0.201,
+    "right_ankle_pitch_joint": 0.215,
+    "right_ankle_roll_joint": 0.161,
+    "waist_yaw_joint": 0.5,
+    "waist_roll_joint": 0.018,
+    "waist_pitch_joint": 0.189,
+    "left_shoulder_pitch_joint": 0.383,
+    "left_shoulder_roll_joint": 0.269,
+    "left_shoulder_yaw_joint": 0.767,
+    "left_elbow_joint": 0.509,
+    "left_wrist_roll_joint": 1.372,
+    "left_wrist_pitch_joint": 0.78,
+    "left_wrist_yaw_joint": 0.635,
+    "left_hand_index_0_joint": 0.261,
+    "left_hand_index_1_joint": 0.355,
+    "left_hand_middle_0_joint": 0.203,
+    "left_hand_middle_1_joint": 0.242,
+    "left_hand_thumb_0_joint": 0.122,
+    "left_hand_thumb_1_joint": 0.219,
+    "left_hand_thumb_2_joint": 0.358,
+    "right_shoulder_pitch_joint": 0.808,
+    "right_shoulder_roll_joint": 0.576,
+    "right_shoulder_yaw_joint": 1.029,
+    "right_elbow_joint": 0.934,
+    "right_wrist_roll_joint": 1.027,
+    "right_wrist_pitch_joint": 3.315,
+    "right_wrist_yaw_joint": 1.317,
+    "right_hand_index_0_joint": 0.517,
+    "right_hand_index_1_joint": 0.589,
+    "right_hand_middle_0_joint": 0.95,
+    "right_hand_middle_1_joint": 1.064,
+    "right_hand_thumb_0_joint": 0.262,
+    "right_hand_thumb_1_joint": 0.431,
+    "right_hand_thumb_2_joint": 0.767
+   }
+  },
+  "contact": {
+   "sole_above_floor_m": {
+    "min": -0.0001,
+    "max": 0.0041,
+    "measured_on": "the four foot contact spheres of each foot"
+   },
+   "pelvis_z_m": {
+    "min": 0.5929,
+    "max": 0.5929,
+    "start": 0.5929,
+    "end": 0.5929,
+    "asked_root_z": 0.5929,
+    "seat_top": 0.4404
+   }
+  }
+ },
+ "deviations": {
+  "definition": {
+   "asked": "what the stage aimed at",
+   "got": "what came out",
+   "error": "abs |got-asked|, or the one-sided overshoot for a bound",
+   "status": "ok / FAIL against tolerance; informational when there is none"
+  },
+  "passed": true,
+  "counts": {
+   "total": 9,
+   "checked": 9,
+   "failed": 0
+  },
+  "failures": [],
+  "by_stage": {
+   "physics": [
+    {
+     "quantity": "physics.tracking_rmse",
+     "stage": "physics",
+     "asked": 0.0,
+     "got": 0.18021139099140573,
+     "error": 0.18021139099140573,
+     "unit": "deg",
+     "tolerance": 3.0,
+     "status": "ok",
+     "how": "q_actual vs q_target over every joint and frame"
+    },
+    {
+     "quantity": "physics.tracking_max.right_wrist_pitch_joint",
+     "stage": "physics",
+     "asked": 0.0,
+     "got": 3.3146037192952704,
+     "error": 3.3146037192952704,
+     "unit": "deg",
+     "tolerance": 10.0,
+     "status": "ok",
+     "how": "worst single joint excursion"
+    }
+   ],
+   "contact": [
+    {
+     "quantity": "invariant.feet_on_floor",
+     "stage": "contact",
+     "asked": 0.0,
+     "got": 0.0040763170464405,
+     "error": 0.0040763170464405,
+     "unit": "m",
+     "tolerance": 0.02,
+     "status": "ok",
+     "how": "worst sole corner distance from z=0 over the clip"
+    },
+    {
+     "quantity": "invariant.feet_not_penetrating",
+     "stage": "contact",
+     "asked": 0.0,
+     "got": 0.00010242515759127657,
+     "error": 0.00010242515759127657,
+     "unit": "m",
+     "tolerance": 0.005,
+     "status": "ok",
+     "how": "deepest foot contact sphere below the floor -- the toe, which a single point under the ankle cannot see"
+    },
+    {
+     "quantity": "retarget.commanded_feet_on_floor",
+     "stage": "contact",
+     "asked": 0.0,
+     "got": 0.001,
+     "error": 0.001,
+     "unit": "m",
+     "tolerance": 0.02,
+     "status": "ok",
+     "how": "where the *commanded* trajectory puts the soles with the pelvis where the retarget asked -- the ceiling on what physics can achieve without fixing the retarget",
+     "note": "commanded sole z ranges -0.0 .. 0.001 m"
+    },
+    {
+     "quantity": "invariant.pelvis_holds_height",
+     "stage": "contact",
+     "asked": 0.5929,
+     "got": 0.592900055150191,
+     "error": 5.5150190969577295e-08,
+     "unit": "m",
+     "tolerance": 0.02,
+     "status": "ok",
+     "how": "mean pelvis origin height against the root the seated invariant asked for"
+    },
+    {
+     "quantity": "invariant.pelvis_not_falling",
+     "stage": "contact",
+     "asked": 0.0,
+     "got": 5.125999450683594e-06,
+     "error": 5.125999450683594e-06,
+     "unit": "m",
+     "tolerance": 0.02,
+     "status": "ok",
+     "how": "how far the pelvis drifted from first frame to last -- a robot resting on something does not move"
+    },
+    {
+     "quantity": "invariant.seated.knee_min",
+     "stage": "contact",
+     "asked": 60.0,
+     "got": 119.60728977382884,
+     "error": 0.0,
+     "unit": "deg",
+     "tolerance": 0.0,
+     "status": "ok",
+     "how": "knee inside the seated band"
+    },
+    {
+     "quantity": "invariant.seated.knee_max",
+     "stage": "contact",
+     "asked": 140.0,
+     "got": 133.68699050247434,
+     "error": 0.0,
+     "unit": "deg",
+     "tolerance": 0.0,
+     "status": "ok",
+     "how": "knee inside the seated band"
+    }
+   ]
+  }
+ },
+ "stage_deviations": {
+  "definition": {
+   "asked": "what the stage aimed at",
+   "got": "what came out",
+   "error": "abs |got-asked|, or the one-sided overshoot for a bound",
+   "status": "ok / FAIL against tolerance; informational when there is none"
+  },
+  "passed": false,
+  "counts": {
+   "total": 14,
+   "checked": 8,
+   "failed": 3
+  },
+  "failures": [
+   {
+    "quantity": "retarget.worst_command_step",
+    "stage": "retarget",
+    "asked": 0.0,
+    "got": 87.10840093821825,
+    "error": 87.10840093821825,
+    "unit": "deg",
+    "tolerance": 30.0,
+    "status": "FAIL",
+    "how": "largest single-frame command step before the repair"
+   },
+   {
+    "quantity": "retarget.commanded_feet_on_floor",
+    "stage": "retarget",
+    "asked": 0.0,
+    "got": 0.1819357787769923,
+    "error": 0.1819357787769923,
+    "unit": "m",
+    "tolerance": 0.02,
+    "status": "FAIL",
+    "how": "worst sole corner, before the contact solve"
+   },
+   {
+    "quantity": "retarget.commanded_foot_penetration",
+    "stage": "retarget",
+    "asked": 0.0,
+    "got": 0.11780394291594554,
+    "error": 0.11780394291594554,
+    "unit": "m",
+    "tolerance": 0.005,
+    "status": "FAIL",
+    "how": "deepest sole corner below the floor before the solve -- the toe, which the single-point model could not see"
+   }
+  ],
+  "by_stage": {
+   "retarget": [
+    {
+     "quantity": "retarget.worst_command_step",
+     "stage": "retarget",
+     "asked": 0.0,
+     "got": 87.10840093821825,
+     "error": 87.10840093821825,
+     "unit": "deg",
+     "tolerance": 30.0,
+     "status": "FAIL",
+     "how": "largest single-frame command step before the repair"
+    },
+    {
+     "quantity": "retarget.worst_command_step_repaired",
+     "stage": "retarget",
+     "asked": 0.0,
+     "got": 29.0625129750122,
+     "error": 29.0625129750122,
+     "unit": "deg",
+     "tolerance": 30.0,
+     "status": "ok",
+     "how": "after the repair"
+    },
+    {
+     "quantity": "retarget.commanded_feet_on_floor",
+     "stage": "retarget",
+     "asked": 0.0,
+     "got": 0.1819357787769923,
+     "error": 0.1819357787769923,
+     "unit": "m",
+     "tolerance": 0.02,
+     "status": "FAIL",
+     "how": "worst sole corner, before the contact solve"
+    },
+    {
+     "quantity": "retarget.corrected_feet_on_floor",
+     "stage": "retarget",
+     "asked": 0.0,
+     "got": 0.003543273423662119,
+     "error": 0.003543273423662119,
+     "unit": "m",
+     "tolerance": 0.02,
+     "status": "ok",
+     "how": "worst sole corner, after the contact solve"
+    },
+    {
+     "quantity": "retarget.commanded_foot_penetration",
+     "stage": "retarget",
+     "asked": 0.0,
+     "got": 0.11780394291594554,
+     "error": 0.11780394291594554,
+     "unit": "m",
+     "tolerance": 0.005,
+     "status": "FAIL",
+     "how": "deepest sole corner below the floor before the solve -- the toe, which the single-point model could not see"
+    },
+    {
+     "quantity": "retarget.corrected_foot_penetration",
+     "stage": "retarget",
+     "asked": 0.0,
+     "got": 2.4357541844710617e-05,
+     "error": 2.4357541844710617e-05,
+     "unit": "m",
+     "tolerance": 0.005,
+     "status": "ok",
+     "how": "deepest sole corner below the floor after the solve"
+    }
+   ],
+   "scene": [
+    {
+     "quantity": "scene.cup.image_vs_hand",
+     "stage": "scene",
+     "asked": 0.0,
+     "got": 0.28912581043229246,
+     "error": 0.28912581043229246,
+     "unit": "m",
+     "tolerance": null,
+     "status": "informational",
+     "how": "how far the image-derived position is from the hand that holds it -- the object is placed on the hand (priority 2) and this is what that costs against the image (priority 4)",
+     "note": "the gap is in the retarget's arm direction, not in the placement: the waist carries no chest rotation, so a reach to the subject's side comes out as a reach to the robot's front"
+    },
+    {
+     "quantity": "scene.cup.pickup_above_surface",
+     "stage": "scene",
+     "asked": 0.0,
+     "got": 0.024681064386496643,
+     "error": 0.024681064386496643,
+     "unit": "m",
+     "tolerance": null,
+     "status": "informational",
+     "how": "the trajectory takes the object at one height and sets it down at another; the surface goes under the lower of the two so the object never penetrates it, which leaves the pick-up starting this far above it"
+    },
+    {
+     "quantity": "scene.cup.grasp_transition",
+     "stage": "scene",
+     "asked": 0.0,
+     "got": 0.02802923550106921,
+     "error": 0.02802923550106921,
+     "unit": "m",
+     "tolerance": null,
+     "status": "informational",
+     "how": "how far the object moves on the frame the hand takes it -- the closest this trajectory brings the hand to the object where it rests"
+    },
+    {
+     "quantity": "scene.dining table.height_solved_vs_catalog",
+     "stage": "scene",
+     "asked": 0.5137,
+     "got": 0.7125151188388487,
+     "error": 0.19881511883884861,
+     "unit": "m",
+     "tolerance": null,
+     "status": "informational",
+     "how": "a support surface is solved for the target; the catalog height at scene scale is what it would have been"
+    },
+    {
+     "quantity": "scene.dining table.reach_overlap",
+     "stage": "scene",
+     "asked": 0.0,
+     "got": 0.0223,
+     "error": 0.0223,
+     "unit": "m",
+     "tolerance": null,
+     "status": "informational",
+     "how": "how far the acting arm reaches inside the surface it reaches over, with every link at the radius of its own collision mesh -- a reach defect, which is why the surface is scenery rather than a collider"
+    },
+    {
+     "quantity": "scene.dining table.top_lowered",
+     "stage": "scene",
+     "asked": 0.0,
+     "got": 0.0,
+     "error": 0.0,
+     "unit": "m",
+     "tolerance": null,
+     "status": "informational",
+     "how": "how far the surface had to drop below the height the object rests at, so the reach that takes the object does not pass through it"
+    },
+    {
+     "quantity": "scene.dining table.legs_clear_of_robot",
+     "stage": "scene",
+     "asked": 0.0,
+     "got": 0.0,
+     "error": 0.0,
+     "unit": "bool",
+     "tolerance": 0.0,
+     "status": "ok",
+     "how": "no robot link is inside a leg on any frame"
+    },
+    {
+     "quantity": "invariant.hand_contact",
+     "stage": "scene",
+     "asked": 0.0,
+     "got": 0.0,
+     "error": 0.0,
+     "unit": "m",
+     "tolerance": 0.02,
+     "status": "ok",
+     "how": "acting hand's grasp centre to the handled object, over every hold frame",
+     "note": "satisfied by construction: the object is placed on the hand. What it does not say is whether the hand is where the subject's was -- that is `scene.<object>.image_vs_hand`"
+    }
+   ]
+  }
+ },
+ "stage_provenance": {
+  "tiers": {
+   "definition": {
+    "measured": "canonical CBD carries it",
+    "derived": "geometry from canonical CBD",
+    "prior": "class-level constant (catalog / anthropometry)",
+    "synthesized": "authored by the adapter to keep the target consistent",
+    "unavailable": "nothing filled it -- a defect, not an outcome"
+   },
+   "weight_is": "channels x frames covered",
+   "ratio": {
+    "measured": 0.0,
+    "derived": 0.9984,
+    "prior": 0.0,
+    "synthesized": 0.0016,
+    "unavailable": 0.0
+   }
+  },
+  "evidence": {
+   "measured_plus_derived": 0.9984,
+   "floor": 0.7,
+   "passed": true,
+   "note": "measured+derived 99.8% >= floor 70%"
+  },
+  "unavailable": [],
+  "spec_feedback": {},
+  "by_tier": {
+   "measured": [],
+   "derived": [
+    {
+     "quantity": "joint.legs",
+     "rule": "leg joints solved so the soles reach the floor the contact mask asserts",
+     "weight": 1152.0
+    },
+    {
+     "quantity": "object.cup.position",
+     "rule": "placed on the acting hand's grasp centre: the phase signal says it is held, and an object that is held is where the hand is",
+     "weight": 96.0
+    },
+    {
+     "quantity": "object.dining table.position",
+     "rule": "the surface under the handled object: its height from where that object rests, its footprint at the scene scale",
+     "weight": 1.0
+    }
+   ],
+   "prior": [],
+   "synthesized": [
+    {
+     "quantity": "joint.continuity",
+     "rule": "clipped wrist run interpolated -- the commanded orientation was outside the joint's range and coming out of it was a step no drive can follow",
+     "weight": 2.0
+    }
+   ],
+   "unavailable": []
+  }
+ },
+ "change_from_v1_deg": {
+  "rmse": 19.72,
+  "max": 79.653,
+  "per_joint_max": {
+   "right_wrist_roll_joint": 79.653,
+   "right_wrist_yaw_joint": 75.307,
+   "right_hand_middle_1_joint": 60.514,
+   "right_hand_middle_0_joint": 54.444,
+   "left_hand_middle_1_joint": 51.737,
+   "left_hand_index_1_joint": 50.89,
+   "left_hand_middle_0_joint": 46.568,
+   "left_hand_index_0_joint": 45.79
+  }
+ },
+ "writes": [
+  "motion_baked.usda",
+  "motion.npz",
+  "g1_joint_trajectory.csv",
+  "groot_lerobot/",
+  "settle_final.json",
+  "stage_report.json"
+ ]
+}

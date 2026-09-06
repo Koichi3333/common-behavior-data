@@ -1,0 +1,14 @@
+#usda 1.0
+(
+    defaultPrim = "World"
+    endTimeCode = 95
+    metersPerUnit = 1
+    startTimeCode = 0
+    subLayers = [
+        @./scene_v2.usda@,
+        @./robot_v2.usda@
+    ]
+    timeCodesPerSecond = 12
+    upAxis = "Z"
+)
+

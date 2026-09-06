@@ -163,19 +163,25 @@ is the part most likely to reshape the schema.
 
 ## Where this lives in the repository
 
-The layers above map onto four working directories, each with its own README:
+The layers above map onto the repository's working directories, each with its
+own README:
 
 ```text
-generator/   → writes CBD          (video → CBD, language → CBD)
-adapter/     → reads CBD           (MuJoCo, Unity / VRM, dataset views, planned robots)
-experiment/  → asks questions of CBD (learning prototypes, re-embodiment, evaluation)
-tool/        → helps at any stage    (validation, inspection, visualisation)
+generators/   Create CBD                   video → CBD (and, later, language → CBD)
+adapters/     Use CBD somewhere            MuJoCo · Unity/VRM · Isaac Sim/GR00T G1 · overlay
+tools/        Prepare and manipulate assets  video prep, asset creation, inspection
+experiments/  Try something with CBD       learning prototypes, re-embodiment, evaluation
+examples/     Initial Minimum Experience   the original end-to-end notebooks
+showcase/     See what CBD can do          the result videos, per target and side by side
+specification/ Define Canonical CBD
+docs/         Explain the architecture and philosophy
 ```
 
-`examples/` stays as the initial end-to-end demos. All four directories are
-placeholders today — the generator, adapter and learning code described on this
-page still lives inside those notebooks, and moving it out is the next
-structural step.
+`generators/` and `adapters/` hold real code today. `adapters/` is the one that
+has grown teeth: four targets, one of which is a robot. `tools/` and
+`experiments/` are still mostly signposts — the learning code lives in the
+[`examples/`](../examples/) notebooks and moving it into `experiments/` is a
+pending step.
 
 ---
 
