@@ -16,12 +16,23 @@ an empty adapter directory is worse than an honest roadmap.
   phase on one timeline
 - **Language → CBD** — Demo B, small learning prototype, generated behavior
   replaying through the same adapters
+- **CBD → Isaac Sim / GR00T, Unitree G1** — the same dataset onto a real robot's
+  kinematics: 43-DoF trajectory, layered USD stage, PhysX-settled poses and a
+  GR00T-LeRobot dataset ([`adapters/isaac_sim_groot_g1/`](../adapters/isaac_sim_groot_g1/)).
+  **Kinematics only — no policy, no task-success claim**
 
 ## Next: re-embodiment
 
 The most important open question is not capture quality or model size. It is:
 
 > **Does behavior intent survive a change of embodiment?**
+
+**Half of this has now been answered.** The G1 adapter above took canonical CBD
+onto a machine whose proportions are not negotiable, and the representation
+carried — for *kinematics*, at a stated cost, with the residuals published. What
+it did **not** answer is the half that matters most, because the adapter runs no
+policy: it writes a dataset a policy could be trained on and never asks the
+robot to accomplish anything. The success criterion below is still unmet.
 
 ```text
 Human video
@@ -32,9 +43,9 @@ Behavior intent / end-effector representation
    ↓
 Embodiment adapter
    ↓
-Simulated robot  ← target platform not yet fixed
+Simulated robot  ← done for the G1, kinematically
    ↓
-Task success
+Task success     ← still open: no policy has been run
 ```
 
 The goal is **not** copying human joint angles onto a robot arm. A robot arm has
@@ -54,16 +65,18 @@ human-shaped — which is also a useful result, and will be reported as one.
 Success criterion, stated in advance: **task success in simulation**, not visual
 similarity to the human demonstration.
 
-### Which embodiment comes first is open
+### Which platform carries it to task success is open
 
-The target platform has not been fixed. A low-cost arm such as SO-101 in MuJoCo
-is the leading candidate for the first pick & place reference, because the cost
-barrier to reproducing it on real hardware is low; validating against a
-different physics simulator first is the other option under consideration. A
-robot arm is also not the only body worth testing — a VR or VRM avatar is a
-change of embodiment too, and a milder one to start from. The choice should be
-driven by what someone actually wants to connect, so if you have a platform in
-mind, an issue or a discussion is the place to raise it.
+The G1 fixed the first embodiment; it did not fix the one that will close this
+question. Driving a policy to task success on a G1 in Isaac Lab Arena is the
+direct continuation, and the GR00T-LeRobot dataset the adapter already writes is
+the input for it. A low-cost arm such as SO-101 in MuJoCo is the other
+candidate, and for a different reason: the barrier to reproducing a result on
+real hardware is low, and a robot arm shares almost nothing with the human
+skeleton the schema grew around — which makes it the harsher test of the two.
+
+The choice should be driven by what someone actually wants to connect, so if you
+have a platform in mind, an issue or a discussion is the place to raise it.
 
 ### What this requires from the schema
 

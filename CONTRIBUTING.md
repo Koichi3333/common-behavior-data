@@ -50,6 +50,39 @@ saves you from building against a version that is about to move.
 **Show & Tell** · **Adapter Requests** · **Integration Ideas** · **Research** ·
 **Industry Use Cases** · **Partnerships**
 
+## Issue labels
+
+Four are applied automatically by the
+[issue templates](.github/ISSUE_TEMPLATE/): `bug`, `adapter`, `schema`,
+`compatibility`.
+
+The fuller set below matches the shape of this repository, so an issue can be
+found by the part of the project it belongs to. Labels are a repository setting
+rather than a file, so if one you need does not exist yet, say so in the issue
+and it will be created.
+
+| Label | For |
+|---|---|
+| `good first issue` | Small, self-contained, no repository history required to start |
+| `adapter` | A new target, or an existing one behaving wrongly |
+| `generator` | Anything that writes CBD from a source |
+| `tool` | Standalone utilities — video prep, masking, comparison, inspection |
+| `experiment` | Exploratory work using existing generators and adapters |
+| `showcase` | Results, videos, comparisons |
+| `specification` / `schema` | The canonical representation itself |
+| `compatibility` | **Portability findings** — where behavior broke on a target |
+| `physics` | Contact, collision, settling, dynamic feasibility |
+| `embodiment` | Body structure, joint limits, retargeting, proportions |
+| `video asset` | Source clips and behavior cases the pipeline handles badly |
+| `ML experiment` | Training, generation, evaluation on CBD datasets |
+| `screen behavior` | Non-body observation — screen recordings, UI workflows |
+| `documentation` | READMEs, docs, anything a first-time reader stumbles on |
+
+`compatibility` is the one most worth using. A portability finding — *this
+behavior broke on this target, by this much* — is the contribution this project
+compounds on, and it has [its own template](.github/ISSUE_TEMPLATE/portability_finding.md)
+and [its own register](docs/compatibility_findings.md).
+
 ## Where code goes
 
 Every directory has one role, and one README that states it:

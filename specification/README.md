@@ -17,15 +17,20 @@
 Formalising a representation before it has survived contact with several
 consumers produces a specification that is precise about the wrong things.
 
-Two adapters (MuJoCo, VRM) plus one learning consumer is not enough evidence.
-The [re-embodiment experiment](../docs/roadmap.md#next-re-embodiment) is
-expected to change the schema, because a robot arm has none of the human joints
-the current representation is built around. Publishing a `v1.0` first would mean
-either breaking it immediately or bending the robot case to fit a human-shaped
-schema.
+Three notebook adapters plus one learning consumer was not enough evidence, and
+the fourth target proved it. [`isaac_sim_groot_g1/`](../adapters/isaac_sim_groot_g1/)
+drives a **Unitree G1** — fixed link lengths, hard joint limits, no willingness
+to be rebuilt to the subject's proportions — and it surfaced six gaps in this
+representation that three human-shaped figures had absorbed silently. They are
+listed in [`docs/compatibility_findings.md`](../docs/compatibility_findings.md)
+and reflected in [open questions](#open-questions) below.
 
-**Extracting a validatable schema and a compatibility checker is open work.**
-It is a good contribution, and it should follow at least one non-human adapter.
+That is the intended order of events: adapters drive the specification. Had a
+`v1.0` been published first, it would have been broken by the G1 run or the G1
+case would have been bent to fit a human-shaped schema.
+
+**Extracting a validatable schema and a compatibility checker is open work**,
+and now has a non-human adapter's findings to be built against.
 
 ## Layout on disk
 
@@ -216,6 +221,44 @@ steps:
 4. Bone rotations are relative to a T-pose rest, so a skeleton authored at zero
    rotation needs a coordinate transform and nothing else
 5. No adapter reads another adapter's output
+
+## What gets into the representation
+
+The schema changes because an adapter proved it should — never because one
+adapter found it convenient. A finding takes this route:
+
+```text
+Adapter finding
+      ↓
+Specification feedback      ← docs/compatibility_findings.md
+      ↓
+Generality evaluation       ← the test below
+      ↓
+Specification update
+```
+
+The generality test, applied before anything is added:
+
+| Add it if | Do **not** add it if |
+|---|---|
+| several targets need it | only one robot needs it |
+| it describes the **behavior itself** | it describes a **runtime's API** |
+| it can be observed or derived from the source | it can only be supplied by the target |
+| it is reusable for more than one purpose | it is a particular robot's joint names |
+
+Worked examples, both from the G1 run:
+
+- **Support relation** — nothing in canonical CBD says what the subject rests on.
+  Every seated or surface-contact behavior needs it, any target with gravity
+  needs it, and it is derivable from the source. **Candidate for the schema.**
+- **Ankle pitch running out of travel** — real, measured, and reported in the
+  adapter's own report. But it is a fact about a 1.32 m robot's hardware, not
+  about the behavior. **Stays in the adapter.**
+
+When the answer is "stays in the adapter", the constraint is still
+[published as a number](../docs/compatibility_findings.md#target-constraints--reported-not-fixed)
+rather than silently approximated. Reporting it is not the same as encoding it
+here.
 
 ## Open questions
 
