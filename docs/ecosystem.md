@@ -14,11 +14,22 @@ Competing on any of those from a personal GitHub account would be silly.
 The hypothesis this project tests instead is that value can accumulate in the
 properties those advantages do *not* produce:
 
+- **Measured honesty** — every channel says how it was obtained, and every
+  transfer publishes its residual in the target's own units
 - **Neutrality** — a layer that belongs to no vendor is usable by all of them
 - **Interoperability** — the value grows with the number of connected systems
 - **Open specifications** — a schema anyone can read, criticise and implement
 - **Reusable behavior semantics** — meaning, not just numbers
 - **Adapter-based integration** — new systems join without central coordination
+
+The first one is the newest and the one this project now leads with. The other
+five are claims most interoperability efforts can make; "the data tells you how
+much of itself to trust, and the adapter tells you what it could not represent"
+is one almost nobody makes, and it is cheap to build and expensive to retrofit.
+It is also the only item on that list that a single person can take further than
+a large team has bothered to — scale buys dataset size and model capacity, not
+an admission of what a number is standing on. See
+[concept](concept.md#the-core-design-rules).
 
 ## The intended shape
 
@@ -61,7 +72,7 @@ The core project intends to focus on the parts that only work if one group keeps
 them coherent:
 
 - the canonical CBD representation and its semantics
-- provenance and lineage
+- provenance and lineage — per channel, in the data, not in prose
 - language / motion / object alignment
 - the adapter interface
 - compatibility and validation

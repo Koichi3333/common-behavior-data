@@ -103,6 +103,29 @@ shoulders) are written as identity in every frame.
 4. **Do not promote candidates.** A heuristic stays named as a candidate.
 5. Observed and generated behavior are written in the **same schema** — there
    is no separate "generated motion format".
+6. **Never write a channel that cannot be told apart from a measurement.** If a
+   channel was not observed, say so in the data rather than writing a plausible
+   default. This is the rule the current pipeline breaks: `chest`, `neck` and
+   both shoulders are written as identity rotations in every frame, and `phase`
+   is written for all 96 frames of a pick-and-place clip as `Idle` — both
+   indistinguishable, on disk, from a real observation.
+
+Rule 6 is **implemented in [`video_to_cbd/`](video_to_cbd/) as of dataset
+version `0.3.0`**: a per-channel provenance ledger in `manifest.json` and
+`quality/channel_provenance.json`, a `provenance` column in
+`human/bone_rotations.csv`, and `degenerate` for a field that is populated
+without carrying information. Tiers are **measured from the series, not
+asserted**, and the ledger covers every channel the dataset writes — including
+the absent ones.
+
+It had to land here before anywhere else: the generator is the only stage that
+knows the answer at write time. An adapter can only guess afterwards, per
+target, by hand — which is what
+[`isaac_sim_groot_g1/`](../adapters/isaac_sim_groot_g1/) still does.
+
+See [specification → generalising it](../specification/README.md#generalising-it)
+for the fields, and the [roadmap](../docs/roadmap.md#next-in-band-provenance)
+for what is still missing (no adapter consumes it, and there is no validator).
 
 See [`specification/README.md`](../specification/README.md) for the
 representation, and [`CONTRIBUTING.md`](../CONTRIBUTING.md) before opening a PR.

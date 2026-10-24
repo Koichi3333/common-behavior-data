@@ -31,7 +31,9 @@ Notebook: [`cbd_generator_video_to_cbd.ipynb`](cbd_generator_video_to_cbd.ipynb)
 ├── objects/                detections (never rewritten) · tracks · label reclassification
 ├── interactions/           reach / contact / grasp / carry / release CANDIDATES
 ├── metrics/                motion and object metrics
-├── quality/quality.json    per-modality coverage and notes
+├── quality/
+│   ├── quality.json        per-modality coverage, what each number counts, notes
+│   └── channel_provenance.json   a tier per channel: what each one stands on
 └── captions/               optional, Gemini — temporal captions over phase windows
 ```
 
@@ -86,16 +88,35 @@ colab exec -s cbd <<< 'import os; os.environ["GEMINI_API_KEY"] = "<key>"'
 Without a key those two cells skip and every other output still works. No
 credential is ever written into the notebook.
 
-## Known gaps in what it currently writes
+## Known data gaps — and the fact that the data now declares them
 
-Recorded honestly, because adapters have hit them
+Every gap below is a **data gap**: the record does not carry it, so it is
+closable here rather than in an adapter. A *body gap* — a 1.32 m robot with no
+spine — is not this file's problem and never appears in a generator
+([the distinction](../../docs/concept.md#the-problem)).
+
+These gaps are real and unchanged. What changed in `0.3.0` is that the dataset
+**says so itself**, instead of leaving it to this README
 ([findings](../../docs/compatibility_findings.md)):
 
-- `interactions/interaction_events.csv` ships as a **header with no rows**
-- four of the nineteen bones — `chest`, `neck`, `left_shoulder`,
-  `right_shoulder` — are written as **identity in every frame**
-- `phase` can be degenerate (all `Idle`) with no validity flag to say so
-- no camera intrinsics, and no declared real-world scale
+| Gap | Still true | Now declared as |
+|---|---|---|
+| four of the nineteen bones — `chest`, `neck`, `left_shoulder`, `right_shoulder` — are identity in every frame | yes | `degenerate`, per bone, in the `provenance` column of `human/bone_rotations.csv` and in the ledger. **Tested, not listed**: the generator measures whether each bone's series is constant |
+| `phase` can be all `Idle` with nothing to say so | yes | `degenerate` when one label covers the clip, with the label counts, plus a `quality.json` note telling a consumer to derive phase itself |
+| `interaction_events.csv` ships as a header with no rows | yes | `absent`, with the reason: *the state machine fired nothing, NOT that no contact occurred* |
+| `object_coverage: 1.0` read as "3D positions available" | the number is unchanged | `coverage_definitions` says it counts 2D detections, and `object_position_3d_coverage` is published beside it |
+| no camera intrinsics, no support relation, no force or contact, no finger bones | yes | an `absent` entry each, with the consequence for a consumer |
+| real scale is a configured constant, not a measurement | yes | `prior`, naming `canonical.frame_world_width` |
+
+Why the bones are identity, since the README used to imply a capture failure:
+MediaPipe pose has no landmark that separates the chest, neck or clavicles from
+the shoulders, so `chest`, `neck` and both shoulders are all assigned the same
+shoulder-derived orientation — and a parent-relative rotation against a parent
+holding the same orientation is identity **by construction**. It is a
+well-formed skeleton, not an observation.
+
+What is **not** fixed: no adapter reads these fields yet, there is no validator,
+and the committed sample output is a `0.2.0` bundle that predates them.
 
 Full list: [`docs/limitations.md`](../../docs/limitations.md).
 

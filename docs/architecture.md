@@ -155,11 +155,18 @@ bridge can be written by different people without coordinating:
 - what a consumer is guaranteed to find in CBD
 - how it declares which parts it uses
 - how it reports what it could not represent
+- how it reports back **what the representation could not give it** — the G1
+  adapter's `provenance.py` implements `spec_feedback()` for exactly this, one
+  call site sets it, and nothing upstream consumes it
 - how behavior intent (reach / grasp / place) maps onto a body that has none of
   the human's joints
 
-The last one is the re-embodiment question in the [roadmap](roadmap.md), and it
-is the part most likely to reshape the schema.
+The third and fourth are the [next roadmap step](roadmap.md#next-in-band-provenance):
+the G1 adapter already grades its own output by provenance tier and publishes
+its deviations as `asked` / `got` / `error` / `tolerance`, and that machinery
+belongs in the contract rather than in one target's report. The last one is the
+re-embodiment question in the [roadmap](roadmap.md), and it is the part most
+likely to reshape the schema.
 
 ## Where this lives in the repository
 

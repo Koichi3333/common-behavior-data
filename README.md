@@ -2,13 +2,13 @@
 
 # Common Behavior Data
 
-**Behavior should be portable.**
+**Behavior should be portable — and should say where it isn't.**
 
 An open framework for turning observed behavior into reusable assets across
 simulators, robots, models, and tools.
 
-*Generate behavior once, adapt it to different environments, measure what
-breaks, and keep improving portability.*
+*Generate behavior once, adapt it to different environments, and measure what
+breaks — in the target's own units, recorded in the data rather than in prose.*
 
 [![Status: experimental](https://img.shields.io/badge/status-experimental-orange)](docs/limitations.md)
 [![License: Apache 2.0](https://img.shields.io/badge/license-Apache--2.0-blue)](LICENSE)
@@ -40,6 +40,7 @@ breaks, and keep improving portability.*
 |---|---|
 | **See what it does** | [`showcase/`](showcase/) — videos first, code later |
 | **Understand the idea** | [How CBD works](#how-cbd-works), below |
+| **See what this is actually about** | [What we are learning](#what-we-are-learning) — data gaps, body gaps, and the numbers |
 | **Run the smallest complete example** | [`examples/`](examples/) — two Colab notebooks |
 | **Run the current pipeline** | [`generators/`](generators/) → [`adapters/`](adapters/) |
 | **Read the data format** | [`specification/`](specification/README.md) |
@@ -177,18 +178,31 @@ frame, and one frame is a complete tuple:**
 }
 ```
 
-Vision + language + motion + objects + phase, aligned on one clock. Supervision
-is complete at the frame level, so no annotation pass sits between capture and
+Vision + language + motion + objects + phase, aligned on one clock. Every field
+is present on every frame, so no annotation pass sits between capture and
 training. The same data is also projected into column-oriented CSVs for analysis
 and for adapters that need one series.
 
-Three conventions that change how it should be read:
+**Present is not the same as informative**, and that distinction is the thing to
+read this format with. In the frame above, `phase` is populated — and in the
+shipped sample it reads `Idle` for all 96 frames of a pick-and-place clip, while
+four of the nineteen bone rotations are identity in every frame because nothing
+measured them. The tuple is structurally complete and partly empty, and the data
+does not currently tell you which parts.
+
+Four conventions that change how it should be read:
 
 - **`interaction_events` are candidates**, not ground truth. The names say so,
   and no adapter may promote them.
 - **Derived 3D positions carry `position_source`** — depth that was inferred
-  rather than measured is always marked.
+  rather than measured is always marked. It is the only channel that does.
 - **Captions are AI-generated**, recorded with the model that produced them.
+- **Since `0.3.0`, the dataset says which is which.** Every channel carries a
+  tier — `measured` / `derived` / `estimated` / `prior` / `degenerate` /
+  `absent` — in `manifest.json` and `quality/channel_provenance.json`. No
+  adapter reads it yet, so a consumer should still check informativeness
+  itself, as the G1 adapter does for `phase` in
+  [`phases.py`](adapters/isaac_sim_groot_g1/phases.py).
 
 Full description: [`specification/README.md`](specification/README.md).
 
@@ -351,6 +365,56 @@ The most useful output of this project so far is not a video. It is the list of
 places where behavior stopped being portable — collected, with numbers, in
 [`docs/compatibility_findings.md`](docs/compatibility_findings.md).
 
+Everything in that list is one of **two kinds of gap**, and the difference
+decides what you can do about it:
+
+```text
+data gap    the record does not carry it      → closable upstream:
+                                                a better generator, a sensor,
+                                                a new schema channel
+
+body gap    the two bodies genuinely          → not closable:
+            disagree                            measure it and publish the
+                                                number, in the target's units
+```
+
+A data gap is someone's bug. A body gap is a fact about a 1.32 m robot with no
+spine — the motion has to be *solved* rather than copied (**6.87°** mean
+residual), the furniture has to be scaled to the robot (`scale = 0.685`), and
+both ankle pitch joints sit on their limit for a whole seated clip at the retarget stage. Scaling the
+robot instead would be a fabrication about hardware.
+
+And the two connect: **a data gap becomes a body gap the moment the body
+changes.** Four bones that carry no rotation are a missing field in the dataset;
+on the G1 they arrive as **0.296 m** between where the image puts the glass and
+where the robot's hand goes. More in [the concept](docs/concept.md#the-problem).
+
+The most informative thing in the list is not a transfer result. It is that the G1
+adapter had to build its own machinery to say how much of its output was still
+CBD's — a provenance ledger with five tiers, a degeneracy test, and a 70 %
+evidence floor that fails its own run
+([`provenance.py`](adapters/isaac_sim_groot_g1/provenance.py),
+[`phases.py`](adapters/isaac_sim_groot_g1/phases.py)) — because canonical CBD
+provides none of it.
+
+And then the ledger grades a subset and reports a total:
+
+```text
+stage_provenance, as shipped
+  entries       4         the legs it solved, two object placements, one wrist repair
+  total weight  1251      of 43 joints × 96 frames = 4128 joint-frames
+  evidence      "measured+derived 99.8% >= floor 70%"  → passed
+```
+
+The retargeted arm, torso and waist joints — the bulk of the trajectory — are
+not in the ledger at all, and `measured` reads `0.0000` because no `measured`
+call site is reached on the path that ships. **A check that grades ~30 % of the
+output and reports a pass** is the same shape of defect this project already
+caught once: *the single-point foot check was reporting a pass with the toes
+87 mm underground.* This one is in our own instrumentation, and it is why
+[the concept](docs/concept.md) now puts provenance in the data ahead of
+everything else.
+
 The human-shaped targets absorbed almost everything. **The machine did not**,
 and that is what made it worth doing:
 
@@ -378,6 +442,14 @@ dropouts** instead of holding the nearest value.
 
 None of this required changing the representation. All of it is a request to
 improve it.
+
+And one pattern runs through the whole list: **the data does not say any of
+it.** Four bones read as a motionless torso, 96 frames of `Idle` read as a clip
+where nothing happened, and `quality.json` reports `object_coverage: 1.0` for a
+clip in which one object entry out of 173 carries a 3D position. The findings
+above are prose; a consumer that reads only the dataset learns none of them.
+`position_source` is the one field that gets this right, and generalising it is
+[the next step](docs/roadmap.md#next-in-band-provenance).
 
 ---
 
@@ -421,19 +493,25 @@ receive right now.
 
 ## Roadmap
 
-The next question is not more human capture. It is whether the abstraction
-**survives more changes of embodiment** — and the G1 run says it survives one,
-at a cost it can now name.
+The next question is not more human capture, and it is no longer whether the
+representation can reach a new target — the G1 says it can, at a cost it can
+now name. It is whether the data can **state that cost itself**.
 
-Three directions, in order of how much they would change things:
+Four directions, in order:
 
-1. **Whole-body reach.** Rotation for the four bones that carry none is now the
+1. **Provenance in the data — generator done, consumers open.** `0.3.0` writes
+   a tier per channel (`measured` / `derived` / `estimated` / `prior` /
+   `degenerate` / `absent`), measured from the series rather than asserted, plus
+   `episode_kind` for observed vs generated. What is missing is the half that
+   makes it a contract: an adapter that reads it, a validator, and the G1
+   ledger's own coverage (~30 % of its output today).
+2. **Whole-body reach.** Rotation for the four bones that carry none is the
    binding constraint on the robot target, and it is a specification question
    before it is an adapter one.
-2. **Force and contact channels.** Whether they belong on the same timeline as
+3. **Force and contact channels.** Whether they belong on the same timeline as
    first-class channels or in a layer joined by timestamp is open — and best
    answered with a real sensor integration rather than in the abstract.
-3. **More targets, deliberately unlike the ones we have.** Another robot
+4. **More targets, deliberately unlike the ones we have.** Another robot
    embodiment, another simulator. A target similar to an existing one teaches
    almost nothing; the G1 taught a great deal precisely because it was not a
    human-shaped figure.
@@ -451,6 +529,9 @@ The short version:
 - The learning prototype memorises and interpolates; it does not generalise
 - No sim-to-real, no robot task success, no grasp correctness claim
 - Finger angles are approximations from hand landmark curl
+- Four bones plus `phase` are **populated without being informative** —
+  declared as `degenerate` since `0.3.0`, but declaring a gap does not close it,
+  and no adapter reads the declaration yet
 - The schema is unstable and will change
 
 Full list with reasoning: [`docs/limitations.md`](docs/limitations.md).
@@ -464,6 +545,12 @@ The hypothesis it *is* testing is that there is durable value in the opposite
 properties: neutrality, interoperability, open specifications, reusable behavior
 semantics, and adapter-based integration — a layer that belongs to nobody in
 particular, and is therefore usable by everybody.
+
+And one property none of those organisations is competing on: **measured
+honesty** — data that declares how each of its channels was obtained, and
+adapters that publish what they could not represent, as numbers. Scale buys
+dataset size and model capacity. It does not buy an admission of what a value is
+standing on.
 
 The long-term goal is not a video-conversion repository and not a human-motion
 repository. It is:

@@ -48,6 +48,8 @@ Thumbs.db
 
 # --- Local working material, not part of the public repository ---
 _handover/
+# Session hand-off notes: Colab CU balance, Drive layout, token procedures.
+HANDOFF_*.md
 
 # --- Local staging material, not part of the public repository ---
 # The Isaac Sim work was carried out on a GPU VM and handed over as a folder

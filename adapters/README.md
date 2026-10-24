@@ -156,14 +156,21 @@ How much it changed
 What remains unresolved
 ```
 
-and should distinguish these four, because they have different owners:
+and should distinguish these four, because they have different owners — and
+first of all which **kind of gap** it is: a *data gap* the record could carry,
+or a *body gap* where your target and the subject genuinely disagree
+([the distinction](../docs/concept.md#the-problem)):
 
-| Class | Owner |
-|---|---|
-| Source / capture issue | recapture, or generator robustness |
-| **Generator issue** — the channel exists but is empty or wrong | [`generators/`](../generators/) |
-| **Specification gap** — canonical CBD has no such channel | [`specification/`](../specification/), after a generality check |
-| **Target constraint** — this target simply cannot | stays here, and is **reported as a number** |
+| Class | Gap | Owner |
+|---|---|---|
+| Source / capture issue | data | recapture, or generator robustness |
+| **Generator issue** — the channel exists but is empty or wrong | data | [`generators/`](../generators/) |
+| **Specification gap** — canonical CBD has no such channel | data | [`specification/`](../specification/), after a generality check |
+| **Target constraint** — this target simply cannot | **body** | nobody. It stays here, and is **reported as a number** |
+
+Getting this wrong is the common failure: a body gap filed upstream asks the
+schema to fix a robot's hardware, and a data gap absorbed quietly in an adapter
+means the next target rediscovers it from scratch.
 
 The register: [`docs/compatibility_findings.md`](../docs/compatibility_findings.md).
 
@@ -194,22 +201,42 @@ From [`CONTRIBUTING.md`](../CONTRIBUTING.md), unchanged:
 5. **Report what you could not represent**, rather than silently approximating
 6. **Preserve provenance** — if you derive a position, say how
 
-And two from the structure of this directory:
+And three from the structure of this directory:
 
 7. **Stay self-contained.** Do not factor your machinery into a shared library
    for other adapters to import.
 8. **State where you run**, at the top of your README, if you do not run in
    Colab.
+9. **Grade your own output** — and grade *all* of it. Tag every quantity you
+   write with where it came from, and publish each deviation as
+   `asked` / `got` / `error` / `tolerance` in the target's own units.
+   `isaac_sim_groot_g1/` does this in [`provenance.py`](isaac_sim_groot_g1/provenance.py)
+   and [`deviation.py`](isaac_sim_groot_g1/deviation.py) — and is also the
+   cautionary example: its shipped ledger instruments only the quantities it
+   *corrected*, about 30 % of the trajectory, while reporting its 70 % evidence
+   floor as passed. A ledger that grades a subset and publishes a total is worse
+   than no ledger, because it reads as a clean bill of health.
 
 If a rule blocks you, that is interesting: it probably means the schema is
 missing something. Open an issue.
+
+Rule 6 is currently the hardest one to obey, because canonical CBD gives you
+almost nothing to preserve: `position_source` is the only provenance it carries.
+[Generalising that](../specification/README.md#generalising-it)
+is the next step on the [roadmap](../docs/roadmap.md#next-in-band-provenance), and
+it exists because rule 9 made the gap measurable.
 
 ## Open design question
 
 The adapter *contract* is not formalised yet — what a consumer is guaranteed to
 find, how it declares which parts it uses, and how it reports what it dropped.
 The `adapter_report.json` every adapter here writes is a first, informal answer
-to the last part of that.
+to the last part of that. `provenance.py` goes one step further with
+`spec_feedback()` — a `spec_gap` tag on any fill that exists only because the
+schema has no channel for it — but exactly one call site sets it, so the shipped
+report's `spec_feedback` is `{}`. The mechanism for an adapter to talk back to
+the specification exists and is unused; formalising and using it is part of the
+[next roadmap step](../docs/roadmap.md#next-in-band-provenance).
 See [Architecture → what the adapter interface has to become](../docs/architecture.md)
 and [Specification → open questions](../specification/README.md#open-questions).
 Adapters drive the specification here, not the other way around.

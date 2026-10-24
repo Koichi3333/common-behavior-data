@@ -23,6 +23,8 @@ Three things shape how this project takes changes:
 - **Adapters** — robot embodiments, simulators, engines, content pipelines
 - **Schema feedback** — especially "I tried to load CBD into X and here is what
   was missing"
+- **Provenance and degeneracy reports** — "this channel looks populated but
+  carries no information, and here is how I detected it"
 - **Reference demos** — a small, honest, end-to-end example beats a large
   speculative one
 - **Tools** — visualisation, inspection, validation, conversion, evaluation
@@ -162,6 +164,12 @@ self-contained**. Until the adapter contract is formalised (see
    version) — never a project, host or account — and commit your outputs so the
    result is readable without that machine. See
    [`docs/runtime_environments.md`](docs/runtime_environments.md).
+9. **Grade your own output.** Tag every quantity you write with where it came
+   from — measured, derived, estimated, a class-level prior, or authored by you
+   to stay consistent — and publish every deviation as
+   `asked` / `got` / `error` / `tolerance` in your target's own units.
+   [`adapters/isaac_sim_groot_g1/`](adapters/isaac_sim_groot_g1/) does this in
+   `stage_provenance` and `deviations`; copy the idea, not the code.
 
 And when you are done, write down what you learned, not just what you built:
 
@@ -173,6 +181,13 @@ Classify each finding as a **source**, **generator**, **specification** or
 **target** issue — they have different owners — and add it to
 [`docs/compatibility_findings.md`](docs/compatibility_findings.md). A finding
 with a number attached is worth several without one.
+
+One extra question per finding, and it is often the more important half:
+**could a consumer that reads only the dataset have detected this?** For almost
+every finding recorded so far the answer is no — the data describes the behavior
+confidently and says nothing about how much of it was observed. If your answer
+is also no, say so in the row; that is the gap the
+[next roadmap step](docs/roadmap.md#next-in-band-provenance) is about.
 
 If a rule blocks you, that is interesting. Say so in an issue: it probably means
 the schema is missing something.

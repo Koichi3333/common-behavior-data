@@ -21,7 +21,86 @@ an empty adapter directory is worse than an honest roadmap.
   GR00T-LeRobot dataset ([`adapters/isaac_sim_groot_g1/`](../adapters/isaac_sim_groot_g1/)).
   **Kinematics only — no policy, no task-success claim**
 
-## Next: re-embodiment
+## Next: in-band provenance
+
+**The step before everything below.** Canonical CBD describes behavior
+confidently and says almost nothing about how much of it was observed. The G1
+adapter had to answer that question for itself, and built the machinery to do
+it: a five-tier provenance ledger, a degeneracy test, and a 70 % evidence floor
+that fails its own run
+([`provenance.py`](../adapters/isaac_sim_groot_g1/provenance.py),
+[`phases.py`](../adapters/isaac_sim_groot_g1/phases.py)).
+
+That machinery is right, private to one target, and incomplete — as shipped it
+holds four entries totalling 1251 weight units against a 43-joint × 96-frame
+trajectory (4128 joint-frames), instruments only the quantities that stage
+corrected, and reports *"measured+derived 99.8% >= floor 70%"* over that subset.
+`measured` reads `0.0000` because the shipping path reaches no `measured` call
+site, not because the dataset was weighed. **A check that grades about 30 % of
+the output and publishes a pass** is exactly the defect class this repository
+already caught in a foot solve; this time it is in our own instrumentation.
+
+**The generator half has landed.** Dataset version `0.3.0` from
+[`generators/video_to_cbd/`](../generators/video_to_cbd/) writes a tier for
+every channel it produces — `measured` / `derived` / `estimated` / `prior` /
+`degenerate` / `absent` — into `manifest.json`,
+`quality/channel_provenance.json` and a `provenance` column in
+`human/bone_rotations.csv`, plus `episode_kind` (`observed` / `generated`) and
+the source's terms. Tiers are measured from the series rather than asserted, and
+the ledger covers every channel including the absent ones. On this repository's
+own sample it reports five degenerate entries and eight absent channels. See
+[specification → generalising it](../specification/README.md#generalising-it).
+
+What this step still is:
+
+- **An adapter that reads it.** Nothing consumes the field yet.
+  `isaac_sim_groot_g1/` still detects a degenerate `phase` itself; it should
+  trust the declaration and keep its own test as a fallback. Until a consumer
+  depends on it, the ledger is a claim rather than a contract.
+- **A validator.** *"Does this bundle declare provenance for every channel it
+  writes?"* — the check that makes the rule enforceable instead of aspirational.
+  It belongs in [`tools/`](../tools/), which already lists validation as its
+  own.
+- **Reconcile the two vocabularies.** The generator writes `absent`; the
+  adapter's ledger calls the same thing `unavailable`. One of them has to move.
+- **Regenerate the sample output.** The committed bundle is `0.2.0` and carries
+  none of this, so the repository's own showcase still demonstrates the old
+  behaviour. Needs a Colab run.
+- **Producers that set `episode_kind`.** The field exists; the two things that
+  emit generated CBD do not write it. Demo B's notebook is untouched, and
+  [`vla-maker-from-cbd`](https://github.com/Koichi3333/vla-maker-from-cbd)
+  trains on CBD and emits CBD with a redistribution ban
+  (*"AMASS-derived motion data must never be redistributed"*) that its bundles
+  still cannot state about themselves.
+- **A ledger that covers what it grades.** Instrument the quantities taken
+  straight from the dataset, not only the ones a stage corrected, so the
+  evidence floor measures the output rather than a subset of it. This is a
+  defect in [`isaac_sim_groot_g1/`](../adapters/isaac_sim_groot_g1/) today and a
+  requirement on any contract that replaces it.
+- **Carry `spec_feedback` through.** `provenance.py` implements it — a
+  `spec_gap` tag on a fill that exists only because the schema has no channel for
+  it — and exactly one call site sets it, so the shipped report's
+  `spec_feedback` is `{}`. Tag the fills that qualify, and give the channel a
+  consumer upstream.
+- **Fix `quality.json` where it overstates.** `object_coverage: 1.0` on a clip
+  with one 3D object position is worse than no number at all.
+
+Why first, and why now:
+
+- it needed **no GPU and no new target** — a generator and schema change,
+  runnable where the pipeline already runs, which is why it went first
+- it turns [the findings register](compatibility_findings.md) from prose into
+  something a consumer can check, which is the only way those findings reach
+  anyone who does not read this repository
+- everything after it is more trustworthy for having it: a policy trained on a
+  corpus that cannot distinguish a measurement from a derived guess will still
+  produce a number, and that number will not mean anything
+
+What it is **not**: a validation framework, a formal schema release, or a version
+1.0. It is the honesty the representation already claims, written where a machine
+can read it.
+
+## Then: re-embodiment
 
 The most important open question is not capture quality or model size. It is:
 
@@ -118,7 +197,7 @@ kinematics, and the adapter is precise about the cost. The motion has to be
 the schema cannot supply, and both ankle pitch joints sit on their limit for the
 whole sample clip.
 
-What it surfaced is four gaps worth taking to the schema. Canonical space
+What it surfaced is four **data gaps** worth taking to the schema — gaps in the record, not places where the two bodies disagree. Canonical space
 declares no real scale — and that is not merely unstated but load-bearing once a
 1.32 m robot has to sit on furniture derived from a taller subject. Four bones
 (`chest`, `neck`, and both shoulders) are always written as identity, so the

@@ -135,10 +135,17 @@ the properties that matter more than a clean result:
 
 - interaction detection is **heuristic candidates**, and a single missed
   detection changes the behavioral reading of a clip
-- `quality/quality.json` reports what was actually achieved
-  (`object_coverage: 1.0`, `face_coverage: 0.0`) rather than hiding gaps
 - the captions are still correct, because they come from the frames rather than
   from the interaction state machine
+- and the part that is *not* to the pipeline's credit: **the dataset does not
+  say any of this.** `quality/quality.json` is honest about the face
+  (`face_coverage: 0.0`) and misleading about the objects
+  (`object_coverage: 1.0`, while one of 173 per-frame object entries carries a
+  3D position at all). The empty event table reads as "no contact occurred", and
+  96 frames of `Idle` read as "nothing happened". A consumer reading only the
+  data draws the wrong conclusion with nothing to warn it — which is why
+  provenance in the data is the
+  [next step](../../docs/roadmap.md#next-in-band-provenance)
 
 The tuning table below is what you would reach for to fix it — raising
 `object.min_confidence` sensitivity and `behavior.contact_distance` are the

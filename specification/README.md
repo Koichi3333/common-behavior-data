@@ -161,6 +161,19 @@ They are distinguished by content, not format:
 which is which.** The format will not stop you, and nothing downstream can tell
 them apart — which is the demo's point and also its sharpest edge.
 
+That sentence was a defect, not a caveat. "The format will not stop you" is
+exactly what the [anti-fabrication rule](#position_source--the-anti-fabrication-rule-in-the-one-place-it-exists)
+forbids everywhere else, and a corpus used for training is the worst place to
+rely on a reader's discipline.
+
+Since `0.3.0` the format does say: `manifest.json` → `provenance.episode_kind`
+is `observed` or `generated`, and `generated_by` names the model when it is the
+latter. A generated episode is still written in the same schema and still plays
+through the same adapters — that remains the point — but a corpus can now be
+sorted without trusting whoever assembled it. **Demo B does not set the field
+yet**; the learning prototype lives in a notebook that this change did not
+touch.
+
 ## Raw vs derived
 
 Raw observation is never overwritten.
@@ -181,9 +194,10 @@ If a consumer disagrees with a derived value, the input it came from is present.
 | `quality/quality.json` | per-modality coverage, missing-frame ratio, notes |
 | `objects/label_reclassification.json` | every detected label, what it became, why, and what was excluded |
 | `captions/temporal_captions.json` | which model generated the captions, and that they are not ground truth |
-| `manifest.json` | fps, frame count, coordinate systems, which tasks ran |
+| `manifest.json` | fps, frame count, coordinate systems, which tasks ran — and since `0.3.0` the `provenance` block: episode kind, source terms, and a tier per channel |
+| `quality/channel_provenance.json` | the per-channel ledger on its own (`0.3.0`) |
 
-### `position_source` — the anti-fabrication rule
+### `position_source` — the anti-fabrication rule, in the one place it exists
 
 Any derived 3D object position carries how it was obtained:
 
@@ -198,6 +212,105 @@ Any derived 3D object position carries how it was obtained:
 
 A consumer that needs measured positions can filter on this. A consumer that
 does not check is at least not being lied to.
+
+### Generalising it
+
+`position_source` is the right idea applied to one field. Every other channel in
+canonical CBD is written without it, and the consequences are measurable:
+
+| Channel | What it looks like in the shipped sample | What a consumer cannot tell |
+|---|---|---|
+| `human/bone_rotations.csv` | `chest`, `neck`, `left_shoulder`, `right_shoulder` identity in all 96 frames (4 of 19) | "the torso was still" from "nothing measured the torso" |
+| `phase` | `("Pick And Place", "Idle", "Right")` in all 96 frames of a pick-and-place clip | a real idle from a field that was never populated meaningfully |
+| `interaction_events.csv` | header, zero rows | "no contact" from "the detector produced nothing" |
+| `quality/quality.json` | `object_coverage: 1.0` while 1 of 173 per-frame object entries carries a 3D position | 2D detection coverage from 3D position availability |
+| canonical units | metre-ish numbers from monocular estimation | an estimate from a measurement |
+| the episode itself | no field for source terms, or for observed vs generated | a recording from a model's output |
+
+The proposal is one vocabulary, declared per channel, used on both sides of the
+adapter boundary:
+
+| Tier | Meaning |
+|---|---|
+| `measured` | the source actually carried it |
+| `derived` | computed from something measured |
+| `estimated` | inferred under a model or assumption (monocular depth) |
+| `prior` | a class-level constant (catalog, anthropometry) |
+| `synthesized` | authored to keep a consumer self-consistent |
+| `degenerate` | written, but carrying no information |
+| `absent` | not written at all |
+
+**None of this vocabulary is new** — which is the argument for it. The G1
+adapter already implements five of the tiers in
+[`provenance.py`](../adapters/isaac_sim_groot_g1/provenance.py), with
+`unavailable` (= `absent` here) defined as *"nothing filled it — a defect, not
+an outcome"*, weighted by channels × frames, and checked against a 70 %
+evidence floor because *"Below the floor the run is not evidence any more."*
+`estimated` is the distinction `position_source` already draws. And `degenerate`
+is the adapter's word too: [`phases.py`](../adapters/isaac_sim_groot_g1/phases.py)
+documents *"canonical phase is degenerate (one label for every frame)"* and
+tests for it with `cbd_phase_is_informative()`.
+
+Every one of those distinctions was invented downstream, by a consumer that
+needed it and could not get it from the data.
+
+Two things follow, and the second is a defect worth stating plainly:
+
+1. **It belongs upstream.** A generator knows at write time whether it measured
+   a channel; an adapter can only guess afterwards, per target, by hand.
+2. **Target-side instrumentation grades what the target touched.** As shipped,
+   the G1 ledger holds four entries — the legs it solved, two object placements,
+   one wrist repair — totalling 1251 weight units against a 43-joint × 96-frame
+   trajectory (4128 joint-frames), and reports *"measured+derived 99.8% >= floor
+   70%"*. The retargeted arm, torso and waist joints are not in it, and
+   `measured` reads `0.0000` because the shipping path reaches no `measured`
+   call site. The floor passes at 99.8 % over roughly 30 % of the output.
+
+#### What `0.3.0` actually writes
+
+[`generators/video_to_cbd/`](../generators/video_to_cbd/) now answers the
+question at write time, which is the only place it can be answered without
+guessing. **Additive only** — every `0.2.0` field is still written, unchanged,
+so an existing consumer keeps working.
+
+| Where | What |
+|---|---|
+| `manifest.json` → `provenance` | the whole ledger: `episode_kind` (`observed` / `generated`), `generated_by`, `source` (`terms`, `redistributable`, `attribution`), the tier definitions, per-channel entries, and the `degenerate` / `absent` lists |
+| `quality/channel_provenance.json` | the same ledger on its own, for a consumer that wants only this |
+| `human/bone_rotations.csv` → `provenance` column | appended, so a reader of that file alone can tell a still bone from an unobserved one |
+| `quality/quality.json` | `coverage_definitions` (what each number counts), `object_position_3d_coverage` (the 3D number, beside the 2D one), `degenerate_channels`, `absent_channels`, and `notes` naming each degenerate channel |
+
+Two rules the generator holds itself to, and they matter more than the field
+names:
+
+1. **Tiers are measured, not asserted.** `degenerate` comes from testing the
+   series — `prov_is_constant()` over the clip — so it stays correct if the
+   construction changes. The four torso bones are flagged because they *are*
+   constant, not because they are on a list.
+2. **The ledger covers every channel the dataset writes**, including the ones
+   that are not there: `camera_intrinsics`, `support_relation`,
+   `contact_and_force` and `finger_bone_rotations` each get an `absent` entry
+   with the reason. A ledger that grades a subset and publishes a total is worse
+   than no ledger.
+
+On this repository's own sample the generator now reports five degenerate
+entries — `phase`, and `chest` / `neck` / `left_shoulder` / `right_shoulder` —
+and eight absent channels.
+
+**Status: implemented in the generator, not yet consumed.** What remains:
+
+- **No adapter reads it yet.** `isaac_sim_groot_g1/` still detects a degenerate
+  `phase` itself; it should trust the field and keep its test as a fallback.
+- **The tier names are not fully reconciled** across the boundary: the generator
+  writes `absent`, the adapter's ledger calls the same thing `unavailable`, and
+  the adapter's `synthesized` has no generator-side meaning (by design — a
+  generator that authors a value to satisfy a target is doing an adapter's job).
+- **The committed sample output is a `0.2.0` bundle** and carries none of these
+  fields; it predates the change and is not regenerated here. The figures above
+  are what the current generator produces from it, not what the file contains.
+- **A validator** — "does this bundle declare provenance for every channel it
+  writes?" — does not exist. That is the check that would make the rule
+  enforceable rather than aspirational.
 
 ## Interaction candidate vs ground truth
 
@@ -246,11 +359,16 @@ The generality test, applied before anything is added:
 | it can be observed or derived from the source | it can only be supplied by the target |
 | it is reusable for more than one purpose | it is a particular robot's joint names |
 
-Worked examples, both from the G1 run:
+Worked examples, all three from the G1 run:
 
 - **Support relation** — nothing in canonical CBD says what the subject rests on.
   Every seated or surface-contact behavior needs it, any target with gravity
   needs it, and it is derivable from the source. **Candidate for the schema.**
+- **Per-channel provenance** — the adapter defined a tier vocabulary and an
+  evidence floor to grade its own output, and every other target needs the same
+  thing to know what it is standing on. It describes the behavior record rather
+  than any runtime's API, and the generator knows the answer at write time.
+  **Passes the test; now the next step.**
 - **Ankle pitch running out of travel** — real, measured, and reported in the
   adapter's own report. But it is a fact about a 1.32 m robot's hardware, not
   about the behavior. **Stays in the adapter.**
@@ -261,6 +379,14 @@ rather than silently approximated. Reporting it is not the same as encoding it
 here.
 
 ## Open questions
+
+**One item left this list.** Per-channel provenance — generalising
+`position_source` — is no longer undecided; it is the
+[next step](../docs/roadmap.md#next-in-band-provenance), for the reasons in
+[concept](../docs/concept.md). What is still open about it is narrower: the tier
+names on the two sides of the adapter boundary, whether provenance rides on each
+frame or in a per-channel manifest, and how a `degenerate` channel is detected
+by the generator rather than asserted by hand.
 
 Genuinely undecided, and good places to argue:
 
