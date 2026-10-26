@@ -2,8 +2,13 @@
 
 [← back to README](README.md)
 
-Thanks for looking. This is an early, independent open-source experiment, and
-contribution friction is deliberately low.
+Thanks for looking. This is an early, independent open-source experiment —
+a one-person project so far — and contribution friction is deliberately low.
+
+**The short version:** pick a behavior, run it on a body CBD has not reached
+yet, and tell us where the gap is. The README's
+[Help wanted](README.md#help-wanted--measure-a-gap) table lists concrete tasks,
+most of which need no GPU.
 
 ## Philosophy
 
@@ -20,7 +25,15 @@ Three things shape how this project takes changes:
 
 ## What is especially welcome
 
+- **Gap reports** — *"I ran CBD on this body, and here is what it could not do,
+  by how much."* The single most valuable contribution, with
+  [its own template](.github/ISSUE_TEMPLATE/portability_finding.md)
 - **Adapters** — robot embodiments, simulators, engines, content pipelines
+- **Experiments** — anything that trains on, generates, or evaluates CBD; in
+  this repository or in your own, like
+  [`vla-maker-from-cbd`](https://github.com/Koichi3333/vla-maker-from-cbd)
+- **Recorded clips with objects**, contributed as CBD — data you own is what
+  both the adapters and the VLA lack most
 - **Schema feedback** — especially "I tried to load CBD into X and here is what
   was missing"
 - **Provenance and degeneracy reports** — "this channel looks populated but
@@ -72,7 +85,7 @@ and it will be created.
 | `experiment` | Exploratory work using existing generators and adapters |
 | `showcase` | Results, videos, comparisons |
 | `specification` / `schema` | The canonical representation itself |
-| `compatibility` | **Portability findings** — where behavior broke on a target |
+| `compatibility` | **Gap reports** — where behavior broke on a body, data gap or body gap |
 | `physics` | Contact, collision, settling, dynamic feasibility |
 | `embodiment` | Body structure, joint limits, retargeting, proportions |
 | `video asset` | Source clips and behavior cases the pipeline handles badly |
@@ -80,9 +93,9 @@ and it will be created.
 | `screen behavior` | Non-body observation — screen recordings, UI workflows |
 | `documentation` | READMEs, docs, anything a first-time reader stumbles on |
 
-`compatibility` is the one most worth using. A portability finding — *this
-behavior broke on this target, by this much* — is the contribution this project
-compounds on, and it has [its own template](.github/ISSUE_TEMPLATE/portability_finding.md)
+`compatibility` is the one most worth using. A gap report — *this behavior
+broke on this body, by this much* — is the contribution this project compounds
+on, and it has [its own template](.github/ISSUE_TEMPLATE/portability_finding.md)
 and [its own register](docs/compatibility_findings.md).
 
 ## Where code goes
@@ -94,7 +107,7 @@ Every directory has one role, and one README that states it:
 | [`generators/`](generators/) | **Create CBD** | Anything that **writes** CBD — video → CBD, language → CBD, captioning and annotation passes |
 | [`adapters/`](adapters/) | **Use CBD somewhere** | Anything that **reads** CBD and converts it for an engine, embodiment or format |
 | [`tools/`](tools/) | **Prepare and manipulate assets** | Independent utilities — video prep, masking, asset creation, comparison, dataset inspection |
-| [`experiments/`](experiments/) | **Try something with CBD** | Research code that uses existing generators and adapters — learning prototypes, re-embodiment, evaluation |
+| [`experiments/`](experiments/) | **Try something with CBD** | Research code that uses existing generators and adapters — learning prototypes, re-embodiment, evaluation. A large experiment can live in its own repository and be listed here |
 | [`examples/`](examples/) | **Initial Minimum Experience** | The original end-to-end notebooks, preserved as they are |
 | [`showcase/`](showcase/) | **See what CBD can do** | Results, with what worked and what broke. Links, not copies |
 
@@ -112,11 +125,11 @@ Rules of thumb:
 - **Do not create empty directories** for future work. Put the idea in the
   roadmap; add the directory when there is code.
 
-`generators/` and `adapters/` hold working code. `tools/` and `experiments/` are
-still mostly signposts — the learning code lives inside the `examples/`
-notebooks, and extracting a piece of it into the right directory is a genuinely
-useful contribution. Open an issue first so two people do not extract the same
-thing.
+`generators/` and `adapters/` hold working code. `experiments/` lists the VLA,
+which lives in [its own repository](https://github.com/Koichi3333/vla-maker-from-cbd)
+and has its own [help-wanted list](https://github.com/Koichi3333/vla-maker-from-cbd#help-wanted).
+`tools/` is still mostly a signpost — a provenance validator is the first tool
+it wants. Open an issue first so two people do not build the same thing.
 
 ## Working on the notebooks
 
@@ -220,4 +233,4 @@ maintainers will act on it.
 **Not sure where to start?** Take an episode from
 [`examples/human-capture/sample_output/`](examples/human-capture/sample_output/),
 try to load it into a system this project has never heard of, and tell us what
-was missing. That report is the single most useful thing you can send.
+was missing. That gap report is the single most useful thing you can send.

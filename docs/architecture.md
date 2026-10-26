@@ -177,7 +177,7 @@ own README:
 generators/   Create CBD                   video → CBD (and, later, language → CBD)
 adapters/     Use CBD somewhere            MuJoCo · Unity/VRM · Isaac Sim/GR00T G1 · overlay
 tools/        Prepare and manipulate assets  video prep, asset creation, inspection
-experiments/  Try something with CBD       learning prototypes, re-embodiment, evaluation
+experiments/  Try something with CBD       the VLA (own repository), learning prototypes, evaluation
 examples/     Initial Minimum Experience   the original end-to-end notebooks
 showcase/     See what CBD can do          the result videos, per target and side by side
 specification/ Define Canonical CBD
@@ -185,10 +185,12 @@ docs/         Explain the architecture and philosophy
 ```
 
 `generators/` and `adapters/` hold real code today. `adapters/` is the one that
-has grown teeth: four targets, one of which is a robot. `tools/` and
-`experiments/` are still mostly signposts — the learning code lives in the
-[`examples/`](../examples/) notebooks and moving it into `experiments/` is a
-pending step.
+has grown teeth: four targets, one of which is a robot. `experiments/` lists one
+experiment at real scale,
+[`vla-maker-from-cbd`](https://github.com/Koichi3333/vla-maker-from-cbd) — a VLA
+that trains on CBD and emits CBD — which lives in its own repository because it
+needs an A100 and non-commercial weights, and can, because it only reads and
+writes CBD. `tools/` is still mostly a signpost.
 
 ---
 

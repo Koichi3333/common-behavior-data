@@ -2,6 +2,11 @@
 
 [← back to README](../../README.md) · [← Demo A](../human-capture/README.md)
 
+> **Looking for the real-scale version?** This notebook is the small prototype.
+> Its successor — NVIDIA GR00T N1.7 fine-tuned on CBD, emitting CBD — is
+> [`vla-maker-from-cbd`](https://github.com/Koichi3333/vla-maker-from-cbd). See
+> [`experiments/`](../../experiments/).
+
 **Behavior captured in Demo A becomes training data, and generated behavior
 returns through the same adapters.**
 

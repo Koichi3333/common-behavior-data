@@ -24,6 +24,10 @@ running anything.
 | [A — Human Capture](human-capture/) | Observation → behavior data → MuJoCo / Unity | `human_behavior_demo_2_0.ipynb` |
 | [B — Language to Motion](language-to-motion/) | Behavior data → learning → generated behavior | `human_behavior_vla_trainer.ipynb` |
 
+Demo B grew up: the same loop at 3B parameters is
+[`vla-maker-from-cbd`](https://github.com/Koichi3333/vla-maker-from-cbd), listed
+in [`experiments/`](../experiments/).
+
 ## Why these are kept as they are
 
 ```text

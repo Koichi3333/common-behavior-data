@@ -11,6 +11,7 @@ constraint of what is in this repository today.
 - ❌ CBD is an established standard, or has industry adoption
 - ❌ The schema is complete or stable
 - ❌ Demo B is a general-purpose VLA
+- ❌ The VLA reaches objects precisely on its own, without outside guidance
 - ❌ Arbitrary natural language works
 - ❌ Video directly trains a robot
 - ❌ Human motion transfers directly to a robot

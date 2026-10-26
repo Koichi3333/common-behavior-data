@@ -22,7 +22,7 @@ what is honestly not true yet.
 | **Why an observation is treated as an asset** — and why this is not a video-only project | [`behavior_asset.md`](behavior_asset.md) |
 | **How the pieces fit together** | [`architecture.md`](architecture.md) |
 | **Where each step runs**, and the rule for new targets | [`runtime_environments.md`](runtime_environments.md) |
-| **What broke on each target**, with numbers | [`compatibility_findings.md`](compatibility_findings.md) |
+| **The gap on each body** — what broke, with numbers | [`compatibility_findings.md`](compatibility_findings.md) — the gap register |
 | **What is not true yet** | [`limitations.md`](limitations.md) |
 | **What comes next** | [`roadmap.md`](roadmap.md) |
 | **Why this is open** rather than a product | [`ecosystem.md`](ecosystem.md) |
@@ -31,8 +31,8 @@ what is honestly not true yet.
 
 ## The two pages that carry the most weight
 
-**[`compatibility_findings.md`](compatibility_findings.md)** is the one that
-makes the project cumulative. Adapters are deliberately
+**[`compatibility_findings.md`](compatibility_findings.md)** — the gap
+register — is the one that makes the project cumulative. Adapters are deliberately
 [self-contained](../adapters/README.md#self-contained-beats-dry), so code does
 not travel between them — findings do. Every entry says which of four things it
 is (source issue, generator issue, specification gap, target constraint),

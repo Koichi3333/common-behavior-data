@@ -80,8 +80,12 @@ chest, neck and clavicles from the shoulders. Put that record on a machine and
 it stops being a missing field and becomes a **0.296 m** disagreement between
 where the image puts the glass and where the robot's hand goes, because a waist
 that can only yaw cannot reach to the side. Put the same record into a model and
-it becomes worse than an error: `vla-maker-from-cbd` emits 19 CBD bone rotations,
-four of which had a constant training target, and nothing ever said so.
+the gap has to be closed before training can even start:
+[`vla-maker-from-cbd`](https://github.com/Koichi3333/vla-maker-from-cbd) emits
+19 CBD bone rotations, and for its video clips it filled the four that canonical
+CBD never measures by fitting SMPL (ROMP) — which closed the gap, and brought
+SMPL's non-commercial, no-redistribution terms into the training data with it.
+Nothing in the CBD bundle said the fill was needed; the VLA had to find out.
 
 That is why provenance comes before re-embodiment in
 [the roadmap](roadmap.md#next-in-band-provenance). A data gap you have declared
@@ -244,8 +248,10 @@ claim, not a contract. See
   out as a reach to the robot's front, and here is the 0.296 m" cannot.
 - **Not a motion capture product.** Demo A uses off-the-shelf vision models. The
   interesting part is the layer they write into, not the capture quality.
-- **Not a general-purpose VLA.** Demo B is a small learning prototype. See
-  [limitations](limitations.md).
+- **Not a general-purpose VLA.** Demo B is a small learning prototype, and
+  [`vla-maker-from-cbd`](https://github.com/Koichi3333/vla-maker-from-cbd) is a
+  research preview evaluated kinematically, whose precise reaching depends on
+  outside guidance. See [limitations](limitations.md).
 
 ## The core design rules
 
@@ -354,8 +360,10 @@ distinguish a measurement from a derived guess will still produce a number, and
 that number will not mean anything. The second consumer makes this concrete:
 [`vla-maker-from-cbd`](https://github.com/Koichi3333/vla-maker-from-cbd) trains
 on CBD and **emits CBD** — 19 bone rotations plus the hip position — and four of
-those 19 are the bones canonical CBD never measures. A model's training target
-for them is a constant, and nothing in the data ever said so.
+those 19 are the bones canonical CBD never measures. Trained on video-derived
+CBD as it ships, the target for them would be a constant. The VLA avoided that
+only by fitting SMPL to its own clips: a fix, and a licence, that live outside
+CBD and that no CBD bundle records.
 
 ---
 

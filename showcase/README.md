@@ -32,6 +32,7 @@ of sync.
 | [`video_to_unity/`](video_to_unity/) | Unity / VRM 1.0 | the same data drives an avatar **nobody measured** — any VRM 1.0 model |
 | [`video_to_isaac_g1/`](video_to_isaac_g1/) | **Unitree G1 / NVIDIA GR00T, Isaac Sim** | it drives a machine whose proportions are not negotiable — and reports exactly where that costs |
 | [`cross_simulator/`](cross_simulator/) | all of them at once | the same behavior, side by side, on one timeline |
+| [CBD → VLA → CBD](../experiments/#vla-maker-from-cbd--a-vla-trained-on-cbd) | MuJoCo humanoid · Unitree G1 | a VLA trained on CBD **emits CBD**, so it reaches every body through these same adapters — an [experiment](../experiments/), in [its own repository](https://github.com/Koichi3333/vla-maker-from-cbd) |
 
 ## Start here
 
@@ -58,11 +59,11 @@ Corrections     and how much they changed
 Known limitations
 ```
 
-**Failures are kept deliberately.** "MuJoCo: worked. Isaac G1: both ankle pitch
-joints on their limit for 96 frames. Correction: four-point contact solve.
-Residual: a reach to the side comes out as a reach to the front." That sequence
-is more useful than a clean video, and it is the material that feeds
-[`docs/compatibility_findings.md`](../docs/compatibility_findings.md).
+**Failures are kept deliberately, because they are the gap.** "MuJoCo: worked.
+Isaac G1: both ankle pitch joints on their limit for 96 frames. Correction:
+four-point contact solve. Residual: a reach to the side comes out as a reach to
+the front." That sequence is more useful than a clean video, and it is the
+material that feeds [the gap register](../docs/compatibility_findings.md).
 
 ## Showcase vs. Examples
 

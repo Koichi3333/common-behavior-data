@@ -20,6 +20,12 @@ an empty adapter directory is worse than an honest roadmap.
   kinematics: 43-DoF trajectory, layered USD stage, PhysX-settled poses and a
   GR00T-LeRobot dataset ([`adapters/isaac_sim_groot_g1/`](../adapters/isaac_sim_groot_g1/)).
   **Kinematics only — no policy, no task-success claim**
+- **CBD → VLA → CBD** — an [experiment](../experiments/) in its own repository,
+  [`vla-maker-from-cbd`](https://github.com/Koichi3333/vla-maker-from-cbd): NVIDIA
+  GR00T N1.7 fine-tuned on CBD, emitting CBD, so its motion reaches the MuJoCo
+  humanoid and the G1 through the existing adapters with no per-body retraining.
+  **Kinematic evaluation only; precise reaching needs outside guidance (0.93
+  guided vs 0.51 alone); non-commercial weights**
 
 ## Next: in-band provenance
 
@@ -113,6 +119,15 @@ it did **not** answer is the half that matters most, because the adapter runs no
 policy: it writes a dataset a policy could be trained on and never asks the
 robot to accomplish anything. The success criterion below is still unmet.
 
+**A policy has now been run — but not on this question yet.**
+[`vla-maker-from-cbd`](https://github.com/Koichi3333/vla-maker-from-cbd) trains a
+VLA on CBD and has it reach for objects: the hand reaches the object in 0.93 of
+held-out trials with an outside planner guiding it, 0.51 without. That is
+kinematic MuJoCo on a human-shaped body, and its G1 output so far is generated
+walking, not a task. It moves the question from *can a policy learn from CBD* —
+yes, at a measured cost — to *can it complete a task on a body unlike the
+human, under physics*, which is still open.
+
 ```text
 Human video
    ↓
@@ -124,7 +139,7 @@ Embodiment adapter
    ↓
 Simulated robot  ← done for the G1, kinematically
    ↓
-Task success     ← still open: no policy has been run
+Task success     ← still open: no policy has completed a task under physics
 ```
 
 The goal is **not** copying human joint angles onto a robot arm. A robot arm has
@@ -225,7 +240,7 @@ error in the output.
 |---|---|
 | **Schema extraction** | Turn "what the notebooks emit" into a validatable schema with a compatibility checker |
 | **Object trajectory generation** | Demo B currently generates only the human body; behavior involving objects needs the objects |
-| **LeRobot interoperability** | The most natural neighbour in the robot-learning ecosystem; a conversion in both directions would test the schema hard |
+| **LeRobot interoperability** | The most natural neighbour in the robot-learning ecosystem; a conversion in both directions would test the schema hard. CBD → LeRobot already exists twice, in the G1 adapter and in the VLA repository; the reverse does not |
 | **ROS 2 bridge** | Makes CBD reachable from existing robot stacks |
 | **Blender / Unreal exporters** | Extends reach into content pipelines, and stresses the avatar side of the schema |
 | **IK and retargeting library** | Shared machinery every embodiment adapter otherwise reinvents — `isaac_sim_groot_g1/` now has a working direction-matching solver, a contact-polygon foot solve and an object placement solver that the next embodiment should not have to rewrite |

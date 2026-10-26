@@ -1,12 +1,12 @@
 ---
-name: Portability finding
-about: You ran CBD somewhere new and something broke. This is the most valuable issue type here.
-title: "[finding] "
+name: Gap report (portability finding)
+about: You ran CBD on a new body and something did not carry over. This is the most valuable issue type here.
+title: "[gap] "
 labels: compatibility
 ---
 
-<!-- Pick a behavior. Run it somewhere new. Tell us what breaks.
-     See docs/compatibility_findings.md for the register this feeds. -->
+<!-- Pick a behavior. Run it on a new body. Tell us where the gap is.
+     See docs/compatibility_findings.md — the gap register this feeds. -->
 
 ## What did you run, and where?
 
@@ -25,7 +25,13 @@ labels: compatibility
 
 <!-- Numbers if you have them: residual, penetration, RMSE, frames affected. -->
 
-## Which kind of problem is it?
+## Which kind of gap is it?
+
+- [ ] **Data gap** — the record does not carry it (closable upstream)
+- [ ] **Body gap** — the two bodies genuinely disagree (not closable; publish the number)
+- [ ] Not sure
+
+## Who owns it?
 
 - [ ] **Source** — the capture itself was bad
 - [ ] **Generator** — the channel exists in the spec but is written wrong or empty

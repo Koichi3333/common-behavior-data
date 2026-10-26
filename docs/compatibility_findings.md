@@ -1,11 +1,15 @@
-# Compatibility findings
+# The gap register — compatibility findings
 
 [← back to README](../README.md) · [Adapters](../adapters/README.md) ·
 [Specification](../specification/README.md) · [Limitations](limitations.md)
 
-**One sentence:** *What survived the trip to each target, what broke, how it was
-corrected, and how much the correction changed — kept as a record, because the
-differences are the most useful thing this project produces.*
+**One sentence:** *What survived the trip to each body, where the gap was, how
+it was corrected, and how much the correction changed — kept as a record,
+because the gaps between bodies are the most useful thing this project
+produces.*
+
+A per-body summary of this page is in the README:
+[the gap map](../README.md#the-gap-map--per-body).
 
 A behavior representation is only interesting if something reuses it. The moment
 something does, you learn where it is thin. This page is the running register of
@@ -90,11 +94,16 @@ G1 as 0.296 m of reach error. See
 
 ## Findings so far
 
-Everything below comes from
+Almost everything below comes from
 [`adapters/isaac_sim_groot_g1/`](../adapters/isaac_sim_groot_g1/) — the first
 target that is a machine rather than a figure built to the subject. That is not
 a coincidence: the notebook adapters animate a body shaped like the subject, so
 they can absorb almost anything. A robot cannot.
+
+The rest comes from the second consumer,
+[`vla-maker-from-cbd`](https://github.com/Koichi3333/vla-maker-from-cbd) — a
+VLA that trains on CBD and emits CBD ([experiment](../experiments/)). A model
+meets the same gaps an adapter does, one step earlier: in its training data.
 
 ### Is the finding in the data, or only on this page?
 
@@ -118,7 +127,7 @@ find out*.
 
 | Finding | Where it showed up | Consequence | In the data? | Status |
 |---|---|---|---|---|
-| **Four bones carry no rotation** — `chest`, `neck`, `left_shoulder`, `right_shoulder` are identity in every frame (4 of 19) | G1 | The waist can only yaw, so a reach to the subject's *side* comes out as a reach to the robot's *front*. Largest remaining error in the output: 0.296 m of hand-vs-image disagreement. **Cause:** no pose landmark separates these bones from their parent, so the parent-relative rotation is identity by construction — not a capture failure | **Yes, `0.3.0`** — tier `degenerate` per bone, tested rather than listed, in the `provenance` column of `bone_rotations.csv` and in the ledger | Open — the binding constraint. Declaring it does not supply the rotation |
+| **Four bones carry no rotation** — `chest`, `neck`, `left_shoulder`, `right_shoulder` are identity in every frame (4 of 19) | G1; the VLA | The waist can only yaw, so a reach to the subject's *side* comes out as a reach to the robot's *front*. Largest remaining error in the output: 0.296 m of hand-vs-image disagreement. The VLA closed the gap for its video clips by fitting the torso with SMPL (ROMP) — and with it took on SMPL's non-commercial, no-redistribution terms, which its dataset metadata records as `smpl_used`. **Cause:** no pose landmark separates these bones from their parent, so the parent-relative rotation is identity by construction — not a capture failure | **Yes, `0.3.0`** — tier `degenerate` per bone, tested rather than listed, in the `provenance` column of `bone_rotations.csv` and in the ledger | Open — the binding constraint. Declaring it does not supply the rotation |
 | **No support relation** — nothing says what the subject rests on, or what rests on what | G1 | The seat had to be solved from the retargeted pelvis; the result is a 110 mm pad, not a chair | **Yes, `0.3.0`** — an explicit `absent` entry with the consequence, so a consumer knows to solve it | Open — proposed as a canonical channel |
 | **`phase` has no validity signal** | G1 | All 96 frames of a pick-and-place clip read `("Pick And Place", "Idle")`, and the adapter had no way to know that from the data — it tests the field's informativeness itself | **Yes, `0.3.0`** — tier `degenerate` with the label counts, plus a `quality.json` note. The adapter's own test should become a fallback | Closed in the generator; open until an adapter trusts the field |
 | **No real scale is declared** | G1 | Canonical space is metre-ish but derived from monocular estimation. Load-bearing the moment a 1.32 m robot must sit on furniture derived from a taller subject | **Partly, `0.3.0`** — `manifest.canonical_scale` publishes the constant and the ledger marks it tier `prior`, so a consumer knows it is configured rather than measured. A *measured* scale still does not exist | Open — [spec open questions](../specification/README.md#open-questions) |
@@ -144,6 +153,7 @@ find out*.
 | A fixed-length limb cannot match a reach in metres | G1 | motion is *solved* by direction matching, not copied; residual **6.87° mean** across all segments, 65.08° worst (palm normal) |
 | A 1.32 m robot cannot use furniture sized for the subject | G1 | the **set** is scaled instead, by one reported number — `scale = 0.835` in v1, **`0.685` in v2**, which anchors it on the robot's own geometry rather than the subject's. Scaling the robot would be a fabrication about hardware |
 | No neck; three fingers per hand | G1 | head pose and two fingers per hand are dropped. A 29-DoF G1 has no neck and a Dex3 has three fingers — not the generator's to fix |
+| Waist travel is ±30° | G1, driving the VLA's generated motion | deep bends the generated motion asks for are cut at the waist limit. Generated `walks forward` still retargets with a median direction residual of **0.957°** against 1.543° for the teacher walks, and in 6 of 7 comparable texts the generated motion is below the teacher median ([VLA results](https://github.com/Koichi3333/vla-maker-from-cbd/blob/main/docs/results.md)) |
 | Kinematic replay is not contact | MuJoCo | playback is `qpos` + `mj_forward`; physical correctness of contact is not claimed. See [limitations](limitations.md) |
 
 ### Our own instrumentation
