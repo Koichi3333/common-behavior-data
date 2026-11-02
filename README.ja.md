@@ -16,7 +16,7 @@
 [![VLA sample](https://img.shields.io/badge/VLA%20sample-vla--maker--from--cbd-8A2BE2)](https://github.com/Koichi3333/vla-maker-from-cbd)
 [![Contributors wanted](https://img.shields.io/badge/contributors-wanted-ff69b4)](#協力者を募集しています--ギャップを測る)
 
-[![資料を読む](https://img.shields.io/badge/Technical%20Concept%20Deck-PDF-EC1C24?style=for-the-badge&logo=adobeacrobatreader&logoColor=white)](docs/media/technical-concept-deck.pdf)
+[![資料を読む](https://img.shields.io/badge/Technical%20Concept%20Deck-PDF-EC1C24?style=for-the-badge&logo=adobeacrobatreader&logoColor=white)](docs/media/CBD_Technical_Concept_Deck.pdf)
 
 [English README](README.md) ·
 **[VLA サンプル](#cbd-で学習した-vla)** ·

@@ -15,7 +15,7 @@ that body could not do, as a number in its own units.
 [![VLA sample](https://img.shields.io/badge/VLA%20sample-vla--maker--from--cbd-8A2BE2)](https://github.com/Koichi3333/vla-maker-from-cbd)
 [![Contributors wanted](https://img.shields.io/badge/contributors-wanted-ff69b4)](#help-wanted--measure-a-gap)
 
-[![Read the deck](https://img.shields.io/badge/Technical%20Concept%20Deck-PDF-EC1C24?style=for-the-badge&logo=adobeacrobatreader&logoColor=white)](docs/media/technical-concept-deck.pdf)
+[![Read the deck](https://img.shields.io/badge/Technical%20Concept%20Deck-PDF-EC1C24?style=for-the-badge&logo=adobeacrobatreader&logoColor=white)](docs/media/CBD_Technical_Concept_Deck.pdf)
 
 [日本語](README.ja.md) ·
 **[VLA sample](#a-vla-trained-on-cbd)** ·
