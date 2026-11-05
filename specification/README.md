@@ -141,6 +141,13 @@ One JSON object per line.
   boundaries**, not a fixed clock — so one caption describes one action. The
   caption is then injected into every frame it spans, which is what makes a
   single line a complete training sample.
+- The same request also returns **one sentence for the whole clip**
+  (`clip_caption_en`, plus `clip_caption_ja` in the human-capture example) at the
+  top of `captions/temporal_captions.json`: "a person ...", present tense, no
+  gendered words, at most 15 words. It is for consumers that need one instruction
+  per episode, such as a VLA's task description, instead of joining the window
+  captions. It is `null` when the model did not return one (the raw response is
+  then kept as `raw_response`). It is not injected into frames.
 - **Phase** (`Idle` / `Reach` / `Grasp` / `Carry` / `Release`) is the state that
   ties language to motion. It is also the target of Demo B's phase head, and its
   observed transition matrix becomes a generation-time grammar.
@@ -193,7 +200,7 @@ If a consumer disagrees with a derived value, the input it came from is present.
 | `runtime_info.json` | which delegate and GL backend actually ran, how long it took, achieved fps |
 | `quality/quality.json` | per-modality coverage, missing-frame ratio, notes |
 | `objects/label_reclassification.json` | every detected label, what it became, why, and what was excluded |
-| `captions/temporal_captions.json` | which model generated the captions, and that they are not ground truth |
+| `captions/temporal_captions.json` | which model generated the captions, and that they are not ground truth; the per-window captions and the one-sentence `clip_caption_en` |
 | `manifest.json` | fps, frame count, coordinate systems, which tasks ran — and since `0.3.0` the `provenance` block: episode kind, source terms, and a tier per channel |
 | `quality/channel_provenance.json` | the per-channel ledger on its own (`0.3.0`) |
 
