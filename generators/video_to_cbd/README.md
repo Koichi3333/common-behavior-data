@@ -41,6 +41,10 @@ Field-by-field description: [`specification/README.md`](../../specification/READ
 
 ## Recommended: run it from the Colab CLI
 
+First time? [`colab-cli/`](../../colab-cli/) installs the CLI, signs you in and
+runs this notebook with the MuJoCo adapter on the sample clip — no GPU machine
+needed.
+
 The notebook runs from both entry points — it detects at runtime whether stdin
 is available and degrades gracefully — but the **Colab CLI is the recommended
 way**:
@@ -79,11 +83,16 @@ this is the repository's default, and which single step does not follow it.
 
 Temporal captions and object re-classification need a Gemini key. In the UI, add
 a Colab secret named `GEMINI_API_KEY` and grant the notebook access. Headless,
-set it in the session before running the notebook:
+ship it to the session before running the notebook:
 
 ```bash
-colab exec -s cbd <<< 'import os; os.environ["GEMINI_API_KEY"] = "<key>"'
+python3 colab-cli/tools/colab_secrets.py -s cbd GEMINI_API_KEY
 ```
+
+It reads the key from your environment, `colab-cli/.env` or Codespaces secrets
+([details](../../colab-cli/README.md#cloud-or-local-what-differs)). Do not set
+it with `colab exec` code: the CLI keeps that code in plain text in
+`~/.config/colab-cli/history/<session>.jsonl`.
 
 Without a key those two cells skip and every other output still works. No
 credential is ever written into the notebook.

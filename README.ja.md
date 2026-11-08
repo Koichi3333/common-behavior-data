@@ -10,17 +10,23 @@
 ロボット・アバターで動かす —— そして**身体ごとに「その身体にできなかったこと」を、
 その身体の単位の数字として記録する**ためのオープンな層です。
 
+**GPU マシンは要りません。** パイプラインはターミナルから操作する Google Colab で動き
+（ブラウザで開いた Codespace で十分）、VLA も同じやり方で Colab の GPU で学習します。
+[3つのコマンドで始める →](#gpu-マシンが無くても動かせる--ターミナルから-colab-へ)
+
 [![Status: experimental](https://img.shields.io/badge/status-experimental-orange)](docs/limitations.md)
 [![License: Apache 2.0](https://img.shields.io/badge/license-Apache--2.0-blue)](LICENSE)
 [![Targets: 4](https://img.shields.io/badge/adapters-4%20targets-brightgreen)](adapters/README.md)
 [![VLA sample](https://img.shields.io/badge/VLA%20sample-vla--maker--from--cbd-8A2BE2)](https://github.com/Koichi3333/vla-maker-from-cbd)
 [![Contributors wanted](https://img.shields.io/badge/contributors-wanted-ff69b4)](#協力者を募集しています--ギャップを測る)
+[![No GPU machine needed](https://img.shields.io/badge/GPU-Colab%2C%20from%20your%20terminal-F9AB00?logo=googlecolab&logoColor=white)](#gpu-マシンが無くても動かせる--ターミナルから-colab-へ)
 
 [![資料を読む](https://img.shields.io/badge/Technical%20Concept%20Deck-PDF-EC1C24?style=for-the-badge&logo=adobeacrobatreader&logoColor=white)](docs/media/CBD_Technical_Concept_Deck.pdf)
 
 [English README](README.md) ·
 **[VLA サンプル](#cbd-で学習した-vla)** ·
 **[ギャップ](#ギャップ--このプロジェクトが測っているもの)** ·
+**[GPU 無しで動かす](#gpu-マシンが無くても動かせる--ターミナルから-colab-へ)** ·
 [Showcase](showcase/) ·
 [Experiments](experiments/) ·
 [コンセプト](docs/concept.md) ·
@@ -53,9 +59,9 @@
 | **CBD で学習した VLA を見る** | [下の節](#cbd-で学習した-vla) → [`vla-maker-from-cbd`](https://github.com/Koichi3333/vla-maker-from-cbd) |
 | **いちばん大事な考え方を知る** | [ギャップ](#ギャップ--このプロジェクトが測っているもの) — data gap / body gap と、身体ごとの数字 |
 | **1つの行動を4つの身体で見る** | [`showcase/`](showcase/) — 出力の映像をまず確認できます |
+| **自分で動かす —— GPU マシン不要** | [動かし方](#gpu-マシンが無くても動かせる--ターミナルから-colab-へ) → [`colab-cli/`](colab-cli/) — Codespace でもノート PC でも、3つのコマンドから |
 | **手伝う** | [協力者募集](#協力者を募集しています--ギャップを測る) — ほとんどが GPU 不要です |
 | **ミニマムのサンプルを動かす** | [`examples/`](examples/) — Colab ノートブック2本 |
-| **現行パイプラインを動かす** | [`generators/`](generators/) → [`adapters/`](adapters/) |
 
 ---
 
@@ -91,6 +97,10 @@ Unitree G1・VRM アバターに載せるのは Adapter の仕事なので、
 **まだ言えないこと:** 物理シミュレータや実機での成功（すべて運動学）、指での把持、
 誘導なしでの正確な到達、動画の動きの予測で「今の姿勢を保つだけ」に勝つこと
 （5.53° 対 5.05°）。コードは Apache-2.0、重みは非商用です（GR00T N1.7・AMASS・SMPL の条件による）。
+
+**このループに手元の GPU はありません。** VLA の学習と評価は、Codespace から Colab CLI で
+操作する Colab の A100 で行っており（このリポジトリと同じ道です —— [動かし方](#gpu-マシンが無くても動かせる--ターミナルから-colab-へ)）、
+CPU のスモークテストはノート PC で動きます。
 
 ### 身体に依存しないモデルだからこそ、ギャップが資産になる
 
@@ -214,6 +224,90 @@ data gap は誰かのバグです。body gap は「脊椎を持たない 1.32 m 
 
 ---
 
+## GPU マシンが無くても動かせる —— ターミナルから Colab へ
+
+**このリポジトリを動かすのに、GPU も CUDA のインストールもクラウドのプロジェクトも
+要りません。** 必要なのは Google アカウントとターミナルだけで、ターミナルはブラウザで
+開いた GitHub Codespace で十分です。ノートブックは Google Colab の VM 上で動き、その VM の
+起動・実行・停止をターミナルから公式の [Colab CLI](https://github.com/googlecolab/google-colab-cli)
+で行います。GPU が必要なときはそのセッションだけ Colab の GPU を借り、終わったら返します。
+
+```text
+手元のターミナル（Codespace・ノート PC・SSH）        Google Colab の VM
+  colab-cli/setup.sh     最初に1回
+  colab-cli/auth.sh      最初に1回  ──────────►  Google アカウントでログイン
+  colab new --gpu T4                ──────────►  CPU · T4 · A100  ← GPU は Colab のもの
+  colab exec -f X.ipynb             ──────────►  ノートブックを画面なしで実行
+  colab download                    ◄──────────  結果をファイルで受け取る
+  colab stop                        ──────────►  VM を解放
+```
+
+**VLA まで同じ道でつながっています。** [`vla-maker-from-cbd`](https://github.com/Koichi3333/vla-maker-from-cbd)
+も 3B のモデルを同じやり方で学習・評価しています —— Codespace から操作する Colab の A100 です。
+つまり上の GIF のループ全体（動画 → CBD → VLA → CBD → 身体）が、自分の GPU 無しで回ります。
+
+| 工程 | 動かす場所 | GPU |
+|---|---|---|
+| [`generators/video_to_cbd/`](generators/video_to_cbd/) | Colab（CLI から） | T4 があると速い。CPU でも完走 |
+| [`adapters/mediapipe_overlay/`](adapters/mediapipe_overlay/)・[`mujoco/`](adapters/mujoco/) | Colab（同じセッション） | 不要 —— MuJoCo は T4 なら EGL、CPU なら OSMesa で描画 |
+| [`adapters/unity_vrm/`](adapters/unity_vrm/) | Colab がファイルを書き、Unity が手元で再生 | 不要 |
+| [`adapters/isaac_sim_groot_g1/`](adapters/isaac_sim_groot_g1/) —— リターゲット・合成 | どのマシンでも（素の Python） | 不要 |
+| [`adapters/isaac_sim_groot_g1/`](adapters/isaac_sim_groot_g1/) —— **描画・PhysX** | **唯一の例外:** Google Compute Engine · `g2-standard-16` · NVIDIA L4 × 1 · Isaac Sim 6.0 —— 出力はコミット済み | 必要 |
+| [`vla-maker-from-cbd`](https://github.com/Koichi3333/vla-maker-from-cbd) —— スモークテスト | ノート PC の CPU | 不要 |
+| [`vla-maker-from-cbd`](https://github.com/Koichi3333/vla-maker-from-cbd) —— 推論・学習 | Colab A100（CLI から）· 目標ファイル1つあたり約 1.4 コンピューティング ユニット、5,000 ステップの学習で約 9 | 必要 |
+
+このリポジトリのノートブックは、どれも無料の Colab の CPU で動きます。無料枠の T4 は
+空いていれば使えますが、保証はありません。A100 には有料の Colab プランが必要です。
+
+### まずはここから: [`colab-cli/`](colab-cli/)
+
+必要なものは1つのディレクトリにまとまっています。リポジトリのルートで:
+
+```bash
+colab-cli/setup.sh        # uv と google-colab-cli 0.7.5 を入れる（何度流してもよい）
+colab-cli/auth.sh         # ログイン。マシンごとに1回。ブラウザでページが開く
+colab-cli/smoke_test.sh   # CPU の VM を起動 → 実行 → ファイル回収 → 停止（約1分）
+```
+
+続けて本線 —— リポジトリに同梱のサンプル動画で、Generator → Adapter を**1つのセッションで**:
+
+```bash
+cd colab-cli/ws && R=../..                                  # 作業はここで（gitignore 済み）
+cp $R/generators/video_to_cbd/cbd_generator_video_to_cbd.ipynb \
+   $R/adapters/mujoco/cbd_adapter_mujoco.ipynb .            # コピーする: 出力は入力の隣に書かれる
+colab new -s cbd                                            # GPU を使うなら --gpu T4
+python3 ../tools/colab_secrets.py -s cbd GEMINI_API_KEY     # 任意。キーを colab exec に書かない
+colab upload -s cbd $R/examples/human-capture/sample_output/source/source_video.mp4 \
+                    /content/source_video.mp4
+colab exec   -s cbd -f cbd_generator_video_to_cbd.ipynb --timeout 1800 2>&1 | tee generator.log
+colab exec   -s cbd -f cbd_adapter_mujoco.ipynb         --timeout 1800 2>&1 | tee mujoco.log
+grep -nE "^(Traceback|[A-Za-z]*Error:)" *.log               # セルが失敗しても終了コードは 0
+colab download -s cbd /content/human_behavior_demo_2_0/cbd_dataset.zip ./cbd_dataset.zip
+colab stop -s cbd && colab sessions                         # 必ず止めて、確認する
+```
+
+| 次に知りたいこと | 読むところ |
+|---|---|
+| Codespace と自分のマシンで何が違うか | [クラウドとローカルで違うところ](colab-cli/README.ja.md#クラウドとローカルで違うところ) —— ログイン・キー・Rebuild で消えるもの |
+| 他の Adapter を流したい / どのノートブックが画面なしで動くか | [このリポジトリのノートブックを流す](colab-cli/README.ja.md#このリポジトリのノートブックを流す) |
+| 落とし穴を避けたい —— VM の止め忘れ、既定 30 秒のタイムアウト、終了コード | [守ること5つ](colab-cli/README.ja.md#守ること5つ) |
+| ブラウザ無しで `input()`・ファイルアップロード・Google Drive を使いたい | [フィールドガイド](colab-cli/guide/field_guide.ja.md#対話コードinput-などの扱い) |
+| Claude Code に操作させたい | [`colab-cli/CLAUDE.md`](colab-cli/CLAUDE.md) —— [`.claude/settings.json`](.claude/settings.json) のフックが、止め忘れたセッションを警告します |
+
+実際にこの方法で動かしたもの: Codespace 上の `google-colab-cli` 0.7.5 で、ログイン →
+スモークテスト → Generator → MuJoCo Adapter を CPU ランタイムで最後まで（2026-11-07）。
+**GPU ランタイムと残り2つのノートブック Adapter は、0.7.5 ではまだ確認していません。**
+ローカルマシンでも未確認です。VLA の A100 での実行は、今は独自のスクリプトと古い CLI（0.6.x）
+によるもので、同じ `colab-cli/` の構成へ揃える予定です。詳細:
+[`colab-cli/README.ja.md`](colab-cli/README.ja.md#状態--何を動かし何をまだ動かしていないか)
+
+**唯一の例外は Isaac Sim です。** Colab が出さない RTX GPU、数十 GB のコンテナ、実行を
+またいで残るシェーダーキャッシュが要るため、Colab には収まりません。その README の冒頭に
+マシンを明記し、**出力はコミット済み**なので、GPU に触れなくても結果を読めます。
+新しいターゲットのルール: [`docs/runtime_environments.md`](docs/runtime_environments.md)
+
+---
+
 ## CBD とは何か
 
 行動をデジタル活用する場合は、通常、**特定のツールの中へ**取り込まれます —— モーション
@@ -262,6 +356,7 @@ PC 作業画面のスクリーンキャプチャなど様々なものに応用�
 | [`showcase/`](showcase/) | **CBD で何ができるかを見る** | 4 つの結果 |
 | [`examples/`](examples/) | **最初の最小体験** | 当時のまま保存、実行可能 |
 | [`tools/`](tools/) | **資産の準備と加工** | ほぼ空 —— 検証ツールを募集中 |
+| [`colab-cli/`](colab-cli/) | **ターミナルから Colab でノートブックを動かす** | セットアップ・ログイン・疎通確認・キー —— [動かし方](#gpu-マシンが無くても動かせる--ターミナルから-colab-へ) |
 | [`specification/`](specification/README.md) | **Canonical CBD の定義** | 実験的、Adapter 主導 |
 | [`docs/`](docs/) | **設計と考え方の説明** —— [ギャップ台帳](docs/compatibility_findings.md)を含む | — |
 

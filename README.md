@@ -9,17 +9,23 @@ Turn ordinary video into behavior data, train a model on it, run it on a
 humanoid, a robot or an avatar — and record **the gap for each body**: what
 that body could not do, as a number in its own units.
 
+**No GPU machine needed.** The pipeline runs on Google Colab, driven from your
+terminal — a Codespace in the browser is enough — and the VLA trains on Colab's
+GPUs the same way. [Three commands to start →](#run-it--no-gpu-machine-needed)
+
 [![Status: experimental](https://img.shields.io/badge/status-experimental-orange)](docs/limitations.md)
 [![License: Apache 2.0](https://img.shields.io/badge/license-Apache--2.0-blue)](LICENSE)
 [![Targets: 4](https://img.shields.io/badge/adapters-4%20targets-brightgreen)](adapters/README.md)
 [![VLA sample](https://img.shields.io/badge/VLA%20sample-vla--maker--from--cbd-8A2BE2)](https://github.com/Koichi3333/vla-maker-from-cbd)
 [![Contributors wanted](https://img.shields.io/badge/contributors-wanted-ff69b4)](#help-wanted--measure-a-gap)
+[![No GPU machine needed](https://img.shields.io/badge/GPU-Colab%2C%20from%20your%20terminal-F9AB00?logo=googlecolab&logoColor=white)](#run-it--no-gpu-machine-needed)
 
 [![Read the deck](https://img.shields.io/badge/Technical%20Concept%20Deck-PDF-EC1C24?style=for-the-badge&logo=adobeacrobatreader&logoColor=white)](docs/media/CBD_Technical_Concept_Deck.pdf)
 
 [日本語](README.ja.md) ·
 **[VLA sample](#a-vla-trained-on-cbd)** ·
 **[The gap](#the-gap)** ·
+**[Run it — no GPU](#run-it--no-gpu-machine-needed)** ·
 [Showcase](showcase/) ·
 [Experiments](experiments/) ·
 [Concept](docs/concept.md) ·
@@ -48,9 +54,9 @@ This is one of 12 trials of this scene — in the other 11 the glass stops at ch
 | **See a VLA trained on CBD** | [A VLA trained on CBD](#a-vla-trained-on-cbd), below → [`vla-maker-from-cbd`](https://github.com/Koichi3333/vla-maker-from-cbd) |
 | **Understand the one idea that matters** | [The gap](#the-gap) — data gaps, body gaps, and the numbers per body |
 | **See one behavior on four bodies** | [`showcase/`](showcase/) — videos first, code later |
+| **Run it yourself — no GPU machine needed** | [Run it](#run-it--no-gpu-machine-needed) → [`colab-cli/`](colab-cli/) — three commands, from a Codespace or your laptop |
 | **Help** | [Help wanted](#help-wanted--measure-a-gap) — most items need no GPU |
 | **Run the smallest complete example** | [`examples/`](examples/) — two Colab notebooks |
-| **Run the current pipeline** | [`generators/`](generators/) → [`adapters/`](adapters/) |
 | **Read the data format** | [`specification/`](specification/README.md) |
 
 ---
@@ -89,6 +95,11 @@ the current pose"* at predicting video motion (5.53° vs 5.05°). The code is
 Apache-2.0; the weights are non-commercial, because GR00T N1.7, AMASS and SMPL
 are. Its [help-wanted list](https://github.com/Koichi3333/vla-maker-from-cbd#help-wanted)
 has eight open problems, from GPU research to translating log messages.
+
+**No local GPU is in that loop.** The VLA is trained and evaluated on Colab
+A100s, driven from a Codespace through the Colab CLI — the same route this
+repository uses ([how](#run-it--no-gpu-machine-needed)) — and its CPU smoke
+test runs on a laptop.
 
 ### Why a body-independent model makes the gap the asset
 
@@ -237,6 +248,111 @@ that feedback is the most useful thing this project can receive right now.
 
 ---
 
+## Run it — no GPU machine needed
+
+**You do not need a GPU, a CUDA install or a cloud project to run this
+repository.** You need a Google account and a terminal — and the terminal can
+be a GitHub Codespace in your browser. The notebooks run on a Google Colab VM
+that you start, drive and stop from that terminal with the official
+[Colab CLI](https://github.com/googlecolab/google-colab-cli). When a step wants
+a GPU, you ask Colab for one for that session, and give it back when you are
+done.
+
+```text
+your terminal  (Codespace · laptop · SSH)          Google Colab VM
+  colab-cli/setup.sh     once
+  colab-cli/auth.sh      once  ───────────────►  sign in with your Google account
+  colab new --gpu T4           ───────────────►  CPU · T4 · A100  ← the GPU is Colab's
+  colab exec -f X.ipynb        ───────────────►  the notebook runs headless
+  colab download               ◄───────────────  results come back as files
+  colab stop                   ───────────────►  the VM is released
+```
+
+**It goes all the way to the VLA.** [`vla-maker-from-cbd`](https://github.com/Koichi3333/vla-maker-from-cbd)
+fine-tunes and evaluates a 3B model the same way: Colab A100s, driven from a
+Codespace. So the whole loop in the GIF above — video → CBD → VLA → CBD → a
+body — runs without a GPU of your own:
+
+| Step | Runs on | GPU |
+|---|---|---|
+| [`generators/video_to_cbd/`](generators/video_to_cbd/) | Colab, from the CLI | T4 helps; CPU completes |
+| [`adapters/mediapipe_overlay/`](adapters/mediapipe_overlay/), [`mujoco/`](adapters/mujoco/) | Colab, same session | not needed — MuJoCo renders with EGL on a T4, OSMesa on CPU |
+| [`adapters/unity_vrm/`](adapters/unity_vrm/) | Colab writes the files; Unity plays them on your machine | no |
+| [`adapters/isaac_sim_groot_g1/`](adapters/isaac_sim_groot_g1/) — retarget, compose | any machine, plain Python | no |
+| [`adapters/isaac_sim_groot_g1/`](adapters/isaac_sim_groot_g1/) — **render, PhysX** | **the one exception:** Google Compute Engine · `g2-standard-16` · 1 × NVIDIA L4 · Isaac Sim 6.0 — outputs committed | yes |
+| [`vla-maker-from-cbd`](https://github.com/Koichi3333/vla-maker-from-cbd) — smoke test | a laptop, CPU | no |
+| [`vla-maker-from-cbd`](https://github.com/Koichi3333/vla-maker-from-cbd) — inference, training | Colab A100, from the CLI · ≈1.4 compute units per goal file, ≈9 for a 5,000-step training run | yes |
+
+The free Colab tier is enough for every notebook here, on CPU; a free T4 is
+offered when one is available, not guaranteed. A100s need a paid Colab plan.
+
+### Start here: [`colab-cli/`](colab-cli/)
+
+Everything needed is in one directory. From the repository root:
+
+```bash
+colab-cli/setup.sh        # install uv + google-colab-cli 0.7.5 (safe to re-run)
+colab-cli/auth.sh         # sign in once per machine — the page opens in your browser
+colab-cli/smoke_test.sh   # start a CPU VM, run code, fetch a file, stop it (~1 min)
+```
+
+Then the main line — generator → adapter in **one session**, on the sample clip
+that ships with the repository:
+
+```bash
+cd colab-cli/ws && R=../..                                  # work here; it is gitignored
+cp $R/generators/video_to_cbd/cbd_generator_video_to_cbd.ipynb \
+   $R/adapters/mujoco/cbd_adapter_mujoco.ipynb .            # copy: outputs land next to the input
+colab new -s cbd                                            # add --gpu T4 for a GPU
+python3 ../tools/colab_secrets.py -s cbd GEMINI_API_KEY     # optional; never put a key in colab exec
+colab upload -s cbd $R/examples/human-capture/sample_output/source/source_video.mp4 \
+                    /content/source_video.mp4
+colab exec   -s cbd -f cbd_generator_video_to_cbd.ipynb --timeout 1800 2>&1 | tee generator.log
+colab exec   -s cbd -f cbd_adapter_mujoco.ipynb         --timeout 1800 2>&1 | tee mujoco.log
+grep -nE "^(Traceback|[A-Za-z]*Error:)" *.log               # a failed cell still exits 0
+colab download -s cbd /content/human_behavior_demo_2_0/cbd_dataset.zip ./cbd_dataset.zip
+colab stop -s cbd && colab sessions                         # always stop, and confirm
+```
+
+| Next, if you want to… | Read |
+|---|---|
+| Know what differs between a Codespace and your own machine | [Cloud or local](colab-cli/README.md#cloud-or-local-what-differs) — sign-in, keys, what survives a rebuild |
+| Run the other adapters, or know which notebooks run headless | [Which notebooks run headless](colab-cli/README.md#which-notebooks-run-headless) |
+| Avoid the traps — a VM left running, the 30 s default timeout, the exit code | [Five rules](colab-cli/README.md#five-rules) |
+| Use `input()`, file upload or Google Drive without a browser | [Field guide](colab-cli/guide/field_guide.md#what-breaks-without-a-browser) |
+| Let Claude Code drive it | [`colab-cli/CLAUDE.md`](colab-cli/CLAUDE.md) — and a hook in [`.claude/settings.json`](.claude/settings.json) warns about any session still running |
+
+What has actually run this way, as everywhere in this repository: on
+`google-colab-cli` 0.7.5 in a Codespace, sign-in → smoke test → generator →
+MuJoCo adapter, end to end on a CPU runtime (2026-11-07). **GPU runtimes and the
+other two notebook adapters have not been re-checked on 0.7.5 yet**, and nor has
+a local machine. The VLA's A100 runs use its own scripts on an older CLI
+(0.6.x); moving it onto the same `colab-cli/` layout is planned. Full status:
+[`colab-cli/README.md`](colab-cli/README.md#status--what-has-and-has-not-been-run).
+
+### The one exception, and what passes between steps
+
+Isaac Sim does not fit in Colab: it needs an RTX GPU the runtime does not
+expose, a container measured in tens of gigabytes, and a shader cache that
+survives between runs. Its README states the machine at the top, and **its
+outputs are committed**, so the result is readable by someone who never touches
+a GPU. Rules for new targets: [`docs/runtime_environments.md`](docs/runtime_environments.md).
+
+`cbd_dataset.zip` is the **only** thing passed between steps — the generator
+knows nothing about MuJoCo or VRM, and each adapter reads canonical CBD and
+nothing else. The G1 adapter takes the same zip directly:
+
+```bash
+python adapters/isaac_sim_groot_g1/cbd_adapter_groot_g1.py --dataset ./cbd_dataset.zip
+```
+
+And so does the VLA, to build its training data
+([bring your own CBD](https://github.com/Koichi3333/vla-maker-from-cbd#4-bring-your-own-cbd)).
+Details: [`generators/README.md`](generators/README.md) ·
+[`adapters/README.md`](adapters/README.md).
+
+---
+
 ## How CBD works
 
 ```text
@@ -361,6 +477,7 @@ agreement is a property of the representation; where they disagree is the gap.
 | [`showcase/`](showcase/) | **See what CBD can do** | 4 results |
 | [`examples/`](examples/) | **Initial Minimum Experience** | preserved, runnable |
 | [`tools/`](tools/) | **Prepare and manipulate assets** | mostly empty — a validator is wanted |
+| [`colab-cli/`](colab-cli/) | **Run the notebooks on Colab from a terminal** | setup, sign-in, smoke test, keys — [run it](#run-it--no-gpu-machine-needed) |
 | [`specification/`](specification/README.md) | **Define Canonical CBD** | experimental, adapter-driven |
 | [`docs/`](docs/) | **Explain the architecture and philosophy** — including [the gap register](docs/compatibility_findings.md) | — |
 
@@ -382,54 +499,6 @@ Three structural rules worth knowing before you read code:
 
 What travels between adapters is the **gap**, written down, not the code:
 [`docs/compatibility_findings.md`](docs/compatibility_findings.md).
-
----
-
-## Where things run
-
-*Colab CLI where the target allows it; a documented machine where it does not.*
-
-| Step | Environment |
-|---|---|
-| [`generators/video_to_cbd/`](generators/video_to_cbd/) | Google Colab — **CLI recommended** |
-| [`adapters/mediapipe_overlay/`](adapters/mediapipe_overlay/), [`mujoco/`](adapters/mujoco/) | Google Colab — CLI, same session |
-| [`adapters/unity_vrm/`](adapters/unity_vrm/) | Colab writes the files; Unity plays them locally |
-| [`adapters/isaac_sim_groot_g1/`](adapters/isaac_sim_groot_g1/) — retarget, compose | any machine, plain Python |
-| [`adapters/isaac_sim_groot_g1/`](adapters/isaac_sim_groot_g1/) — **render, PhysX** | **Google Compute Engine · `g2-standard-16` · 1 × NVIDIA L4** · Isaac Sim 6.0 |
-| [`vla-maker-from-cbd`](https://github.com/Koichi3333/vla-maker-from-cbd) — training, inference | Google Colab A100, through the Colab CLI · a CPU smoke test runs on a laptop |
-
-Isaac Sim is the one exception to Colab, because it needs an RTX GPU the runtime
-does not expose, a container measured in tens of gigabytes, and a shader cache
-that survives between runs. Its README states the machine at the top, and **its
-outputs are committed**, so the result is readable by someone who never touches
-a GPU. Rules for new targets: [`docs/runtime_environments.md`](docs/runtime_environments.md).
-
-### Running the current pipeline
-
-```bash
-colab new -s cbd
-colab upload -s cbd ./source_video.mp4 /content/source_video.mp4
-colab exec   -s cbd -f cbd_generator_video_to_cbd.ipynb        --timeout 1800
-colab exec   -s cbd -f cbd_adapter_mediapipe_overlay.ipynb     --timeout 1800
-colab exec   -s cbd -f cbd_adapter_mujoco.ipynb                --timeout 1800
-colab exec   -s cbd -f cbd_adapter_unity_vrm.ipynb             --timeout 900
-colab download -s cbd \
-  /content/human_behavior_demo_2_0/cbd_dataset.zip ./cbd_dataset.zip
-colab stop -s cbd
-```
-
-`cbd_dataset.zip` is the **only** thing passed between them — the generator
-knows nothing about MuJoCo or VRM, and each adapter reads canonical CBD and
-nothing else. The G1 adapter takes the same zip directly:
-
-```bash
-python adapters/isaac_sim_groot_g1/cbd_adapter_groot_g1.py --dataset ./cbd_dataset.zip
-```
-
-And so does the VLA, to build its training data
-([bring your own CBD](https://github.com/Koichi3333/vla-maker-from-cbd#4-bring-your-own-cbd)).
-Details: [`generators/README.md`](generators/README.md) ·
-[`adapters/README.md`](adapters/README.md).
 
 ---
 

@@ -55,6 +55,10 @@ than a preference:
 The Colab UI stays fully supported for all of these. The CLI is what makes them
 *checkable*.
 
+Setting it up — install, sign-in, keys, a smoke test and the traps of running
+without a browser — is in [`colab-cli/`](../colab-cli/): three commands from a
+Codespace or your own machine, and no GPU of your own.
+
 ## What runs where today
 
 | Step | Where | GPU |
