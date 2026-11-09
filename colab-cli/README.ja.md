@@ -146,7 +146,8 @@ colab stop -s cbd && colab sessions                      # 必ず。停止確認
   - セルが失敗したときの挙動。上の実行では失敗したセルがなかったため、「それでも終了コードは 0」は
     0.6.0 で確かめた内容のまま。
   - `input()` / `files.upload()` / `drive.mount()` の対処手順。
-  - GPU ランタイム。
+  - このリポジトリのノートブックを GPU ランタイムで流すこと（同じ道具で、
+    [vla-maker-from-cbd](https://github.com/Koichi3333/vla-maker-from-cbd/tree/main/colab-cli) では 0.7.5 の A100 のジョブが通っている。2026-11-09）。
   - mediapipe_overlay と unity_vrm のアダプタ。
 
   運用ガイドのその他の挙動メモは **0.6.0** での実測。0.7.5 のソースで変化が分かった箇所

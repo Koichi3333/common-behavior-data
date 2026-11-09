@@ -158,7 +158,8 @@ Honest about the edges, as everywhere in this repository:
   - What happens when a cell fails. The run above had no failing cell, so the
     "exit code is 0 anyway" note is still from 0.6.0.
   - The `input()` / `files.upload()` / `drive.mount()` recipes.
-  - GPU runtimes.
+  - GPU runtimes for this repository's notebooks. (The same tools ran an A100 job on 0.7.5 in
+    [vla-maker-from-cbd](https://github.com/Koichi3333/vla-maker-from-cbd/tree/main/colab-cli), 2026-11-09.)
   - The mediapipe_overlay and unity_vrm adapters.
 
   The other behaviour notes in the field guide were measured on **0.6.0**. The
