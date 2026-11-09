@@ -296,9 +296,10 @@ colab stop -s cbd && colab sessions                         # 必ず止めて、
 
 実際にこの方法で動かしたもの: Codespace 上の `google-colab-cli` 0.7.5 で、ログイン →
 スモークテスト → Generator → MuJoCo Adapter を CPU ランタイムで最後まで（2026-11-07）。
-**GPU ランタイムと残り2つのノートブック Adapter は、0.7.5 ではまだ確認していません。**
-ローカルマシンでも未確認です。VLA の A100 での実行は、今は独自のスクリプトと古い CLI（0.6.x）
-によるもので、同じ `colab-cli/` の構成へ揃える予定です。詳細:
+**このリポジトリのノートブックを 0.7.5 の GPU ランタイムで流すことと、残り2つのノートブック Adapter は、
+まだ確認していません。** ローカルマシンでも未確認です。VLA も同じ `colab-cli/` の構成になり、
+[`vla-maker-from-cbd/colab-cli/`](https://github.com/Koichi3333/vla-maker-from-cbd/tree/main/colab-cli) から
+スモークテストと A100 での評価 1 本が 0.7.5 で通りました（2026-11-09。数字は VLA の README と同じ）。詳細:
 [`colab-cli/README.ja.md`](colab-cli/README.ja.md#状態--何を動かし何をまだ動かしていないか)
 
 **唯一の例外は Isaac Sim です。** Colab が出さない RTX GPU、数十 GB のコンテナ、実行を

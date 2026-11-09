@@ -11,14 +11,19 @@ export PATH="$HOME/.local/bin:$PATH"
 S="cbd-smoke-$$"
 OUT="$HERE/ws/smoke_test.txt"
 
+# Arguments go to `colab new`, so answer --help here instead of allocating a VM.
+case " $* " in *" -h "*|*" --help "*) sed -n '2,7p' "$0" | sed 's/^# \{0,1\}//'; exit 0 ;; esac
+
 command -v colab >/dev/null || { echo "run colab-cli/setup.sh first" >&2; exit 1; }
 [ -f "$HOME/.config/colab-cli/token.json" ] || { echo "run colab-cli/auth.sh first" >&2; exit 1; }
 
 echo "[smoke] colab new -s $S $*"
 colab new -s "$S" "$@"
-trap 'echo "[smoke] colab stop -s $S"; colab stop -s "$S" || echo "[smoke] stop failed — check: colab sessions" >&2' EXIT
+trap 'echo "[smoke] colab stop -s $S"; timeout -k 5 120 colab stop -s "$S" || echo "[smoke] stop failed — check: colab sessions" >&2' EXIT
 
-colab exec -s "$S" --timeout 120 <<'PY'
+# Hard local deadlines: colab-cli 0.7.5 can hang after sending an exec, ignoring --timeout,
+# and the trap above only runs once the script exits.
+timeout -k 5 180 colab exec -s "$S" --timeout 120 <<'PY'
 # @title smoke test
 import platform, subprocess, sys
 print("python", sys.version.split()[0], "on", platform.platform())
@@ -32,6 +37,6 @@ open("/content/smoke_test.txt", "w").write("hello from the Colab VM\n")
 PY
 
 mkdir -p "$HERE/ws"
-colab download -s "$S" /content/smoke_test.txt "$OUT"
+timeout -k 5 180 colab download -s "$S" /content/smoke_test.txt "$OUT"
 echo "[smoke] downloaded: $(cat "$OUT")"
 echo "[smoke] OK"

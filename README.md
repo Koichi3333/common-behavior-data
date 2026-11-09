@@ -324,10 +324,12 @@ colab stop -s cbd && colab sessions                         # always stop, and c
 
 What has actually run this way, as everywhere in this repository: on
 `google-colab-cli` 0.7.5 in a Codespace, sign-in → smoke test → generator →
-MuJoCo adapter, end to end on a CPU runtime (2026-11-07). **GPU runtimes and the
-other two notebook adapters have not been re-checked on 0.7.5 yet**, and nor has
-a local machine. The VLA's A100 runs use its own scripts on an older CLI
-(0.6.x); moving it onto the same `colab-cli/` layout is planned. Full status:
+MuJoCo adapter, end to end on a CPU runtime (2026-11-07). **This repository's
+notebooks have not been run on a GPU runtime with 0.7.5 yet, nor have the other
+two notebook adapters**, and nor has a local machine. The VLA now uses the same
+`colab-cli/` layout: [`vla-maker-from-cbd/colab-cli/`](https://github.com/Koichi3333/vla-maker-from-cbd/tree/main/colab-cli)
+ran its smoke test and one A100 evaluation on 0.7.5 (2026-11-09), with the same
+numbers as its README. Full status:
 [`colab-cli/README.md`](colab-cli/README.md#status--what-has-and-has-not-been-run).
 
 ### The one exception, and what passes between steps
