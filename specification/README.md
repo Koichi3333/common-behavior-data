@@ -324,7 +324,9 @@ and eight absent channels.
 
 `interaction_events.csv` and the per-frame `interactions` list contain
 **candidates**, produced by a distance-and-gesture state machine with
-hysteresis. They are useful as weak labels and as an index into a clip. They are
+hysteresis. A carried object counts as released when it is seen far from the
+hand, when the hand stays open, or when it is seen lying still outside contact
+distance for 0.4 s (an object set down right beside a resting hand). They are useful as weak labels and as an index into a clip. They are
 not annotations.
 
 The naming is intentional and should be preserved by any adapter: a field named
