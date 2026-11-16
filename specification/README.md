@@ -117,7 +117,8 @@ One JSON object per line.
 | `timestamp_ms`, `timestamp_sec` | position on the common timeline |
 | `frame_image` | relative path to that frame's image, or `null` |
 | `human` | see below |
-| `objects` | list of tracked objects visible at this frame |
+| `objects` | list of tracked objects visible at this frame; the primary object's entry also has `proxy_canonical`, `position_source` and `held_by` |
+| `primary_object` | the primary object on **every** frame, including occluded ones (`video_to_cbd` generator only) |
 | `interactions` | list of interaction **candidates** at this frame |
 | `phase` | `{ action, phase, hand }` — the behavior state at this frame |
 | `caption` | `{ window_index, en, ja, source }`, or `null` |
@@ -323,11 +324,21 @@ and eight absent channels.
 
 `interaction_events.csv` and the per-frame `interactions` list contain
 **candidates**, produced by a distance-and-gesture state machine with
-hysteresis. They are useful as weak labels and as an index into a clip. They are
+hysteresis. A carried object counts as released when it is seen far from the
+hand, when the hand stays open, or when it is seen lying still outside contact
+distance for 0.4 s (an object set down right beside a resting hand). They are useful as weak labels and as an index into a clip. They are
 not annotations.
 
 The naming is intentional and should be preserved by any adapter: a field named
 `grasp_candidate` cannot be silently promoted to `grasp` downstream.
+
+`held_by` on the primary object (`"left"`, `"right"` or `null`) comes from the same
+state machine: the hand is set on every frame it counts as carried, including
+frames where the hand hides the object. It is a candidate in the same sense, and
+the provenance ledger lists it as `objects.held_by` (`derived`). It saves a
+consumer from re-deriving the holding hand from `phase` names, which differ
+between state machines. A missing `held_by` (data written before November 2026)
+means unknown, not "not held".
 
 ## Engine independence
 
